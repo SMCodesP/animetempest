@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import { useContext, useState } from 'react'
 import Anime from '../../entities/Anime'
 
@@ -49,13 +50,17 @@ const AnimeResume: React.FC<{
               onMouseEnter={() => setHoverStar(true)}
             />
           )}
-          <IconPlay
-            size={42}
-            color={theme.text}
-            style={{
-              alignSelf: 'center',
-            }}
-          />
+          <Link href={`/watch/${(anime as Video).video_id}`}>
+            <a>
+              <IconPlay
+                size={42}
+                color={theme.text}
+                style={{
+                  alignSelf: 'center',
+                }}
+              />
+            </a>
+          </Link>
           <More
             style={{
               padding: '5px 15px',
