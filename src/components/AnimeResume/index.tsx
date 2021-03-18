@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useContext, useState } from 'react'
 import Anime from '../../entities/Anime'
 
@@ -17,49 +18,54 @@ const AnimeResume: React.FC<{
   console.log(anime)
 
   return (
-    <ContainerAnime>
-      <Image src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
-      <ContainerCurtain>
-        {isFavorite || hoverStar ? (
-          <AiTwotoneStar
-            size={24}
+    <>
+      <Head>
+        <title>Início - OtakuCity</title>
+      </Head>
+      <ContainerAnime>
+        <Image src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
+        <ContainerCurtain>
+          {isFavorite || hoverStar ? (
+            <AiTwotoneStar
+              size={24}
+              color={theme.text}
+              style={{
+                alignSelf: 'flex-end',
+                marginTop: 8,
+                marginRight: 8,
+              }}
+              onClick={() => setIsFavorite((state) => !state)}
+              onMouseLeave={() => setHoverStar(false)}
+            />
+          ) : (
+            <AiOutlineStar
+              size={24}
+              color={theme.text}
+              style={{
+                alignSelf: 'flex-end',
+                marginTop: 8,
+                marginRight: 8,
+              }}
+              onMouseEnter={() => setHoverStar(true)}
+            />
+          )}
+          <IconPlay
+            size={42}
             color={theme.text}
             style={{
-              alignSelf: 'flex-end',
-              marginTop: 8,
-              marginRight: 8,
+              alignSelf: 'center',
             }}
-            onClick={() => setIsFavorite((state) => !state)}
-            onMouseLeave={() => setHoverStar(false)}
           />
-        ) : (
-          <AiOutlineStar
-            size={24}
-            color={theme.text}
+          <More
             style={{
-              alignSelf: 'flex-end',
-              marginTop: 8,
-              marginRight: 8,
+              padding: '5px 15px',
             }}
-            onMouseEnter={() => setHoverStar(true)}
-          />
-        )}
-        <IconPlay
-          size={42}
-          color={theme.text}
-          style={{
-            alignSelf: 'center',
-          }}
-        />
-        <More
-          style={{
-            padding: '5px 15px',
-          }}
-        >
-          {(anime as Video).title || (anime as Anime).category_name}
-        </More>
-      </ContainerCurtain>
-    </ContainerAnime>
+          >
+            {(anime as Video).title || (anime as Anime).category_name}
+          </More>
+        </ContainerCurtain>
+      </ContainerAnime>
+    </>
   )
 }
 
