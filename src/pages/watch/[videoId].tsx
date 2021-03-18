@@ -12,11 +12,11 @@ const Watch: NextPage<{
   return (
     <>
       <Head>
-        <title>{episode.title}</title>
+        <title>{episode?.title}</title>
       </Head>
       <Container>
         <VideoComponent
-          src={episode.locationhd || episode.locationsd || episode.location}
+          src={episode?.locationhd || episode?.locationsd || episode?.location}
           controls
         />
       </Container>
