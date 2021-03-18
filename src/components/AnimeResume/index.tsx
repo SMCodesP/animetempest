@@ -16,8 +16,6 @@ const AnimeResume: React.FC<{
   const [hoverStar, setHoverStar] = useState(false)
   const [isFavorite, setIsFavorite] = useState(false)
 
-  console.log(anime)
-
   return (
     <>
       <Head>

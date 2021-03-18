@@ -9,6 +9,8 @@ import { Container, VideoComponent } from '../../shared/styles/watch'
 const Watch: NextPage<{
   episode: Episode
 }> = ({ episode }) => {
+  console.log(episode)
+
   return (
     <>
       <Head>
@@ -36,26 +38,32 @@ export const getStaticPaths = async () => {
   ])
 
   return {
-    paths: [
-      ...releases.map((release) => ({
-        params: {
-          videoId: release.video_id,
-        },
-      })),
-    ],
+    paths: releases.map((release) => ({
+      params: {
+        videoId: release.video_id,
+      },
+    })),
     fallback: true,
   }
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { data: episodes } = await api.get<Episode[]>(
-    `/api-animesbr-10.php?episodios=${params?.videoId}`
-  )
+  try {
+    const { data: episodes } = await api.get<Episode[]>(
+      `/api-animesbr-10.php?episodios=${params?.videoId}`
+    )
 
-  return {
-    props: {
-      episode: episodes[0],
-    },
+    return {
+      props: {
+        episode: episodes[0],
+      },
+      revalidate: 900000,
+    }
+  } catch (error) {
+    return {
+      notFound: true,
+      revalidate: 120,
+    }
   }
 }
 
