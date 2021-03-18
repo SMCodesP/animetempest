@@ -1,0 +1,66 @@
+import { useContext, useState } from 'react'
+import Anime from '../../entities/Anime'
+
+import { AiOutlineStar, AiTwotoneStar } from 'react-icons/ai'
+import { ThemeContext } from 'styled-components'
+
+import { ContainerAnime, IconPlay, ContainerCurtain, Image, More } from './styles'
+import Video from '../../entities/Video'
+
+const AnimeResume: React.FC<{
+  anime: Anime | Video
+}> = ({ anime }) => {
+  const theme = useContext(ThemeContext)
+  const [hoverStar, setHoverStar] = useState(false)
+  const [isFavorite, setIsFavorite] = useState(false)
+
+  console.log(anime)
+
+  return (
+    <ContainerAnime>
+      <Image src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
+      <ContainerCurtain>
+        {isFavorite || hoverStar ? (
+          <AiTwotoneStar
+            size={24}
+            color={theme.text}
+            style={{
+              alignSelf: 'flex-end',
+              marginTop: 8,
+              marginRight: 8,
+            }}
+            onClick={() => setIsFavorite((state) => !state)}
+            onMouseLeave={() => setHoverStar(false)}
+          />
+        ) : (
+          <AiOutlineStar
+            size={24}
+            color={theme.text}
+            style={{
+              alignSelf: 'flex-end',
+              marginTop: 8,
+              marginRight: 8,
+            }}
+            onMouseEnter={() => setHoverStar(true)}
+          />
+        )}
+        <IconPlay
+          size={42}
+          color={theme.text}
+          style={{
+            alignSelf: 'center',
+          }}
+        />
+        <More
+          style={{
+            padding: '5px 15px',
+          }}
+        >
+          {(anime as Video).title || (anime as Anime).category_name}
+        </More>
+      </ContainerCurtain>
+    </ContainerAnime>
+  )
+}
+
+export default AnimeResume
