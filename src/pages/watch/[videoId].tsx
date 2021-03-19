@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import { NextPage, GetStaticProps } from 'next'
-import { curly } from 'node-libcurl'
+import axios from 'axios'
 
 import Episode from '../../entities/Episode'
 import Video from '../../entities/Video'
@@ -51,7 +51,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-    const { data } = await curly.get(
+    const { data } = await axios.get(
       `https://appanimeplus.tk/api-animesbr-10.php?episodios=${params?.videoId}`
     )
     console.log(data)
