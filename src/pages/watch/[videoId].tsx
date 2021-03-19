@@ -7,11 +7,23 @@ import Video from '../../entities/Video'
 import api from '../../services/api'
 
 import { Container, VideoComponent } from '../../shared/styles/watch'
+import { useEffect, useState } from 'react'
 
 const Watch: NextPage<{
   episode: Episode
-}> = ({ episode }) => {
-  console.log(episode)
+}> = ({ episode: episodeInitial }) => {
+  const [episode, setEpisode] = useState<Episode>(episodeInitial)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const { data } = await api.get(`/api-animesbr-10.php?episodios=${episode.video_id}`)
+        setEpisode(data[0])
+      } catch (error) {
+        console.error(error)
+      }
+    })()
+  }, [])
 
   return (
     <>
@@ -51,10 +63,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-    const { data } = await axios.get(
-      `https://appanimeplus.tk/api-animesbr-10.php?episodios=${params?.videoId}`
-    )
-    console.log(data)
+    const { data } = await api.get(`/api-animesbr-10.php?episodios=${params?.videoId}`)
 
     return {
       props: {
