@@ -1,13 +1,9 @@
 import styled from 'styled-components'
 
 export const Container = styled.div`
-  display: flex;
   width: 100%;
+  height: 100vh;
+  display: flex;
   justify-content: center;
-`
-
-export const VideoComponent = styled.video`
-  max-height: 100vh;
-  padding: 5px;
-  align-self: center;
+  overflow: hidden;
 `
