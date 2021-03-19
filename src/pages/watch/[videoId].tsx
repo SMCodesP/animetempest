@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import { NextPage, GetStaticProps } from 'next'
-import axios from 'axios'
 
 import Episode from '../../entities/Episode'
 import Video from '../../entities/Video'
