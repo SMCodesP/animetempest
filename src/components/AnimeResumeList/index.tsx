@@ -11,7 +11,7 @@ const AnimeResumeList: React.FC<{
 }> = ({ animes }) => {
   return (
     <Container>
-      {animes.slice(0, 25).map((anime: Anime | Video) => (
+      {animes.map((anime: Anime | Video) => (
         <AnimeResume
           anime={anime}
           key={`image-${(anime as Anime).id || (anime as Video).video_id}`}
