@@ -4,20 +4,38 @@ import Video from '../../entities/Video'
 
 import AnimeResume from '../AnimeResume'
 
-import { Container } from './styles'
+import Carousel from "react-multi-carousel";
+
+import "react-multi-carousel/lib/styles.css"
 
 const AnimeResumeList: React.FC<{
   animes: Anime[] | Video[]
 }> = ({ animes }) => {
   return (
-    <Container>
-      {animes.map((anime: Anime | Video) => (
+    <Carousel responsive={{
+      desktop: {
+        breakpoint: { max: 3000, min: 1024 },
+        items: 6,
+        slidesToSlide: 6
+      },
+      tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 3,
+        slidesToSlide: 3
+      },
+      mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 2,
+        slidesToSlide: 2
+      }
+    }} ssr infinite={true}>
+      {(animes as any).map((anime: any) => (
         <AnimeResume
           anime={anime}
-          key={`image-${(anime as Anime).id || (anime as Video).video_id}`}
+          key={`image-${anime.id || anime.video_id}`}
         />
       ))}
-    </Container>
+    </Carousel>
   )
 }
 

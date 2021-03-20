@@ -80,7 +80,7 @@ const MiniPlayer: React.FC<{
               playing: 'location' === quality
             },
           ].filter(el => el !== null)}
-          backButton={() => { }}
+          backButton={() => router.back()}
           fullPlayer
           autoPlay
           startPosition={0}

@@ -38,9 +38,14 @@ export const ContainerAnime = styled.div`
   &:hover ${ContainerCurtain} {
     opacity: 1;
   }
+  
+  & * {
+    user-select: none;
+  }
 `
 
 export const Image = styled.img`
+  width: 100%;
   height: 300px;
   margin: 0;
   user-select: none;

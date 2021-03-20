@@ -1,4 +1,5 @@
 import { NextPage } from 'next'
+
 import AnimeResumeList from '../components/AnimeResumeList'
 import Video from '../entities/Video'
 
@@ -16,7 +17,9 @@ const Home: NextPage<{
     <>
       <AnimeHeader anime={animesPopular[0]} />
       <Container>
-        <h1>Lançamentos</h1>
+        <h1 style={{
+          margin: '10px 15px'
+        }}>Lançamentos</h1>
         <AnimeResumeList animes={animesLatest} />
       </Container>
     </>
