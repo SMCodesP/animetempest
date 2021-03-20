@@ -37,25 +37,24 @@ const AnimeResume: React.FC<{
               onMouseLeave={() => setHoverStar(false)}
             />
           ) : (
-            <AiOutlineStar
-              size={24}
-              color={theme.text}
-              style={{
-                alignSelf: 'flex-end',
-                marginTop: 8,
-                marginRight: 8,
-              }}
-              onMouseEnter={() => setHoverStar(true)}
-            />
-          )}
+              <AiOutlineStar
+                size={24}
+                color={theme.text}
+                style={{
+                  alignSelf: 'flex-end',
+                  marginTop: 8,
+                  marginRight: 8,
+                }}
+                onMouseEnter={() => setHoverStar(true)}
+              />
+            )}
           <Link href={`/watch/${(anime as Video).video_id}`}>
-            <a>
+            <a style={{
+              alignSelf: 'center',
+            }}>
               <IconPlay
                 size={42}
                 color={theme.text}
-                style={{
-                  alignSelf: 'center',
-                }}
               />
             </a>
           </Link>

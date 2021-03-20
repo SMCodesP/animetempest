@@ -70,6 +70,7 @@ export const Container = styled.div`
 export const Controlls = styled.div`
   opacity: ${props => (props.show ? 1 : 0)};
   transform: ${props => (props.show ? 'scale(1)' : 'scale(1.2)')};
+  ${props => (!props.show && 'cursor: none;')}
 
   position: absolute;
   top: 0;
@@ -88,10 +89,10 @@ export const Controlls = styled.div`
   background: linear-gradient(
     0deg,
     rgba(0, 0, 0, 1) 0%,
-    rgba(0, 0, 0, 0.7) 10%,
-    rgba(0, 0, 0, 0) 60%,
-    rgba(0, 0, 0, 0) 80%,
-    rgba(0, 0, 0, 0.7) 90%,
+    rgba(0, 0, 0, 0.7) 5%,
+    rgba(0, 0, 0, 0) 15%,
+    rgba(0, 0, 0, 0) 85%,
+    rgba(0, 0, 0, 0.7) 95%,
     rgba(0, 0, 0, 1) 100%
   );
 
@@ -183,7 +184,7 @@ export const Controlls = styled.div`
 
     svg {
       cursor: pointer;
-      opacity: 0.2;
+      opacity: 0.65;
       font-size: 25px;
       transition: all 0.2s ease-out;
 
@@ -199,13 +200,9 @@ export const Controlls = styled.div`
     margin-bottom: 15px;
     appearance: none;
     height: 3px;
-    transition: height 0.2s ease-out;
+    transition: height 0.2s linear;
     border-radius: 5px;
-    background: linear-gradient(
-      93deg,
-      ${props => props.primaryColor} ${props => props.progressVideo}%,
-      #fff ${props => props.progressVideo}%
-    );
+    cursor: pointer;
     -webkit-appearance: none;
     -moz-appearance: none;
 
@@ -256,7 +253,7 @@ export const Controlls = styled.div`
     }
 
     &:hover {
-      height: 5px;
+      height: 6px;
     }
   }
 `;
@@ -267,7 +264,7 @@ export const VideoPreLoading = styled.div`
   width: 100%;
   height: 100%;
   padding: 30px;
-  transition: all 0.5s ease-out;
+  // transition: all 0.5s linear;
   z-index: ${props => (props.show ? 2 : 0)};
   display: flex;
   flex-direction: column;
@@ -296,7 +293,7 @@ export const VideoPreLoading = styled.div`
       font-size: 4em;
       padding: 10px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: transform 0.2s linear, opacity 0.2s linear;
 
       &:hover {
         transform: scale(1.2);
@@ -453,6 +450,10 @@ export const VolumeControll = styled.div`
       );
       width: 70px;
 
+      &:focus {
+        outline: none !important;
+      }
+
       &::-webkit-slider-thumb {
         -webkit-appearance: none;
         border: none;
@@ -464,6 +465,7 @@ export const VolumeControll = styled.div`
       }
 
       &::-moz-range-thumb {
+        outline: none !important;
         -webkit-appearance: none;
         border: none;
         width: 18px;
@@ -500,7 +502,7 @@ export const IconPlayBackRate = styled.div`
   }
 
   span {
-    opacity: 0.2;
+    opacity: 0.65;
     font-size: 25px;
     transition: all 0.2s ease-out;
 
