@@ -1,6 +1,7 @@
 export default {
   primary: '#957FEF',
   secundary: '#6272a4',
+  tertiary: '#8be9fd',
 
   background: '#282a36',
   secundaryBackground: '#44475a',

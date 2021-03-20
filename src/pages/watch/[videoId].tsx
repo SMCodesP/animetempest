@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Error from 'next/error'
 import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
 import { NextPage, GetStaticProps } from 'next'
 import useSWR from 'swr'
 import fetch from 'unfetch'
@@ -11,7 +12,7 @@ import api from '../../services/api'
 
 import { Container } from '../../shared/styles/watch'
 import Category from '../../entities/Category'
-import { useContext } from 'react'
+import { useContext, useState, useEffect } from 'react'
 import { ThemeContext } from 'styled-components'
 import Video from '../../entities/Video'
 
@@ -21,13 +22,95 @@ const Player = dynamic(() => import('../../components/Player'), {
 
 const fetcher = (url: string) => fetch(url).then(r => r.json())
 
+const MiniPlayer: React.FC<{
+  episode: Episode
+  episodes: Episode[]
+  category: Category
+  nextEpisode: Episode | null
+}> = ({ episode, category, episodes, nextEpisode }) => {
+  const theme = useContext(ThemeContext);
+  const [quality, setQuality] = useState<'locationhd' | 'locationsd' | 'location' | ''>('')
+  const router = useRouter()
+
+  useEffect(() => {
+    if (quality) {
+      localStorage.setItem('default_quality', quality)
+    }
+  }, [quality])
+
+  useEffect(() => {
+    const default_quality: any = localStorage.getItem('default_quality')
+    setQuality((default_quality !== null) ? default_quality : (episode.locationhd ? 'locationhd' : episode.locationsd ? 'locationsd' : episode.location ? 'location' : ''))
+  }, [])
+
+  return quality ? (
+    <>
+      <Head>
+        <title>{episode.title}</title>
+      </Head>
+      <Container>
+        <Player
+          src={episode[quality || 'location']}
+          title={category.category_name}
+          subTitle={episode.title}
+          titleMedia={category.category_name}
+          extraInfoMedia={episode.title}
+          playerLanguage="pt"
+          onChangeQuality={(qualityId: 'locationhd' | 'locationsd' | 'location') => {
+            setQuality(qualityId)
+          }}
+          qualities={[
+            (episode.locationhd) ? {
+              id: 'locationhd',
+              // prefix: 'FullHD',
+              nome: 'FullHD',
+              playing: 'locationhd' === quality
+            } : null,
+            (episode.locationsd) && {
+              id: 'locationsd',
+              // prefix: 'HD',
+              nome: 'HD',
+              playing: 'locationsd' === quality
+            },
+            (episode.location) && {
+              id: 'location',
+              // prefix: 'SD',
+              nome: 'SD',
+              playing: 'location' === quality
+            },
+          ].filter(el => el !== null)}
+          backButton={() => { }}
+          fullPlayer
+          autoPlay
+          startPosition={0}
+          dataNext={{
+            title: nextEpisode?.title || 'Não existe um próximo vídeo.'
+          }}
+          onNextClick={() => {
+            nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
+          }}
+          reprodutionList={episodes.map((ep: any) => ({
+            nome: ep.title,
+            id: ep.video_id,
+            playing: (ep.video_id === episode.video_id),
+          })).reverse()}
+          overlayEnabled={true}
+          autoControllCloseEnabled
+          primaryColor={theme.tertiary}
+          secundaryColor={theme.text}
+          fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+        />
+      </Container>
+    </>
+  ) : <div />
+}
+
 const Watch: NextPage<{
   episode: Episode[]
   episodes: Episode[]
   category: Category
-}> = ({ episode: episodeInitial, episodes, category }) => {
-  console.log(episodeInitial)
-  console.log(category)
+  nextEpisode: Episode | null
+}> = ({ episode: episodeInitial, episodes, category, nextEpisode }) => {
 
   if (!episodeInitial) {
     return <Error statusCode={404} />
@@ -38,41 +121,8 @@ const Watch: NextPage<{
     revalidateOnMount: true,
     revalidateOnReconnect: false
   })
-  const theme = useContext(ThemeContext);
 
-  return episode ? (
-    <>
-      <Head>
-        <title>{episode[0]?.title}</title>
-      </Head>
-      <Container>
-        <Player
-          src={episode[0]?.locationhd || episode[0]?.locationsd || episode[0]?.location}
-          title={category.category_name}
-          subTitle={episode[0].title}
-          titleMedia={category.category_name}
-          extraInfoMedia={episode[0].title}
-          playerLanguage="pt"
-          backButton={() => { }}
-          fullPlayer
-          autoPlay
-          startPosition={0}
-          dataNext={{ title: 'Não existe um próximo vídeo.' }}
-          onNextClick={() => { }}
-          reprodutionList={episodes.map(ep => ({
-            nome: ep.title,
-            id: ep.video_id,
-            playing: (ep.video_id === episode[0].video_id),
-          })).reverse()}
-          overlayEnabled
-          autoControllCloseEnabled
-          primaryColor={theme.fifthText}
-          secundaryColor={theme.text}
-          fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
-        />
-      </Container>
-    </>
-  ) : <div />
+  return episode ? <MiniPlayer episode={episode[0]} nextEpisode={nextEpisode} episodes={episodes} category={category} /> : <div />
 }
 
 export const getStaticPaths = async () => {
@@ -90,11 +140,12 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-    const { data } = await api.get(`/api-animesbr-10.php?episodios=${params?.videoId}`)
+    const { data } = await api.get<Episode[]>(`/api-animesbr-10.php?episodios=${params?.videoId}`)
     if (!data)
       throw "Error array."
     const { data: episodes } = await api.get(`/api-animesbr-10.php?cat_id=${data[0].category_id}`)
     const { data: category } = await api.get(`/api-animesbr-10.php?info=${data[0].category_id}`)
+    const { data: nextEpisode } = await api.get(`/api-animesbr-10.php?episodios=${params?.videoId}&catid=${data[0].category_id}&next`)
     if (!category || !episodes)
       throw "Error array."
 
@@ -103,10 +154,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         episode: data,
         category: category[0],
         episodes,
+        nextEpisode: nextEpisode ? nextEpisode[0] : null
       },
       revalidate: 900000,
     }
   } catch (error) {
+    console.error(error)
     return {
       notFound: true,
       revalidate: 900000,

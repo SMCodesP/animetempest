@@ -21,6 +21,7 @@ const toUpOpacity = keyframes`
 
 export const Container = styled.div`
   & > * {
+    user-select: none;
     outline: 0;
     box-sizing: border-box;
     margin: 0;
@@ -46,9 +47,9 @@ export const Container = styled.div`
     opacity: ${props => (props.hideVideo ? 0 : 1)};
 
     &::cue {
-      color: #eee;
+      color: ${({ theme }) => theme.text};
       z-index: 4;
-      text-shadow: #222 0 0 5px;
+      text-shadow: ${({ theme }) => theme.inverseText} 0 0 5px;
       background: none;
       font-family: ${props =>
     props.fontFamily
@@ -83,9 +84,9 @@ export const Controlls = styled.div`
   transition: all 0.2s ease-out;
 
   padding: 10px;
-  color: #fff;
+  color: ${({ theme }) => theme.text};
   font-size: 1.5em;
-  background: rgb(0, 0, 0);
+  background: ${({ theme }) => theme.background};
   background: linear-gradient(
     0deg,
     rgba(0, 0, 0, 1) 0%,
@@ -136,6 +137,8 @@ export const Controlls = styled.div`
   .line-reproduction {
     display: flex;
     margin-bottom: 10px;
+    justify-content: space-between;
+    gap: 15px;
 
     input {
       margin: auto;
@@ -143,7 +146,6 @@ export const Controlls = styled.div`
 
     span {
       font-size: 14px;
-      margin-left: 5px;
     }
   }
 
@@ -169,6 +171,8 @@ export const Controlls = styled.div`
     .info-video {
       font-size: 16px;
       margin-top: -1px;
+      display: flex;
+      flex-direction: column;
 
       .info-first {
         font-weight: bold;
@@ -272,7 +276,7 @@ export const VideoPreLoading = styled.div`
 
   header {
     display: flex;
-    color: #ffffff;
+    color: ${({ theme }) => theme.text};
     align-items: center;
 
     h1 {
@@ -362,7 +366,7 @@ export const StandyByInfo = styled.div`
     padding-left: 100px;
 
     h3 {
-      color: #fff;
+      color: ${({ theme }) => theme.text};
       font-size: 1.1em;
       margin-bottom: 5px;
     }
@@ -387,7 +391,7 @@ export const StandyByInfo = styled.div`
     margin-bottom: 50px;
     margin-left: auto;
     text-transform: uppercase;
-    color: #ffffff;
+    color: ${({ theme }) => theme.text};
   }
 `;
 
@@ -428,7 +432,7 @@ export const VolumeControll = styled.div`
     transform: rotate(-90deg);
 
     .box {
-      background: #222222;
+      background: ${({ theme }) => theme.background};
       padding: 10px 18px;
       border-radius: 5px;
     }
@@ -519,7 +523,7 @@ export const ItemPlaybackRate = styled(ItemControllBar)`
   max-width: 150px;
 
   & > div:first-child {
-    background: #333;
+    background: ${({ theme }) => theme.secundaryBackground};
     display: flex;
     flex-direction: column;
     border-radius: 5px;
@@ -532,7 +536,7 @@ export const ItemPlaybackRate = styled(ItemControllBar)`
     }
 
     .item {
-      background: #222;
+      background: ${({ theme }) => theme.secundaryBackground};
       display: flex;
       font-size: 14px;
       padding: 10px;
@@ -542,7 +546,7 @@ export const ItemPlaybackRate = styled(ItemControllBar)`
       align-items: center;
 
       &:hover {
-        background: #333;
+        background: ${({ theme }) => theme.background};
       }
     }
 
@@ -559,7 +563,7 @@ export const ItemPlaybackRate = styled(ItemControllBar)`
 
 export const ItemNext = styled(ItemControllBar)`
   & > div:first-child {
-    background: #333;
+    background: ${({ theme }) => theme.secundaryBackground};
     display: flex;
     flex-direction: column;
     border-radius: 5px;
@@ -572,7 +576,7 @@ export const ItemNext = styled(ItemControllBar)`
     }
 
     .item {
-      background: #222;
+      background: ${({ theme }) => theme.background};
       display: flex;
       flex-direction: column;
       font-size: 14px;
@@ -581,7 +585,7 @@ export const ItemNext = styled(ItemControllBar)`
       transition: all 0.2s ease-out;
 
       &:hover {
-        background: #333;
+        background: ${({ theme }) => theme.secundaryBackground};
       }
     }
     .bold {
@@ -595,7 +599,7 @@ export const ItemListReproduction = styled(ItemControllBar)`
   overflow: hidden;
 
   & > div:first-child {
-    background: #333;
+    background: ${({ theme }) => theme.secundaryBackground};
     display: flex;
     flex-direction: column;
     border-radius: 5px;
@@ -619,7 +623,7 @@ export const ItemListReproduction = styled(ItemControllBar)`
       overflow: auto;
 
       &::-webkit-scrollbar-track {
-        background-color: #222;
+        background-color: ${({ theme }) => theme.background};
       }
 
       &::-webkit-scrollbar {
@@ -627,11 +631,16 @@ export const ItemListReproduction = styled(ItemControllBar)`
       }
 
       &::-webkit-scrollbar-thumb {
-        background: #333;
+        background: ${({ theme }) => theme.secundaryBackground};
+      }
+
+      a {
+        color: ${({ theme }) => theme.text};
+        text-decoration: none;
       }
 
       .item-list-reproduction {
-        background: #222;
+        background: ${({ theme }) => theme.background};
         display: flex;
         flex-direction: row;
         font-size: 14px;
@@ -641,7 +650,7 @@ export const ItemListReproduction = styled(ItemControllBar)`
         align-items: center;
 
         &:hover {
-          background: #333;
+          background: ${({ theme }) => theme.secundaryBackground};
         }
 
         .percent {
@@ -652,19 +661,19 @@ export const ItemListReproduction = styled(ItemControllBar)`
       }
 
       .selected {
-        background: #333;
+        background: ${({ theme }) => theme.secundaryBackground};
       }
     }
   }
 `;
 
 export const ItemListQuality = styled(ItemControllBar)`
-  max-width: 200px;
-  min-width: 200px;
+  max-width: 120px;
+  min-width: 120px;
 
   & > div:first-child {
     font-size: 14px;
-    background: #222222;
+    background: ${({ theme }) => theme.background};
     border-radius: 5px;
     display: flex;
     flex-direction: column;
@@ -677,7 +686,7 @@ export const ItemListQuality = styled(ItemControllBar)`
       cursor: pointer;
 
       &:hover {
-        background: #333;
+        background: ${({ theme }) => theme.secundaryBackground};
       }
     }
 
