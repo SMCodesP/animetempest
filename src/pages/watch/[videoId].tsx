@@ -35,7 +35,7 @@ const Watch: NextPage<{
 
   const { data: episode } = useSWR<Episode[]>(`https://appanimeplus.tk/api-animesbr-10.php?episodios=${episodeInitial[0].video_id}`, fetcher, {
     revalidateOnFocus: false,
-    revalidateOnMount: false,
+    revalidateOnMount: true,
     revalidateOnReconnect: false
   })
   const theme = useContext(ThemeContext);
