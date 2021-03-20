@@ -1,5 +1,4 @@
-import styled, { keyframes } from 'styled-components';
-import { FaSearch } from 'react-icons/fa';
+import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 100%;
@@ -22,19 +21,6 @@ export const Menu = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
-
-const InputActive = keyframes`
-  0% {
-    height: 0;
-    width: 0;
-  }
-  15% {
-    height: 36px;
-  }
-  100% {
-    width: 100%;
-  }
 `
 
 export const SearchIcon = styled.div`
