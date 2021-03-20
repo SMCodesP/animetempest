@@ -23,7 +23,6 @@ import {
 
 import { FiCheck, FiX } from 'react-icons/fi';
 import {
-  Loading,
   StandyByInfo,
   VideoPreLoading,
   Container,
@@ -36,6 +35,7 @@ import {
   ItemListQuality,
 } from './styles';
 import Link from 'next/link';
+import Loading from './Loading';
 
 function ReactNetflixPlayer({
   title = false,
@@ -433,18 +433,6 @@ function ReactNetflixPlayer({
     }, false)
   }, []);
 
-  function LoadingComponent() {
-    return (
-      <Loading color={primaryColor}>
-        <div>
-          <div />
-          <div />
-          <div />
-        </div>
-      </Loading>
-    );
-  }
-
   function InfoVideo() {
     return (
       <StandyByInfo
@@ -521,7 +509,7 @@ function ReactNetflixPlayer({
       hideVideo={!!error}
       fontFamily={fontFamily}
     >
-      {(videoReady === false || (waitingBuffer === true && playing === true)) && !error && !end && <LoadingComponent />}
+      {(videoReady === false || (waitingBuffer === true && playing === true)) && !error && !end && <Loading color={primaryColor} />}
 
       {overlayEnabled && <InfoVideo />}
 

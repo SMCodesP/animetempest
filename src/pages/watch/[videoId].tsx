@@ -15,6 +15,7 @@ import Category from '../../entities/Category'
 import { useContext, useState, useEffect } from 'react'
 import { ThemeContext } from 'styled-components'
 import Video from '../../entities/Video'
+import Loading from '../../components/Player/Loading'
 
 const Player = dynamic(() => import('../../components/Player'), {
   ssr: false
@@ -111,6 +112,12 @@ const Watch: NextPage<{
   category: Category
   nextEpisode: Episode | null
 }> = ({ episode: episodeInitial, episodes, category, nextEpisode }) => {
+  const router = useRouter()
+  const theme = useContext(ThemeContext);
+
+  if (router.isFallback) {
+    return <Loading color={theme.tertiary} />
+  }
 
   if (!episodeInitial) {
     return <Error statusCode={404} />
