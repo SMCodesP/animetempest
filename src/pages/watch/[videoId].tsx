@@ -3,8 +3,9 @@ import Error from 'next/error'
 // import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { NextPage, GetStaticProps } from 'next'
-import useSWR from 'swr'
-import fetch from 'unfetch'
+// import useSWR from 'swr'
+// import fetch from 'unfetch'
+// import nodeFetch from 'node-fetch'
 
 import Episode from '../../entities/Episode'
 // import Video from '../../entities/Video'
@@ -19,7 +20,7 @@ import Loading from '../../components/Player/Loading'
 
 import Player from '../../components/Player'
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json())
+// const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 const MiniPlayer: React.FC<{
   episode: Episode
@@ -125,7 +126,7 @@ const Watch: NextPage<{
   episodes: Episode[]
   category: Category
   nextEpisode: Episode | null
-}> = ({ episode: episodeInitial, episodes, category, nextEpisode }) => {
+}> = ({ episode, episodes, category, nextEpisode }) => {
   const router = useRouter()
   const theme = useContext(ThemeContext)
 
@@ -133,19 +134,19 @@ const Watch: NextPage<{
     return <Loading color={theme.tertiary} />
   }
 
-  if (!episodeInitial) {
+  if (!episode) {
     return <Error statusCode={404} />
   }
 
-  const { data: episode } = useSWR<Episode[]>(
-    `https://appanimeplus.tk/api-animesbr-10.php?episodios=${episodeInitial[0].video_id}`,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      revalidateOnMount: true,
-      revalidateOnReconnect: false,
-    }
-  )
+  // const { data: episode } = useSWR<Episode[]>(
+  //   `https://appanimeplus.tk/api-animesbr-10.php?episodios=${episodeInitial[0].video_id}`,
+  //   fetcher,
+  //   {
+  //     revalidateOnFocus: false,
+  //     revalidateOnMount: true,
+  //     revalidateOnReconnect: false,
+  //   }
+  // )
 
   return episode ? (
     <MiniPlayer
@@ -173,8 +174,19 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  // const json = nodeFetch(`https://appanimeplus.tk/api-animesbr-10.php?episodios=${params?.videoId}`)
+
+  // json
+  //   .then((response: any) => {
+  //     return response.json()
+  //   })
+  //   .then((jsonData: any) => {
+  //     console.log(jsonData)
+  //   })
+
   try {
     const { data } = await api.get<Episode[]>(`/api-animesbr-10.php?episodios=${params?.videoId}`)
+    console.log(data)
     if (!data) throw 'Error array.'
     const { data: episodes } = await api.get<Episode[]>(
       `/api-animesbr-10.php?cat_id=${data[0].category_id}`
