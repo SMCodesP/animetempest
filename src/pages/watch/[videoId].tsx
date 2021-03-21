@@ -5,7 +5,6 @@ import { useRouter } from 'next/router'
 import { NextPage, GetStaticProps } from 'next'
 // import useSWR from 'swr'
 // import fetch from 'unfetch'
-// import nodeFetch from 'node-fetch'
 
 import Episode from '../../entities/Episode'
 // import Video from '../../entities/Video'
@@ -44,12 +43,12 @@ const MiniPlayer: React.FC<{
       default_quality !== null
         ? default_quality
         : episode.locationhd
-        ? 'locationhd'
-        : episode.locationsd
-        ? 'locationsd'
-        : episode.location
-        ? 'location'
-        : ''
+          ? 'locationhd'
+          : episode.locationsd
+            ? 'locationsd'
+            : episode.location
+              ? 'location'
+              : ''
     )
   }, [])
 
@@ -72,11 +71,11 @@ const MiniPlayer: React.FC<{
           qualities={[
             episode.locationhd
               ? {
-                  id: 'locationhd',
-                  // prefix: 'FullHD',
-                  nome: 'FullHD',
-                  playing: 'locationhd' === quality,
-                }
+                id: 'locationhd',
+                // prefix: 'FullHD',
+                nome: 'FullHD',
+                playing: 'locationhd' === quality,
+              }
               : null,
             episode.locationsd && {
               id: 'locationsd',
@@ -117,8 +116,8 @@ const MiniPlayer: React.FC<{
       </Container>
     </>
   ) : (
-    <div />
-  )
+      <div />
+    )
 }
 
 const Watch: NextPage<{
@@ -156,8 +155,8 @@ const Watch: NextPage<{
       category={category}
     />
   ) : (
-    <div />
-  )
+      <div />
+    )
 }
 
 export const getStaticPaths = async () => {
@@ -174,22 +173,10 @@ export const getStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  // const json = nodeFetch(`https://appanimeplus.tk/api-animesbr-10.php?episodios=${params?.videoId}`)
-
-  // json
-  //   .then((response: any) => {
-  //     return response.json()
-  //   })
-  //   .then((jsonData: any) => {
-  //     console.log(jsonData)
-  //   })
-
   try {
-    const { data, ...ep } = await api.get<Episode[]>(
+    const { data } = await api.get<Episode[]>(
       `/api-animesbr-10.php?episodios=${params?.videoId}`
     )
-    console.log(data)
-    console.log(ep)
     if (!data) throw 'Error array.'
     const { data: episodes } = await api.get<Episode[]>(
       `/api-animesbr-10.php?cat_id=${data[0].category_id}`
@@ -205,7 +192,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     if (!nextEpisode || nextEpisode.length === 0) {
       nextEpisode = [
         episodes[episodes.findIndex((ep) => data[0].video_id === ep.video_id) - 1] ||
-          episodes[episodes.findIndex((ep) => data[0].video_id === ep.video_id) + 1],
+        episodes[episodes.findIndex((ep) => data[0].video_id === ep.video_id) + 1],
       ]
     }
 
