@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Error from 'next/error'
-import dynamic from 'next/dynamic'
+// import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { NextPage, GetStaticProps } from 'next'
 import useSWR from 'swr'
@@ -17,11 +17,9 @@ import { ThemeContext } from 'styled-components'
 import Video from '../../entities/Video'
 import Loading from '../../components/Player/Loading'
 
-const Player = dynamic(() => import('../../components/Player'), {
-  ssr: false
-})
+import Player from '../../components/Player'
 
-const fetcher = (url: string) => fetch(url).then(r => r.json())
+const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 const MiniPlayer: React.FC<{
   episode: Episode
@@ -29,7 +27,7 @@ const MiniPlayer: React.FC<{
   category: Category
   nextEpisode: Episode | null
 }> = ({ episode, category, episodes, nextEpisode }) => {
-  const theme = useContext(ThemeContext);
+  const theme = useContext(ThemeContext)
   const [quality, setQuality] = useState<'locationhd' | 'locationsd' | 'location' | ''>('')
   const router = useRouter()
 
@@ -41,7 +39,17 @@ const MiniPlayer: React.FC<{
 
   useEffect(() => {
     const default_quality: any = localStorage.getItem('default_quality')
-    setQuality((default_quality !== null) ? default_quality : (episode.locationhd ? 'locationhd' : episode.locationsd ? 'locationsd' : episode.location ? 'location' : ''))
+    setQuality(
+      default_quality !== null
+        ? default_quality
+        : episode.locationhd
+        ? 'locationhd'
+        : episode.locationsd
+        ? 'locationsd'
+        : episode.location
+        ? 'location'
+        : ''
+    )
   }, [])
 
   return quality ? (
@@ -61,40 +69,44 @@ const MiniPlayer: React.FC<{
             setQuality(qualityId)
           }}
           qualities={[
-            (episode.locationhd) ? {
-              id: 'locationhd',
-              // prefix: 'FullHD',
-              nome: 'FullHD',
-              playing: 'locationhd' === quality
-            } : null,
-            (episode.locationsd) && {
+            episode.locationhd
+              ? {
+                  id: 'locationhd',
+                  // prefix: 'FullHD',
+                  nome: 'FullHD',
+                  playing: 'locationhd' === quality,
+                }
+              : null,
+            episode.locationsd && {
               id: 'locationsd',
               // prefix: 'HD',
               nome: 'HD',
-              playing: 'locationsd' === quality
+              playing: 'locationsd' === quality,
             },
-            (episode.location) && {
+            episode.location && {
               id: 'location',
               // prefix: 'SD',
               nome: 'SD',
-              playing: 'location' === quality
+              playing: 'location' === quality,
             },
-          ].filter(el => el !== null)}
+          ].filter((el) => el !== null)}
           backButton={() => router.back()}
           fullPlayer
           autoPlay
           startPosition={0}
           dataNext={{
-            title: nextEpisode?.title || 'Não existe um próximo vídeo.'
+            title: nextEpisode?.title || 'Não existe um próximo vídeo.',
           }}
           onNextClick={() => {
             nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
           }}
-          reprodutionList={episodes.map((ep: any) => ({
-            nome: ep.title,
-            id: ep.video_id,
-            playing: (ep.video_id === episode.video_id),
-          })).reverse()}
+          reprodutionList={episodes
+            .map((ep: any) => ({
+              nome: ep.title,
+              id: ep.video_id,
+              playing: ep.video_id === episode.video_id,
+            }))
+            .reverse()}
           overlayEnabled={true}
           autoControllCloseEnabled
           primaryColor={theme.tertiary}
@@ -103,7 +115,9 @@ const MiniPlayer: React.FC<{
         />
       </Container>
     </>
-  ) : <div />
+  ) : (
+    <div />
+  )
 }
 
 const Watch: NextPage<{
@@ -113,7 +127,7 @@ const Watch: NextPage<{
   nextEpisode: Episode | null
 }> = ({ episode: episodeInitial, episodes, category, nextEpisode }) => {
   const router = useRouter()
-  const theme = useContext(ThemeContext);
+  const theme = useContext(ThemeContext)
 
   if (router.isFallback) {
     return <Loading color={theme.tertiary} />
@@ -123,13 +137,26 @@ const Watch: NextPage<{
     return <Error statusCode={404} />
   }
 
-  const { data: episode } = useSWR<Episode[]>(`https://appanimeplus.tk/api-animesbr-10.php?episodios=${episodeInitial[0].video_id}`, fetcher, {
-    revalidateOnFocus: false,
-    revalidateOnMount: true,
-    revalidateOnReconnect: false
-  })
+  const { data: episode } = useSWR<Episode[]>(
+    `https://appanimeplus.tk/api-animesbr-10.php?episodios=${episodeInitial[0].video_id}`,
+    fetcher,
+    {
+      revalidateOnFocus: false,
+      revalidateOnMount: true,
+      revalidateOnReconnect: false,
+    }
+  )
 
-  return episode ? <MiniPlayer episode={episode[0]} nextEpisode={nextEpisode} episodes={episodes} category={category} /> : <div />
+  return episode ? (
+    <MiniPlayer
+      episode={episode[0]}
+      nextEpisode={nextEpisode}
+      episodes={episodes}
+      category={category}
+    />
+  ) : (
+    <div />
+  )
 }
 
 export const getStaticPaths = async () => {
@@ -148,20 +175,31 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const { data } = await api.get<Episode[]>(`/api-animesbr-10.php?episodios=${params?.videoId}`)
-    if (!data)
-      throw "Error array."
-    const { data: episodes } = await api.get(`/api-animesbr-10.php?cat_id=${data[0].category_id}`)
-    const { data: category } = await api.get(`/api-animesbr-10.php?info=${data[0].category_id}`)
-    const { data: nextEpisode } = await api.get(`/api-animesbr-10.php?episodios=${params?.videoId}&catid=${data[0].category_id}&next`)
-    if (!category || !episodes)
-      throw "Error array."
+    if (!data) throw 'Error array.'
+    const { data: episodes } = await api.get<Episode[]>(
+      `/api-animesbr-10.php?cat_id=${data[0].category_id}`
+    )
+    const { data: category } = await api.get<Category[]>(
+      `/api-animesbr-10.php?info=${data[0].category_id}`
+    )
+    let { data: nextEpisode } = await api.get<Episode[] | null>(
+      `/api-animesbr-10.php?episodios=${params?.videoId}&catid=${data[0].category_id}&next`
+    )
+    if (!category || !episodes) throw 'Error array.'
+
+    if (!nextEpisode || nextEpisode.length === 0) {
+      nextEpisode = [
+        episodes[episodes.findIndex((ep) => data[0].video_id === ep.video_id) - 1] ||
+          episodes[episodes.findIndex((ep) => data[0].video_id === ep.video_id) + 1],
+      ]
+    }
 
     return {
       props: {
         episode: data,
         category: category[0],
         episodes,
-        nextEpisode: nextEpisode ? nextEpisode[0] : null
+        nextEpisode: nextEpisode ? nextEpisode[0] : null,
       },
       revalidate: 900000,
     }
