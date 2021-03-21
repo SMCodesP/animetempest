@@ -185,8 +185,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   //   })
 
   try {
-    const { data } = await api.get<Episode[]>(`/api-animesbr-10.php?episodios=${params?.videoId}`)
+    const { data, ...ep } = await api.get<Episode[]>(
+      `/api-animesbr-10.php?episodios=${params?.videoId}`
+    )
     console.log(data)
+    console.log(ep)
     if (!data) throw 'Error array.'
     const { data: episodes } = await api.get<Episode[]>(
       `/api-animesbr-10.php?cat_id=${data[0].category_id}`
