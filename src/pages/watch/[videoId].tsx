@@ -18,6 +18,7 @@ import Video from '../../entities/Video'
 import Loading from '../../components/Player/Loading'
 
 import Player from '../../components/Player'
+import axios from 'axios'
 
 // const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
@@ -174,8 +175,14 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-    const { data } = await api.get<Episode[]>(
-      `/api-animesbr-10.php?episodios=${params?.videoId}`
+    const { data } = await axios.get<Episode[]>(
+      `/api-animesbr-10.php?episodios=${params?.videoId}`,
+      {
+        headers: {
+          "proxy-type": "brazil"
+        },
+        proxy: { protocol: "http", host: "185.86.150.41", port: 800 },
+      }
     )
     if (!data) throw 'Error array.'
     const { data: episodes } = await api.get<Episode[]>(
