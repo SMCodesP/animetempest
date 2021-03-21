@@ -191,7 +191,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         proxy: { protocol: "http", host: "185.86.150.41", port: 800 },
       }
     )
-    console.log(data)
+
     if (!data) throw 'Error array.'
     if (!data[0].location) throw 'Error array.'
     const { data: episodes } = await api.get<Episode[]>(

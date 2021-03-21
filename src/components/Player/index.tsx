@@ -186,9 +186,9 @@ function ReactNetflixPlayer({
     videoComponent.current.currentTime = position
   }
 
-  const play = () => {
+  const play = debounce(() => {
     videoComponent.current.paused ? videoComponent.current.play() : videoComponent.current.pause()
-  }
+  }, 500)
 
   const onEndedFunction = () => {
     if (+startPosition === +videoComponent.current.duration && !controlBackEnd) {
@@ -296,7 +296,7 @@ function ReactNetflixPlayer({
     }
   }
 
-  const chooseFullScreen = () => {
+  const chooseFullScreen = debounce(() => {
     if (
       document.webkitIsFullScreen ||
       document.mozFullScreen ||
@@ -318,7 +318,8 @@ function ReactNetflixPlayer({
     } else if (playerElement.current.msRequestFullscreen) {
       playerElement.current.msRequestFullscreen()
     }
-  }
+  }, 500)
+
 
   const controllScreenTimeOut = () => {
     if (!autoControllCloseEnabled) {
