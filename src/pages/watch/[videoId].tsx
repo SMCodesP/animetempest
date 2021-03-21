@@ -54,68 +54,63 @@ const MiniPlayer: React.FC<{
   }, [])
 
   return quality ? (
-    <>
-      <Head>
-        <title>{episode.title}</title>
-      </Head>
-      <Container>
-        <Player
-          src={episode[quality || 'location']}
-          title={category.category_name}
-          subTitle={episode.title}
-          titleMedia={category.category_name}
-          extraInfoMedia={episode.title}
-          playerLanguage="pt"
-          onChangeQuality={(qualityId: 'locationhd' | 'locationsd' | 'location') => {
-            setQuality(qualityId)
-          }}
-          qualities={[
-            episode.locationhd
-              ? {
-                id: 'locationhd',
-                // prefix: 'FullHD',
-                nome: 'FullHD',
-                playing: 'locationhd' === quality,
-              }
-              : null,
-            episode.locationsd && {
-              id: 'locationsd',
-              // prefix: 'HD',
-              nome: 'HD',
-              playing: 'locationsd' === quality,
-            },
-            episode.location && {
-              id: 'location',
-              // prefix: 'SD',
-              nome: 'SD',
-              playing: 'location' === quality,
-            },
-          ].filter((el) => el !== null)}
-          backButton={() => router.back()}
-          fullPlayer
-          autoPlay
-          startPosition={0}
-          dataNext={{
-            title: nextEpisode?.title || 'Não existe um próximo vídeo.',
-          }}
-          onNextClick={() => {
-            nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
-          }}
-          reprodutionList={episodes
-            .map((ep: any) => ({
-              nome: ep.title,
-              id: ep.video_id,
-              playing: ep.video_id === episode.video_id,
-            }))
-            .reverse()}
-          overlayEnabled={true}
-          autoControllCloseEnabled
-          primaryColor={theme.tertiary}
-          secundaryColor={theme.text}
-          fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
-        />
-      </Container>
-    </>
+    <Container>
+      <Player
+        src={episode[quality || 'location']}
+        title={category.category_name}
+        subTitle={episode.title}
+        titleMedia={category.category_name}
+        extraInfoMedia={episode.title}
+        playerLanguage="pt"
+        onChangeQuality={(qualityId: 'locationhd' | 'locationsd' | 'location') => {
+          setQuality(qualityId)
+        }}
+        qualities={[
+          episode.locationhd
+            ? {
+              id: 'locationhd',
+              // prefix: 'FullHD',
+              nome: 'FullHD',
+              playing: 'locationhd' === quality,
+            }
+            : null,
+          episode.locationsd && {
+            id: 'locationsd',
+            // prefix: 'HD',
+            nome: 'HD',
+            playing: 'locationsd' === quality,
+          },
+          episode.location && {
+            id: 'location',
+            // prefix: 'SD',
+            nome: 'SD',
+            playing: 'location' === quality,
+          },
+        ].filter((el) => el !== null)}
+        backButton={() => router.back()}
+        fullPlayer
+        autoPlay
+        startPosition={0}
+        dataNext={{
+          title: nextEpisode?.title || 'Não existe um próximo vídeo.',
+        }}
+        onNextClick={() => {
+          nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
+        }}
+        reprodutionList={episodes
+          .map((ep: any) => ({
+            nome: ep.title,
+            id: ep.video_id,
+            playing: ep.video_id === episode.video_id,
+          }))
+          .reverse()}
+        overlayEnabled={true}
+        autoControllCloseEnabled
+        primaryColor={theme.tertiary}
+        secundaryColor={theme.text}
+        fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+      />
+    </Container>
   ) : (
       <div />
     )
@@ -149,12 +144,24 @@ const Watch: NextPage<{
   // )
 
   return episode ? (
-    <MiniPlayer
-      episode={episode[0]}
-      nextEpisode={nextEpisode}
-      episodes={episodes}
-      category={category}
-    />
+    <>
+      <Head>
+        <title>{episode[0]?.title}</title>
+        <meta property="og:title" content={episode[0]?.title} key="title" />
+        <meta name="twitter:title" content={episode[0]?.title} />
+        <meta name="description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
+        <meta property="og:description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
+        <meta name="description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
+        <meta name="Description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
+        <meta name="twitter:description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
+      </Head>
+      <MiniPlayer
+        episode={episode[0]}
+        nextEpisode={nextEpisode}
+        episodes={episodes}
+        category={category}
+      />
+    </>
   ) : (
       <div />
     )
