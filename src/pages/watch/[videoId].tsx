@@ -189,13 +189,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     )
     if (!category || !episodes) throw 'Error array.'
 
-    if (!nextEpisode || nextEpisode.length === 0) {
-      nextEpisode = [
-        episodes[episodes.findIndex((ep) => data[0].video_id === ep.video_id) - 1] ||
-        episodes[episodes.findIndex((ep) => data[0].video_id === ep.video_id) + 1],
-      ]
-    }
-
     return {
       props: {
         episode: data,
