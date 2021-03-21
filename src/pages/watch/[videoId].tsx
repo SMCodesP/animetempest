@@ -176,7 +176,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const { data } = await axios.get<Episode[]>(
-      `https://appanimeplus.tk/api-animesbr-10.php/api-animesbr-10.php?episodios=${params?.videoId}`,
+      `https://appanimeplus.tk/api-animesbr-10.php?episodios=${params?.videoId}`,
       {
         headers: {
           "proxy-type": "brazil"
