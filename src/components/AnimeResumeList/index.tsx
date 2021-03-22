@@ -12,23 +12,28 @@ const AnimeResumeList: React.FC<{
   animes: Anime[] | Video[]
 }> = ({ animes }) => {
   return (
-    <Carousel responsive={{
-      desktop: {
-        breakpoint: { max: 3000, min: 1024 },
-        items: 6,
-        slidesToSlide: 6
-      },
-      tablet: {
-        breakpoint: { max: 1024, min: 464 },
-        items: 3,
-        slidesToSlide: 3
-      },
-      mobile: {
-        breakpoint: { max: 464, min: 0 },
-        items: 2,
-        slidesToSlide: 2
-      }
-    }} ssr infinite={true}>
+    <Carousel
+      responsive={{
+        desktop: {
+          breakpoint: { max: 3000, min: 1024 },
+          items: 6,
+          slidesToSlide: 3
+        },
+        tablet: {
+          breakpoint: { max: 1024, min: 464 },
+          items: 3,
+          slidesToSlide: 2
+        },
+        mobile: {
+          breakpoint: { max: 464, min: 0 },
+          items: 2,
+          slidesToSlide: 1
+        }
+      }}
+      ssr
+      infinite={true}
+      autoPlay={true}
+    >
       {(animes as any).map((anime: any) => (
         <AnimeResume
           anime={anime}
