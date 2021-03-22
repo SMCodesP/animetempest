@@ -1,13 +1,9 @@
 import Head from 'next/head'
 import Error from 'next/error'
-// import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { NextPage, GetStaticProps } from 'next'
-// import useSWR from 'swr'
-// import fetch from 'unfetch'
 
 import Episode from '../../entities/Episode'
-// import Video from '../../entities/Video'
 import api from '../../services/api'
 
 import { Container } from '../../shared/styles/watch'
@@ -18,9 +14,6 @@ import Video from '../../entities/Video'
 import Loading from '../../components/Player/Loading'
 
 import Player from '../../components/Player'
-import axios from 'axios'
-
-// const fetcher = (url: string) => fetch(url).then((r) => r.json())
 
 const MiniPlayer: React.FC<{
   episode: Episode
@@ -44,12 +37,12 @@ const MiniPlayer: React.FC<{
       default_quality !== null
         ? default_quality
         : episode.locationhd
-          ? 'locationhd'
-          : episode.locationsd
-            ? 'locationsd'
-            : episode.location
-              ? 'location'
-              : ''
+        ? 'locationhd'
+        : episode.locationsd
+        ? 'locationsd'
+        : episode.location
+        ? 'location'
+        : ''
     )
   }, [])
 
@@ -68,21 +61,18 @@ const MiniPlayer: React.FC<{
         qualities={[
           episode.locationhd
             ? {
-              id: 'locationhd',
-              // prefix: 'FullHD',
-              nome: 'FullHD',
-              playing: 'locationhd' === quality,
-            }
+                id: 'locationhd',
+                nome: 'FullHD',
+                playing: 'locationhd' === quality,
+              }
             : null,
           episode.locationsd && {
             id: 'locationsd',
-            // prefix: 'HD',
             nome: 'HD',
             playing: 'locationsd' === quality,
           },
           episode.location && {
             id: 'location',
-            // prefix: 'SD',
             nome: 'SD',
             playing: 'location' === quality,
           },
@@ -112,12 +102,12 @@ const MiniPlayer: React.FC<{
       />
     </Container>
   ) : (
-      <div />
-    )
+    <div />
+  )
 }
 
 const Watch: NextPage<{
-  episode: Episode[]
+  episode: Episode
   episodes: Episode[]
   category: Category
   nextEpisode: Episode | null
@@ -133,38 +123,43 @@ const Watch: NextPage<{
     return <Error statusCode={404} />
   }
 
-  // const { data: episode } = useSWR<Episode[]>(
-  //   `https://appanimeplus.tk/api-animesbr-10.php?episodios=${episodeInitial[0].video_id}`,
-  //   fetcher,
-  //   {
-  //     revalidateOnFocus: false,
-  //     revalidateOnMount: true,
-  //     revalidateOnReconnect: false,
-  //   }
-  // )
-
   return episode ? (
     <>
       <Head>
-        <title>{episode[0]?.title}</title>
-        <meta property="og:title" content={episode[0]?.title} key="title" />
-        <meta name="twitter:title" content={episode[0]?.title} />
-        <meta name="description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
-        <meta property="og:description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
-        <meta name="description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
-        <meta name="Description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
-        <meta name="twitter:description" content={`Melhor site para você assistir seus animes, assista agora ${episode[0]?.title} sem anúncios legendado e hd.`} />
+        <title>{episode.title}</title>
+        <meta property="og:title" content={episode.title} key="title" />
+        <meta name="twitter:title" content={episode.title} />
+        <meta
+          name="description"
+          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+        />
+        <meta
+          property="og:description"
+          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+        />
+        <meta
+          name="description"
+          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+        />
+        <meta
+          name="Description"
+          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+        />
+        <meta
+          name="twitter:description"
+          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+        />
       </Head>
       <MiniPlayer
-        episode={episode[0]}
+        episode={episode}
         nextEpisode={nextEpisode}
         episodes={episodes}
         category={category}
       />
     </>
   ) : (
-      <div />
-    )
+    <div />
+  )
 }
 
 export const getStaticPaths = async () => {
@@ -182,35 +177,22 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-    const { data } = await axios.get<Episode[]>(
-      `https://appanimeplus.tk/api-animesbr-10.php?episodios=${params?.videoId}`,
-      {
-        headers: {
-          "proxy-type": "brazil"
-        },
-        proxy: { protocol: "http", host: "185.86.150.41", port: 800 },
-      }
-    )
+    const episode = await api.getEpisode(String(params?.videoId))
 
-    if (!data) throw 'Error array.'
-    if (!data[0].location) throw 'Error array.'
-    const { data: episodes } = await api.get<Episode[]>(
-      `/api-animesbr-10.php?cat_id=${data[0].category_id}`
-    )
-    const { data: category } = await api.get<Category[]>(
-      `/api-animesbr-10.php?info=${data[0].category_id}`
-    )
-    let { data: nextEpisode } = await api.get<Episode[] | null>(
-      `/api-animesbr-10.php?episodios=${params?.videoId}&catid=${data[0].category_id}&next`
-    )
+    if (!episode) throw 'Error array.'
+    if (!episode.location) throw 'Error array.'
+    const episodes = await api.getEpisodesFromAnime(episode.category_id)
+    const category = await api.getAnime(episode.category_id)
+    let nextEpisode = await api.nextEpisode(episode.video_id, episode.category_id)
+
     if (!category || !episodes) throw 'Error array.'
 
     return {
       props: {
-        episode: data,
-        category: category[0],
+        episode,
+        category,
         episodes,
-        nextEpisode: nextEpisode ? nextEpisode[0] : null,
+        nextEpisode,
       },
       revalidate: 900000,
     }

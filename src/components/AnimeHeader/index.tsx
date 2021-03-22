@@ -1,8 +1,10 @@
-import { useState, useEffect, useRef, useCallback, FormEvent } from 'react';
-import { FaSearch, FaPlay } from 'react-icons/fa';
+import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useState, useEffect, useRef, useCallback, FormEvent } from 'react'
+import { FaSearch, FaPlay } from 'react-icons/fa'
 
 import Category from '../../entities/Category'
+import Episode from '../../entities/Episode'
 
 import {
   Container,
@@ -16,21 +18,26 @@ import {
   Icon,
   ContainerInput,
   Input,
-  SearchIcon
-} from './styles';
+  SearchIcon,
+} from './styles'
 
 const AnimeHeader: React.FC<{
   anime: Category
-}> = ({ anime }) => {
+  episodesMostPopular: Episode[]
+}> = ({ anime, episodesMostPopular }) => {
   const router = useRouter()
 
   const [inputSearchActive, setInputSearchActive] = useState(false)
 
-  const inputSearch = useRef<HTMLInputElement>(null);
-  const iconSearch = useRef<HTMLDivElement>(null);
+  const inputSearch = useRef<HTMLInputElement>(null)
+  const iconSearch = useRef<HTMLDivElement>(null)
 
   const cancelInput = (e: MouseEvent) => {
-    if (e.target !== inputSearch.current && e.target !== iconSearch.current && !iconSearch.current?.contains(e.target as any)) {
+    if (
+      e.target !== inputSearch.current &&
+      e.target !== iconSearch.current &&
+      !iconSearch.current?.contains(e.target as any)
+    ) {
       setInputSearchActive(false)
     }
   }
@@ -43,14 +50,14 @@ const AnimeHeader: React.FC<{
   }, [])
 
   const submitSearch = (e?: FormEvent<HTMLFormElement>) => {
-    e?.preventDefault();
-    router.push(`/search?q=${inputSearch.current?.value}`)
+    e?.preventDefault()
+    router.push(`/search?query=${inputSearch.current?.value}`)
   }
 
   const handleClickSearch = useCallback(() => {
     if (!inputSearchActive) {
       setInputSearchActive(true)
-      return;
+      return
     }
     submitSearch()
   }, [inputSearchActive])
@@ -80,7 +87,16 @@ const AnimeHeader: React.FC<{
       <ContainerAnime>
         <ContainerInfo>
           <Title>{anime.category_name}</Title>
-          <ButtonWatch><FaPlay size={20} />Assista agora</ButtonWatch>
+          <div style={{ width: 225 }}>
+            <Link href={`/watch/${episodesMostPopular[episodesMostPopular.length - 1].video_id}`}>
+              <a>
+                <ButtonWatch>
+                  <FaPlay size={20} />
+                  Assista agora
+                </ButtonWatch>
+              </a>
+            </Link>
+          </div>
         </ContainerInfo>
         <Thumbnail src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
       </ContainerAnime>
