@@ -32,6 +32,8 @@ export const ContainerAnime = styled.div`
   margin: 0;
 
   &:hover img {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     filter: brightness(35%);
   }
 
@@ -49,12 +51,26 @@ export const Image = styled.img`
   height: 300px;
   margin: 0;
   user-select: none;
-  transition: 0.4s filter;
+  transition: 0.4s filter, 0.4s border-bottom-left-radius, 0.4s border-bottom-right-radius;
   filter: brightness(85%);
 `
 
-export const More = styled.p`
+export const More = styled.div`
   width: 100%;
   padding: 15px 5px;
-  background: #333a;
+  background: ${({ theme }) => theme.secundary};
+  opacity: 0.65;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  transition: .4s opacity;
+
+  &:hover {
+    opacity: 1;
+  }
+  & a {
+    cursor: pointer;
+  }
+  & a:hover {
+    text-decoration: underline;
+  }
 `

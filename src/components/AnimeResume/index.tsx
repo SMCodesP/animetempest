@@ -63,7 +63,7 @@ const AnimeResume: React.FC<{
               padding: '5px 15px',
             }}
           >
-            {(anime as Video).title || (anime as Anime).category_name}
+            <a>{(anime as Video).title || (anime as Anime).category_name}</a>
           </More>
         </ContainerCurtain>
       </ContainerAnime>
