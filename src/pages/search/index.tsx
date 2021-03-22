@@ -106,16 +106,20 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
               </Menu>
               <ContainerListAnime>
                 {animes.map((anime) => (
-                  <ItemAnime key={anime.id}>
-                    <Thumbnail
-                      src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
-                      width={256}
-                      height={345}
-                    />
-                    <ContainerName>
-                      <Name>{anime.category_name}</Name>
-                    </ContainerName>
-                  </ItemAnime>
+                  <Link href={`/anime/${anime.id}`} key={anime.id}>
+                    <a>
+                      <ItemAnime>
+                        <Thumbnail
+                          src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
+                          width={256}
+                          height={345}
+                        />
+                        <ContainerName>
+                          <Name>{anime.category_name}</Name>
+                        </ContainerName>
+                      </ItemAnime>
+                    </a>
+                  </Link>
                 ))}
               </ContainerListAnime>
             </ContainerPage>

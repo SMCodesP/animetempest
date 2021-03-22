@@ -63,7 +63,9 @@ const AnimeResume: React.FC<{
               padding: '5px 15px',
             }}
           >
-            <a>{(anime as Video).title || (anime as Anime).category_name}</a>
+            <Link href={`/anime/${(anime as Video).category_id || (anime as Anime).id}`}>
+              <a>{(anime as Video).title || (anime as Anime).category_name}</a>
+            </Link>
           </More>
         </ContainerCurtain>
       </ContainerAnime>
