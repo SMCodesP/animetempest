@@ -6,19 +6,22 @@ export const Container = styled.div``
 export const ContainerHeader = styled.header`
   width: 100%;
   height: 70vh;
-  background: ${({ theme }) => theme.secundary};
-  background-image: linear-gradient(
-    ${({ theme }) => theme.primary},
-    ${({ theme }) => theme.secundaryBackground} 75%
-  );
+  background: ${({ theme }) => theme.background};
   position: relative;
 `
 
-export const HeaderWave = styled.img`
+export const HeaderWave = styled.div`
   position: absolute;
   align-self: flex-end;
   width: 100%;
-  bottom: -1px;
+  height: 75%;
+  top: -1px;
+  transform: rotateZ(180deg);
+`
+
+export const ContainerPage = styled.div`
+  position: relative;
+  z-index: 999;
 `
 
 export const Menu = styled.div`
