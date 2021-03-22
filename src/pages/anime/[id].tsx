@@ -55,7 +55,7 @@ const Anime: NextPage<{
             <AnimeTitle>{anime.category_name}</AnimeTitle>
             <AnimeDescription>{anime.category_description}</AnimeDescription>
             <Link href={`/watch/${episodes[episodes.length - 1].video_id}`}>
-              <a>
+              <a style={{ width: 'fit-content' }}>
                 <ButtonWatch>Assistir online</ButtonWatch>
               </a>
             </Link>

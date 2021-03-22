@@ -31,6 +31,7 @@ export const ContainerInfoAnime = styled.div`
   margin-top: 15px;
 
   & > div:first-child {
+    flex: 0 0 268px;
     border-radius: 15px;
     box-shadow: 2px 2px 8px ${({ theme }) => theme.secundaryText};
     transition: box-shadow .3s, filter .3s, transform .3s;
@@ -59,6 +60,7 @@ export const AnimeDescription = styled.p`
   text-indent: 1em;
   font-size: 17px;
   padding: 5px 15px;
+  margin-bottom: 20px;
 `
 
 export const ButtonWatch = styled.button`
@@ -72,7 +74,6 @@ export const ButtonWatch = styled.button`
   font-weight: bold;
   font-size: 18px;
   outline: 0;
-  margin: 20px 0;
   transition: background .3s, color .3s, box-shadow .3s;
 
   &:hover {
