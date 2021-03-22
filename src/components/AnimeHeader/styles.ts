@@ -107,7 +107,7 @@ export const ButtonWatch = styled.button`
   margin: 25px 30px;
   padding: 10px 0;
   width: 100%;
-  background: #e66465;
+  background: ${({ theme }) => theme.tertiary};
   border: 0;
   border-radius: 7.5px;
   cursor: pointer;
@@ -119,10 +119,11 @@ export const ButtonWatch = styled.button`
   font-weight: bold;
   font-size: 18px;
   outline: none;
+    filter: brightness(85%);
   transition: filter 0.2s;
 
   &:hover {
-    filter: brightness(75%);
+    filter: brightness(60%);
   }
 `
 

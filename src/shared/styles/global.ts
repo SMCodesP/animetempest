@@ -29,7 +29,7 @@ export const GlobalStyle = createGlobalStyle`
     background: ${({ theme }) => theme.fifthText};
   }
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.secundary};
+    background: ${({ theme }) => theme.inverseText};
     border-radius: 5px;
     transition: 0.2s background;
   }

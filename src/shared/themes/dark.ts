@@ -1,15 +1,15 @@
 export default {
-  primary: '#957FEF',
-  secundary: '#6272a4',
-  tertiary: '#8be9fd',
+  primary: '#67E480',
+  secundary: '#41414D',
+  tertiary: '#988BC7',
 
-  background: '#282a36',
+  background: '#191622',
   secundaryBackground: '#44475a',
 
-  text: '#f8f8f2',
-  secundaryText: '#bd93f9',
+  text: '#E1E1E6',
+  secundaryText: '#483C67',
   tertiaryText: '#f1fa8c',
-  fifthText: '#ff79c6',
+  fifthText: '#E96379',
   inverseText: '#333333',
 
   light: '#fafafa',
