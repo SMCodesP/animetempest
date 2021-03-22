@@ -33,7 +33,6 @@ export const ContainerInfoAnime = styled.div`
   & > div:first-child {
     border-radius: 15px;
     box-shadow: 2px 2px 8px ${({ theme }) => theme.secundaryText};
-    width: 135%;
     transition: box-shadow .3s, filter .3s, transform .3s;
   }
 
