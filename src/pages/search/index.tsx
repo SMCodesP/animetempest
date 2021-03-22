@@ -25,6 +25,7 @@ import {
 } from '../../shared/styles/search'
 import { FaHome } from 'react-icons/fa'
 import Wave from 'react-wavify'
+import Footer from '../../components/Footer'
 
 const Search: NextPage = ({ query: queryInitial }: any) => {
   const router = useRouter()
@@ -62,61 +63,66 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
       <Head>
         <title>Resultados para {query}</title>
       </Head>
-      <Container>
-        <ContainerHeader>
-          <HeaderWave>
-            <Wave
-              fill="url(#gradient)"
-              paused={false}
-              options={{
-                amplitude: 50
-              }}
-              style={{
-                position: 'absolute',
-                top: 0,
-                bottom: 0,
-              }}
-            >
-              <defs>
-                <linearGradient id="gradient" gradientTransform="rotate(90)">
-                  <stop offset="10%" stopColor={theme.secundaryBackground} />
-                  <stop offset="90%" stopColor={theme.secundary} />
-                </linearGradient>
-              </defs>
-            </Wave>
-          </HeaderWave>
-          <ContainerPage>
-            <Menu>
-              <Link href="/">
-                <a>
-                  <FaHome color={theme.text} size={36} />
-                </a>
-              </Link>
-              <Input
-                type="text"
-                name="search"
-                value={query}
-                onChange={handleChange}
-                placeholder="Procure por um anime"
-              />
-            </Menu>
-            <ContainerListAnime>
-              {animes.map((anime) => (
-                <ItemAnime key={anime.id}>
-                  <Thumbnail
-                    src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
-                    width={256}
-                    height={345}
-                  />
-                  <ContainerName>
-                    <Name>{anime.category_name}</Name>
-                  </ContainerName>
-                </ItemAnime>
-              ))}
-            </ContainerListAnime>
-          </ContainerPage>
-        </ContainerHeader>
-      </Container>
+      <div style={{
+        minHeight: '100vh'
+      }}>
+        <Container>
+          <ContainerHeader>
+            <HeaderWave>
+              <Wave
+                fill="url(#gradient)"
+                paused={false}
+                options={{
+                  amplitude: 50
+                }}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  bottom: 0,
+                }}
+              >
+                <defs>
+                  <linearGradient id="gradient" gradientTransform="rotate(90)">
+                    <stop offset="10%" stopColor={theme.secundaryBackground} />
+                    <stop offset="90%" stopColor={theme.secundary} />
+                  </linearGradient>
+                </defs>
+              </Wave>
+            </HeaderWave>
+            <ContainerPage>
+              <Menu>
+                <Link href="/">
+                  <a>
+                    <FaHome color={theme.text} size={36} />
+                  </a>
+                </Link>
+                <Input
+                  type="text"
+                  name="search"
+                  value={query}
+                  onChange={handleChange}
+                  placeholder="Procure por um anime"
+                />
+              </Menu>
+              <ContainerListAnime>
+                {animes.map((anime) => (
+                  <ItemAnime key={anime.id}>
+                    <Thumbnail
+                      src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
+                      width={256}
+                      height={345}
+                    />
+                    <ContainerName>
+                      <Name>{anime.category_name}</Name>
+                    </ContainerName>
+                  </ItemAnime>
+                ))}
+              </ContainerListAnime>
+            </ContainerPage>
+          </ContainerHeader>
+        </Container>
+      </div>
+      <Footer />
     </>
   )
 }

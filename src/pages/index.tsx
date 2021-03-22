@@ -9,6 +9,7 @@ import { Container } from '../shared/styles/home'
 import AnimeHeader from '../components/AnimeHeader'
 import Category from '../entities/Category'
 import Episode from '../entities/Episode'
+import Footer from '../components/Footer'
 
 const Home: NextPage<{
   animesLatest: Video[]
@@ -17,17 +18,22 @@ const Home: NextPage<{
 }> = ({ animesLatest, animesPopular, episodesMostPopular }) => {
   return (
     <>
-      <AnimeHeader anime={animesPopular[0]} episodesMostPopular={episodesMostPopular} />
-      <Container>
-        <h1
-          style={{
-            margin: '10px 15px',
-          }}
-        >
-          Lançamentos
+      <div style={{
+        minHeight: '100vh'
+      }}>
+        <AnimeHeader anime={animesPopular[0]} episodesMostPopular={episodesMostPopular} />
+        <Container>
+          <h1
+            style={{
+              margin: '10px 15px',
+            }}
+          >
+            Lançamentos
         </h1>
-        <AnimeResumeList animes={animesLatest} />
-      </Container>
+          <AnimeResumeList animes={animesLatest} />
+        </Container>
+      </div>
+      <Footer />
     </>
   )
 }

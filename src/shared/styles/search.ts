@@ -5,7 +5,7 @@ export const Container = styled.div``
 
 export const ContainerHeader = styled.header`
   width: 100%;
-  height: 70vh;
+  min-height: 70vh;
   background: ${({ theme }) => theme.background};
   position: relative;
 `
@@ -14,7 +14,7 @@ export const HeaderWave = styled.div`
   position: absolute;
   align-self: flex-end;
   width: 100%;
-  height: 75%;
+  height: 50vh;
   top: -1px;
   transform: rotateZ(180deg);
 `
@@ -55,7 +55,7 @@ export const Input = styled.input`
 
 export const ContainerListAnime = styled.ul`
   z-index: 999;
-  position: absolute;
+  position: relative;
   width: 100%;
   padding: 10px 30px;
   display: grid;
