@@ -194,7 +194,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         episodes,
         nextEpisode,
       },
-      revalidate: 900000,
+      revalidate: 1,
     }
   } catch (error) {
     console.error(error)
