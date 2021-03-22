@@ -3,19 +3,17 @@ import styled from 'styled-components'
 export const Container = styled.div`
   width: 100%;
   height: 70vh;
-  background: ${({ theme }) => theme.secundary};
-  background-image: linear-gradient(
-    ${({ theme }) => theme.primary},
-    ${({ theme }) => theme.secundaryBackground} 75%
-  );
+  background: ${({ theme }) => theme.background};
   position: relative;
 `
 
-export const HeaderWave = styled.img`
+export const HeaderWave = styled.div`
   position: absolute;
   align-self: flex-end;
   width: 100%;
-  bottom: -1px;
+  height: 75%;
+  top: -1px;
+  transform: rotateZ(180deg);
 `
 
 export const Menu = styled.nav`
@@ -60,6 +58,7 @@ export const ContainerInput = styled.form`
 export const Icon = styled.img`
   width: 48px;
   border-radius: 24px;
+  position: relative;
 `
 
 export const Input = styled.input`

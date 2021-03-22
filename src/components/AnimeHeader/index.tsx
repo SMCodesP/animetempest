@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState, useEffect, useRef, useCallback, FormEvent } from 'react'
+import { useState, useEffect, useRef, useCallback, FormEvent, useContext } from 'react'
+
 import { FaSearch, FaPlay } from 'react-icons/fa'
+import Wave from 'react-wavify'
 
 import Category from '../../entities/Category'
 import Episode from '../../entities/Episode'
@@ -20,12 +22,14 @@ import {
   Input,
   SearchIcon,
 } from './styles'
+import { ThemeContext } from 'styled-components'
 
 const AnimeHeader: React.FC<{
   anime: Category
   episodesMostPopular: Episode[]
 }> = ({ anime, episodesMostPopular }) => {
   const router = useRouter()
+  const theme = useContext(ThemeContext)
 
   const [inputSearchActive, setInputSearchActive] = useState(false)
 
@@ -64,7 +68,27 @@ const AnimeHeader: React.FC<{
 
   return (
     <Container>
-      <HeaderWave src="/images/wave.svg" />
+      <HeaderWave>
+        <Wave
+          fill="url(#gradient)"
+          paused={false}
+          options={{
+            amplitude: 50
+          }}
+          style={{
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+          }}
+        >
+          <defs>
+            <linearGradient id="gradient" gradientTransform="rotate(90)">
+              <stop offset="10%" stopColor={theme.secundaryBackground} />
+              <stop offset="90%" stopColor={theme.secundary} />
+            </linearGradient>
+          </defs>
+        </Wave>
+      </HeaderWave>
       <Menu>
         <Icon src="/images/icons/icon.jpg" />
         <ContainerInput onSubmit={submitSearch}>

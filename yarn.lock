@@ -2717,6 +2717,13 @@ react-refresh@0.8.3:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.8.3.tgz#721d4657672d400c5e3c75d063c4a85fb2d5d68f"
   integrity sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==
 
+react-wavify@^1.5.2:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/react-wavify/-/react-wavify-1.5.2.tgz#02a26b335414d0e008cd4f6c0ab15dd97af5ba88"
+  integrity sha512-Xf7zC+6DyitUbNQsAMrSN6DygN90DrzQB20ecgLpiSoBqyUgUM3DbYvCTk5re7azvwT9EANq+awyk2KNCr4oEg==
+  dependencies:
+    prop-types "^15.7.2"
+
 react@^16.0.0:
   version "16.14.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"

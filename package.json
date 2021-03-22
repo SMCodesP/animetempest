@@ -34,6 +34,7 @@
     "react-multi-carousel": "^2.6.2",
     "react-netflix-player": "^1.0.12",
     "react-player": "^2.9.0",
+    "react-wavify": "^1.5.2",
     "styled-components": "^5.2.1",
     "swr": "^0.5.4",
     "typescript": "^4.2.3",
