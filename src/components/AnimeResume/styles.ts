@@ -8,7 +8,7 @@ export const ContainerCurtain = styled.div`
   width: 100%;
   height: 100%;
   opacity: 0;
-  transition: 0.4s opacity;
+  transition: opacity 0.2s;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -19,7 +19,7 @@ export const ContainerCurtain = styled.div`
 `
 
 export const IconPlay = styled(BiPlayCircle)`
-  transition: 0.4s filter;
+  transition: filter 0.2s;
   filter: brightness(80%);
 
   &:hover {
@@ -52,7 +52,7 @@ export const Image = styled.img`
   height: 300px;
   margin: 0;
   user-select: none;
-  transition: 0.4s filter, 0.4s border-bottom-left-radius, 0.4s border-bottom-right-radius;
+  transition: filter 0.2s, border-bottom-left-radius 0.2s, border-bottom-right-radius 0.2s;
   filter: brightness(85%);
 `
 
@@ -63,7 +63,7 @@ export const More = styled.div`
   opacity: 0.65;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  transition: 0.4s opacity;
+  transition: opacity 0.2s;
 
   &:hover {
     opacity: 1;
