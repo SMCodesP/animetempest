@@ -6,11 +6,10 @@ import Anime from '../../entities/Anime'
 import { AiOutlineStar, AiTwotoneStar } from 'react-icons/ai'
 import { ThemeContext } from 'styled-components'
 
-import { ContainerAnime, IconPlay, ContainerCurtain, Image, More } from './styles'
-import Video from '../../entities/Video'
+import { ContainerAnime, ContainerCurtain, Image, More } from './styles'
 
 const AnimeResume: React.FC<{
-  anime: Anime | Video
+  anime: Anime
 }> = ({ anime }) => {
   const theme = useContext(ThemeContext)
   const [hoverStar, setHoverStar] = useState(false)
@@ -21,54 +20,52 @@ const AnimeResume: React.FC<{
       <Head>
         <title>Início - OtakuCity</title>
       </Head>
-      <ContainerAnime>
-        <Image src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
-        <ContainerCurtain>
-          {isFavorite || hoverStar ? (
-            <AiTwotoneStar
-              size={24}
-              color={theme.text}
-              style={{
-                alignSelf: 'flex-end',
-                marginTop: 8,
-                marginRight: 8,
-              }}
-              onClick={() => setIsFavorite((state) => !state)}
-              onMouseLeave={() => setHoverStar(false)}
-            />
-          ) : (
-              <AiOutlineStar
-                size={24}
-                color={theme.text}
+      <Link href={`/anime/${anime.id}`}>
+        <a
+          style={{
+            alignSelf: 'center',
+          }}
+        >
+          <ContainerAnime>
+            <Image src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
+            <ContainerCurtain>
+              {isFavorite || hoverStar ? (
+                <AiTwotoneStar
+                  size={24}
+                  color={theme.text}
+                  style={{
+                    alignSelf: 'flex-end',
+                    marginTop: 8,
+                    marginRight: 8,
+                  }}
+                  onClick={() => setIsFavorite((state) => !state)}
+                  onMouseLeave={() => setHoverStar(false)}
+                />
+              ) : (
+                <AiOutlineStar
+                  size={24}
+                  color={theme.text}
+                  style={{
+                    alignSelf: 'flex-end',
+                    marginTop: 8,
+                    marginRight: 8,
+                  }}
+                  onMouseEnter={() => setHoverStar(true)}
+                />
+              )}
+              <More
                 style={{
-                  alignSelf: 'flex-end',
-                  marginTop: 8,
-                  marginRight: 8,
+                  padding: '5px 15px',
                 }}
-                onMouseEnter={() => setHoverStar(true)}
-              />
-            )}
-          <Link href={`/watch/${(anime as Video).video_id}`}>
-            <a style={{
-              alignSelf: 'center',
-            }}>
-              <IconPlay
-                size={42}
-                color={theme.text}
-              />
-            </a>
-          </Link>
-          <More
-            style={{
-              padding: '5px 15px',
-            }}
-          >
-            <Link href={`/anime/${(anime as Video).category_id || (anime as Anime).id}`}>
-              <a>{(anime as Video).title || (anime as Anime).category_name}</a>
-            </Link>
-          </More>
-        </ContainerCurtain>
-      </ContainerAnime>
+              >
+                <Link href={`/anime/${anime.id}`}>
+                  <a>{anime.category_name}</a>
+                </Link>
+              </More>
+            </ContainerCurtain>
+          </ContainerAnime>
+        </a>
+      </Link>
     </>
   )
 }

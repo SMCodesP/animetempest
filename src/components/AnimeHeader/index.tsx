@@ -26,8 +26,7 @@ import { ThemeContext } from 'styled-components'
 
 const AnimeHeader: React.FC<{
   anime: Category
-  episodesMostPopular: Episode[]
-}> = ({ anime, episodesMostPopular }) => {
+}> = ({ anime }) => {
   const router = useRouter()
   const theme = useContext(ThemeContext)
 
@@ -73,7 +72,7 @@ const AnimeHeader: React.FC<{
           fill="url(#gradient)"
           paused={false}
           options={{
-            amplitude: 50
+            amplitude: 50,
           }}
           style={{
             position: 'absolute',
@@ -112,7 +111,7 @@ const AnimeHeader: React.FC<{
         <ContainerInfo>
           <Title>{anime.category_name}</Title>
           <div style={{ width: 225 }}>
-            <Link href={`/watch/${episodesMostPopular[episodesMostPopular.length - 1].video_id}`}>
+            <Link href={`/anime/${anime.id}`}>
               <a>
                 <ButtonWatch>
                   <FaPlay size={20} />

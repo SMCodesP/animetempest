@@ -1,22 +1,35 @@
 import { NextPage, GetStaticProps } from 'next'
-import Head from 'next/head';
+import Head from 'next/head'
 
-import Footer from '../../components/Footer';
+import Footer from '../../components/Footer'
 
-import Category from '../../entities/Category';
-import Episode from '../../entities/Episode';
+import Category from '../../entities/Category'
+import Episode from '../../entities/Episode'
 
-import api from '../../services/api';
+import api from '../../services/api'
 
-import { Container, Back, AnimeImage, AnimeDescription, ContainerInfoAnime, AnimeTitle, AnimeInfo, ButtonWatch, ContainerListEpisodes, ContainerItemEpisode, EpisodeTitle, EpisodeImage } from '../../shared/styles/anime';
-import { useContext } from 'react';
-import { ThemeContext } from 'styled-components';
+import {
+  Container,
+  Back,
+  AnimeImage,
+  AnimeDescription,
+  ContainerInfoAnime,
+  AnimeTitle,
+  AnimeInfo,
+  ButtonWatch,
+  ContainerListEpisodes,
+  ContainerItemEpisode,
+  EpisodeTitle,
+  EpisodeImage,
+} from '../../shared/styles/anime'
+import { useContext } from 'react'
+import { ThemeContext } from 'styled-components'
 
 import { IoIosArrowRoundBack } from 'react-icons/io'
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import Loading from '../../components/Player/Loading';
-import Video from '../../entities/Video';
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import Loading from '../../components/Player/Loading'
+import Video from '../../entities/Video'
 
 const Anime: NextPage<{
   anime: Category
@@ -38,9 +51,11 @@ const Anime: NextPage<{
       <Head>
         <title>{anime.category_name} - OtakuCity</title>
       </Head>
-      <Container style={{
-        minHeight: '100vh'
-      }}>
+      <Container
+        style={{
+          minHeight: '100vh',
+        }}
+      >
         <Back onClick={handleBack}>
           <IoIosArrowRoundBack size={46} color={theme.tertiary} />
           Voltar
@@ -62,7 +77,7 @@ const Anime: NextPage<{
           </AnimeInfo>
         </ContainerInfoAnime>
         <ContainerListEpisodes>
-          {episodes.map(episode => (
+          {episodes.map((episode) => (
             <Link href={`/watch/${episode.video_id}`} key={`episode-${episode.video_id}`}>
               <a>
                 <ContainerItemEpisode>
@@ -80,7 +95,7 @@ const Anime: NextPage<{
       </Container>
       <Footer />
     </>
-  );
+  )
 }
 
 export const getStaticPaths = async () => {
@@ -88,29 +103,29 @@ export const getStaticPaths = async () => {
   const { data: animesPopular } = await api.get<Category[]>('/api-animesbr-10.php?populares')
 
   const paths = [
-    ...videosLatest.map(video => ({
+    ...videosLatest.map((video) => ({
       params: {
-        id: video.category_id
-      }
+        id: video.category_id,
+      },
     })),
-    ...animesPopular.map(anime => ({
+    ...animesPopular.map((anime) => ({
       params: {
-        id: anime.id
-      }
-    }))
+        id: anime.id,
+      },
+    })),
   ]
 
   var pathsUnique: {
     params: {
       id: string
     }
-  }[] = [];
+  }[] = []
   paths.forEach((item) => {
-    var i = pathsUnique.findIndex(x => x.params.id == item.params.id);
+    var i = pathsUnique.findIndex((x) => x.params.id == item.params.id)
     if (i <= -1) {
-      pathsUnique.push({ params: { id: item.params.id } });
+      pathsUnique.push({ params: { id: item.params.id } })
     }
-  });
+  })
 
   return {
     paths: pathsUnique,
@@ -123,12 +138,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const anime = await api.getAnime(String(params?.id))
     if (!anime) {
       console.log(anime)
-      throw new Error("Anime not found")
+      throw new Error('Anime not found')
     }
     const episodes = await api.getEpisodesFromAnime(anime.id)
     if (!episodes) {
       console.log(episodes)
-      throw new Error("Episodes not found")
+      throw new Error('Episodes not found')
     }
 
     return {
@@ -147,4 +162,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 }
 
-export default Anime;
+export default Anime

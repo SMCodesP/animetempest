@@ -30,7 +30,6 @@ export const IconPlay = styled(BiPlayCircle)`
 export const ContainerAnime = styled.div`
   position: relative;
   margin: 0;
-  cursor: pointer;
 
   &:hover img {
     border-bottom-left-radius: 10px;
@@ -41,7 +40,7 @@ export const ContainerAnime = styled.div`
   &:hover ${ContainerCurtain} {
     opacity: 1;
   }
-
+  
   & * {
     user-select: none;
   }
@@ -63,7 +62,7 @@ export const More = styled.div`
   opacity: 0.65;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  transition: 0.4s opacity;
+  transition: .4s opacity;
 
   &:hover {
     opacity: 1;
