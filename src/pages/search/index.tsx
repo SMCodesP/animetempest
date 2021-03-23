@@ -117,7 +117,16 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                 />
               </Menu>
               {loading && animes.length === 0 ? (
-                <h1>Carregando...</h1>
+                <>
+                  <h1>Carregando...</h1>
+                  <LoadingComponent color={theme.fifthText}>
+                    <div>
+                      <div />
+                      <div />
+                      <div />
+                    </div>
+                  </LoadingComponent>
+                </>
               ) : (
                 animes.length === 0 && <h1>Nenhum anime encontrado</h1>
               )}
