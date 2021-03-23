@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState, useEffect, useRef, useCallback, FormEvent, useContext } from 'react'
+import { useState, useEffect, useRef, useCallback, FormEvent, memo, useContext } from 'react'
 
 import { FaSearch, FaPlay } from 'react-icons/fa'
 import Wave from 'react-wavify'
@@ -126,4 +126,4 @@ const AnimeHeader: React.FC<{
   )
 }
 
-export default AnimeHeader
+export default memo(AnimeHeader)

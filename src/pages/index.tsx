@@ -15,6 +15,8 @@ const Home: NextPage<{
   animesLatest: Video[]
   animesPopular: Category[]
 }> = ({ animesLatest, animesPopular }) => {
+  const animePopular = animesPopular[Math.floor(Math.random() * animesPopular.length)]
+
   return (
     <>
       <div
@@ -22,7 +24,7 @@ const Home: NextPage<{
           minHeight: '100vh',
         }}
       >
-        <AnimeHeader anime={animesPopular[Math.floor(Math.random() * animesPopular.length)]} />
+        <AnimeHeader anime={animePopular} />
         <Container>
           <div>
             <h1
