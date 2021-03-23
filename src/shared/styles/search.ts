@@ -1,5 +1,22 @@
 import Image from 'next/image'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+
+const toUpOpacity = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+
+  30% {
+    opacity: 1;
+    transform: translateY(-20px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+`
 
 export const Container = styled.div``
 
@@ -22,6 +39,13 @@ export const HeaderWave = styled.div`
 export const ContainerPage = styled.div`
   position: relative;
   z-index: 999;
+  display: flex;
+  flex-direction: column;
+
+  & h1 {
+    align-self: center;
+    margin: 30px 0;
+  }
 `
 
 export const Menu = styled.div`
@@ -102,4 +126,33 @@ export const Name = styled.p`
   font-size: 16px;
   font-weight: bold;
   font-family: 'Roboto', sans-serif;
+`
+
+export const LoadingComponent = styled.div`
+  height: 100% !important;
+  width: 100% !important;
+  display: flex;
+  margin-top: 45px;
+
+  div {
+    display: flex;
+    margin: auto;
+
+    div {
+      &:nth-child(2) {
+        animation-delay: 0.1s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 0.2s;
+      }
+
+      animation: 1s linear ${toUpOpacity} infinite;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: ${(props) => props.color};
+      margin: auto 5px;
+    }
+  }
 `
