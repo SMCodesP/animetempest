@@ -6,7 +6,6 @@ import { FaSearch, FaPlay } from 'react-icons/fa'
 import Wave from 'react-wavify'
 
 import Category from '../../entities/Category'
-import Episode from '../../entities/Episode'
 
 import {
   Container,
