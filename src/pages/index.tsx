@@ -10,12 +10,17 @@ import AnimeHeader from '../components/AnimeHeader'
 import Category from '../entities/Category'
 import Footer from '../components/Footer'
 import EpisodeResumeList from '../components/EpisodeResumeList'
+import { useEffect, useState } from 'react'
 
 const Home: NextPage<{
   animesLatest: Video[]
   animesPopular: Category[]
 }> = ({ animesLatest, animesPopular }) => {
-  const animePopular = animesPopular[Math.floor(Math.random() * animesPopular.length)]
+  const [animePopular, setAnimePopular] = useState<Category | null>(null)
+
+  useEffect(() => {
+    setAnimePopular(animesPopular[Math.floor(Math.random() * animesPopular.length)])
+  }, [])
 
   return (
     <>

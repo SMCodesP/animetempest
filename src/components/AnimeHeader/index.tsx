@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState, useEffect, useRef, useCallback, FormEvent, memo, useContext } from 'react'
+import { useState, useEffect, useRef, useCallback, FormEvent, useContext } from 'react'
 
 import { FaSearch, FaPlay } from 'react-icons/fa'
 import Wave from 'react-wavify'
@@ -24,7 +24,7 @@ import {
 import { ThemeContext } from 'styled-components'
 
 const AnimeHeader: React.FC<{
-  anime: Category
+  anime: Category | null
 }> = ({ anime }) => {
   const router = useRouter()
   const theme = useContext(ThemeContext)
@@ -106,24 +106,26 @@ const AnimeHeader: React.FC<{
           </SearchIcon>
         </ContainerInput>
       </Menu>
-      <ContainerAnime>
-        <ContainerInfo>
-          <Title>{anime.category_name}</Title>
-          <div style={{ width: 225 }}>
-            <Link href={`/anime/${anime.id}`}>
-              <a>
-                <ButtonWatch>
-                  <FaPlay size={20} />
-                  Assista agora
-                </ButtonWatch>
-              </a>
-            </Link>
-          </div>
-        </ContainerInfo>
-        <Thumbnail src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
-      </ContainerAnime>
+      {anime && (
+        <ContainerAnime>
+          <ContainerInfo>
+            <Title>{anime.category_name}</Title>
+            <div style={{ width: 225 }}>
+              <Link href={`/anime/${anime.id}`}>
+                <a>
+                  <ButtonWatch>
+                    <FaPlay size={20} />
+                    Assista agora
+                  </ButtonWatch>
+                </a>
+              </Link>
+            </div>
+          </ContainerInfo>
+          <Thumbnail src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
+        </ContainerAnime>
+      )}
     </Container>
   )
 }
 
-export default memo(AnimeHeader)
+export default AnimeHeader
