@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import React, { useEffect, memo, useState, useRef, useCallback } from 'react'
+import React, { useEffect, memo, useState, useRef, useCallback, useContext } from 'react'
 
 import debounce from 'lodash.debounce'
 
@@ -33,9 +33,11 @@ import {
   ItemNext,
   ItemListReproduction,
   ItemListQuality,
+  ContainerMain,
 } from './styles'
 import Link from 'next/link'
 import Loading from './Loading'
+import { ThemeContext } from 'styled-components'
 
 function ReactNetflixPlayer({
   title = false,
@@ -49,6 +51,7 @@ function ReactNetflixPlayer({
 
   src = '',
   autoPlay = false,
+  videoId = '',
 
   onCanPlay = false,
   onTimeUpdate = false,
@@ -56,7 +59,7 @@ function ReactNetflixPlayer({
   onErrorVideo = false,
   onNextClick = false,
   onClickItemListReproduction = false,
-  onCrossClick = () => { },
+  onCrossClick = () => {},
   startPosition = 0,
 
   dataNext = {},
@@ -72,7 +75,8 @@ function ReactNetflixPlayer({
   secundaryColor = '#ffffff',
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
 }: // subtitleMedia,
-  any) {
+any) {
+  const theme = useContext(ThemeContext)
   // Referências
   const videoComponent = useRef<HTMLVideoElement>(null)
 
@@ -125,53 +129,52 @@ function ReactNetflixPlayer({
     return `${m}:${s}`
   }
 
+  const saveVideoProgress = (progress: number) => {
+    const history = localStorage.getItem('history')
+    if (history) {
+      let historyParsed: {
+        video_id: string
+        progress: number
+      }[] = JSON.parse(history)
+      localStorage.setItem(
+        'history',
+        JSON.stringify([
+          ...historyParsed.filter((el) => el.video_id !== videoId),
+          {
+            video_id: videoId,
+            progress,
+          },
+        ])
+      )
+    } else {
+      localStorage.setItem(
+        'history',
+        JSON.stringify([
+          {
+            video_id: videoId,
+            progress,
+          },
+        ])
+      )
+    }
+  }
+
   const timeCallBack = (e) => {
     setShowInfo(false)
     setEnd(false)
-
-    // if (waitingBuffer) {
-    //   setWaitingBuffer(false);
-    // }
-
-    // setTimerBuffer((oldTimerBuffer) => {
-    //   if (oldTimerBuffer) {
-    //     window.clearTimeout(oldTimerBuffer)
-    //   }
-    //   return window.setTimeout(() => setWaitingBuffer(true), 1000)
-    // });
 
     if (onTimeUpdate) {
       onTimeUpdate(e)
     }
 
-    // let choseBuffer = 0;
-    // const lenghtBuffer = e.target.buffered.length;
-    // let start = 0;
-    // let endBuffer = 0;
-    // const atualTime = e.target.currentTime;
-
-    // for (let i = 1; i <= lenghtBuffer; i++) {
-    //   const startCheck = e.target.buffered.start(i - 1);
-    //   const endCheck = e.target.buffered.end(i - 1);
-
-    //   if (endCheck > atualTime && atualTime > startCheck) {
-    //     choseBuffer = i;
-
-    //     if (endCheck > endBuffer) {
-    //       endBuffer = endCheck;
-    //     }
-
-    //     if (startCheck < start) {
-    //       start = startCheck;
-    //     }
-    //   }
-    // }
-
     seekElement.current.style.background = `linear-gradient(93deg, ${primaryColor} ${
       (e.target.currentTime * 100 + 2 * (duration / 100)) / duration
-      }%, #fff ${(e.target.currentTime * 100 + 2 * (duration / 100)) / duration}%)`
+    }%, #fff ${(e.target.currentTime * 100 + 2 * (duration / 100)) / duration}%)`
     seekElement.current.value = Math.trunc(e.target.currentTime)
     progressTime.current.innerText = secondsToHms(Math.trunc(e.target.currentTime))
+    if (playing) {
+      saveVideoProgress(Math.trunc(e.target.currentTime))
+    }
   }
 
   const timeUpdate = (e) => {
@@ -182,7 +185,7 @@ function ReactNetflixPlayer({
   const goToPosition = (position) => {
     seekElement.current.style.background = `linear-gradient(93deg, ${primaryColor} ${
       (position * 100 + 2 * (duration / 100)) / duration
-      }%, #fff ${(position * 100 + 2 * (duration / 100)) / duration}%)`
+    }%, #fff ${(position * 100 + 2 * (duration / 100)) / duration}%)`
     videoComponent.current.currentTime = position
   }
 
@@ -224,11 +227,9 @@ function ReactNetflixPlayer({
     videoComponent.current.currentTime -= seconds
   }
 
-  const startVideo = () => {
+  const startVideo = async () => {
     setDuration(videoComponent.current.duration)
     setVideoReady(true)
-
-    play()
 
     if (onCanPlay) {
       onCanPlay()
@@ -320,7 +321,6 @@ function ReactNetflixPlayer({
     }
   }, 500)
 
-
   const controllScreenTimeOut = () => {
     if (!autoControllCloseEnabled) {
       setShowInfo(true)
@@ -362,13 +362,11 @@ function ReactNetflixPlayer({
       40: () => addVolumeAction(-10),
     }
     if (controlKeyBoard[e.keyCode] && videoComponent.current) {
+      setShowControls(true)
+      setShowInfo(false)
       controlKeyBoard[e.keyCode]()
     }
   }
-
-  const getKeyBoardInteration = debounce((e) => {
-    keyboardInteractionCallback(e)
-  }, 500)
 
   const scrollToSelected = () => {
     const element = listReproduction.current
@@ -408,22 +406,23 @@ function ReactNetflixPlayer({
       setShowReproductionList(false)
       setShowDataNext(false)
       if (videoComponent && videoComponent.current) {
-        videoComponent.current.currentTime = progress
+        videoComponent.current.currentTime = startPosition
         videoComponent.current?.addEventListener('pause', pauseVideo)
         videoComponent.current?.addEventListener('play', playVideo)
       }
     }
 
     return () => {
+      videoComponent.current?.removeEventListener('loadedmetadata', startVideo, true)
       videoComponent.current?.removeEventListener('play', playVideo)
       videoComponent.current?.removeEventListener('pause', pauseVideo)
     }
-  }, [src])
+  }, [src, startPosition])
 
   useEffect(() => {
-    document.addEventListener('keydown', getKeyBoardInteration)
+    document.addEventListener('keydown', keyboardInteractionCallback)
     return () => {
-      document.removeEventListener('keydown', getKeyBoardInteration)
+      document.removeEventListener('keydown', keyboardInteractionCallback)
     }
   }, [])
 
@@ -512,7 +511,6 @@ function ReactNetflixPlayer({
     <Container
       onMouseMove={hoverScreen}
       ref={playerElement}
-      onDoubleClick={(e) => (e.target === controls.current ? chooseFullScreen() : null)}
       fullPlayer={fullPlayer}
       hideVideo={!!error}
       fontFamily={fontFamily}
@@ -529,8 +527,8 @@ function ReactNetflixPlayer({
         ref={videoComponent}
         src={src}
         controls={false}
-        onLoadedMetadata={() => startVideo()}
         onClick={play}
+        onLoadedData={startVideo}
         onTimeUpdate={timeUpdate}
         onError={erroVideo}
         onEnded={onEndedFunction}
@@ -540,7 +538,6 @@ function ReactNetflixPlayer({
         ref={controls}
         show={showControls === true && videoReady === true && error === false}
         primaryColor={primaryColor}
-        onClick={(e) => (e.target === controls.current ? play() : null)}
       >
         {backButton && (
           <div className="back">
@@ -549,6 +546,21 @@ function ReactNetflixPlayer({
               <span>Voltar à navegação</span>
             </div>
           </div>
+        )}
+
+        {videoReady === true && error === false && !showInfo && (
+          <ContainerMain
+            show={showControls === true && videoReady === true && error === false}
+            onDoubleClick={chooseFullScreen}
+            playing={playing}
+          >
+            <div className="play" onClick={play}>
+              <FaPlay size={48} color={theme.text} />
+            </div>
+            <div className="pause" onClick={play}>
+              <FaPause size={48} color={theme.text} />
+            </div>
+          </ContainerMain>
         )}
 
         <div>
@@ -572,8 +584,8 @@ function ReactNetflixPlayer({
                   {!playing ? (
                     <FaPlay size={28} onClick={play} />
                   ) : (
-                      <FaPause size={28} onClick={play} />
-                    )}
+                    <FaPause size={28} onClick={play} />
+                  )}
                 </div>
 
                 <div className="item-control">
@@ -627,14 +639,14 @@ function ReactNetflixPlayer({
                         onClick={() => setMuttedAction(true)}
                       />
                     ) : (
-                            volume <= 0 && (
-                              <FaVolumeMute
-                                size={28}
-                                onMouseEnter={() => setShowControlVolume(true)}
-                                onClick={() => setVolumeAction(0)}
-                              />
-                            )
-                          )}
+                      volume <= 0 && (
+                        <FaVolumeMute
+                          size={28}
+                          onMouseEnter={() => setShowControlVolume(true)}
+                          onClick={() => setVolumeAction(0)}
+                        />
+                      )
+                    )}
                   </VolumeControll>
                 )}
 
@@ -727,7 +739,7 @@ function ReactNetflixPlayer({
                                   <div
                                     className={`item-list-reproduction ${
                                       item.playing && 'selected'
-                                      }`}
+                                    }`}
                                     onClick={() =>
                                       onClickItemListReproduction &&
                                       onClickItemListReproduction(item.id, item.playing)
@@ -743,21 +755,22 @@ function ReactNetflixPlayer({
                                 </a>
                               </Link>
                             ) : (
-                                <div
-                                  className={`item-list-reproduction ${item.playing && 'selected'}`}
-                                  onClick={() =>
-                                    onClickItemListReproduction &&
-                                    onClickItemListReproduction(item.id, item.playing)
-                                  }
-                                >
-                                  <div className="bold">
-                                    <span style={{ marginRight: 15 }}>{index + 1}</span>
-                                    {item.nome}
-                                  </div>
-
-                                  {item.percent && <div className="percent" />}
+                              <div
+                                key={`video-${item.id}-no-playing`}
+                                className={`item-list-reproduction ${item.playing && 'selected'}`}
+                                onClick={() =>
+                                  onClickItemListReproduction &&
+                                  onClickItemListReproduction(item.id, item.playing)
+                                }
+                              >
+                                <div className="bold">
+                                  <span style={{ marginRight: 15 }}>{index + 1}</span>
+                                  {item.nome}
                                 </div>
-                              )
+
+                                {item.percent && <div className="percent" />}
+                              </div>
+                            )
                           )}
                         </div>
                       </div>

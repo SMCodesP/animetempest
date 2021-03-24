@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import styled, { css, keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components'
 
 const toUpOpacity = keyframes`
   0% {
@@ -17,7 +17,7 @@ const toUpOpacity = keyframes`
     opacity: 0;
     transform: translateY(0);
   }
-`;
+`
 
 export const Container = styled.div`
   & > * {
@@ -26,10 +26,10 @@ export const Container = styled.div`
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: ${props =>
-    props.fontFamily
-      ? props.fontFamily
-      : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"};
+    font-family: ${(props) =>
+      props.fontFamily
+        ? props.fontFamily
+        : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"};
   }
 
   width: 100%;
@@ -44,21 +44,21 @@ export const Container = styled.div`
     width: 100% !important;
     max-width: 100% !important;
     cursor: none;
-    opacity: ${props => (props.hideVideo ? 0 : 1)};
+    opacity: ${(props) => (props.hideVideo ? 0 : 1)};
 
     &::cue {
       color: ${({ theme }) => theme.text};
       z-index: 4;
       text-shadow: ${({ theme }) => theme.inverseText} 0 0 5px;
       background: none;
-      font-family: ${props =>
-    props.fontFamily
-      ? props.fontFamily
-      : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"};
+      font-family: ${(props) =>
+        props.fontFamily
+          ? props.fontFamily
+          : "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"};
     }
   }
 
-  ${props =>
+  ${(props) =>
     props.fullPlayer &&
     css`
       position: fixed;
@@ -66,12 +66,61 @@ export const Container = styled.div`
       left: 0;
       z-index: 10000;
     `}
-`;
+`
+
+export const ContainerMain = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1 !important;
+
+  & * {
+    transition: opacity 0.4s;
+  }
+
+  ${(props) =>
+    !props.playing
+      ? `
+    & .play {
+      opacity: 1 !important;
+    }
+    & .play * {
+      opacity: 1 !important;
+    }
+    & .pause {
+      opacity: 0 !important;
+    }
+    & .pause * {
+      opacity: 0 !important;
+    }
+  `
+      : props.show &&
+        `
+    & .pause {
+      opacity: 1;
+    }
+    & .pause * {
+      opacity: 1;
+    }
+    & .play {
+      opacity: 0 !important;
+    }
+    & .play * {
+      opacity: 0 !important;
+    }
+  `}
+
+  & div {
+    cursor: pointer;
+    position: absolute;
+    filter: brightness(70%);
+  }
+`
 
 export const Controlls = styled.div`
-  opacity: ${props => (props.show ? 1 : 0)};
-  transform: ${props => (props.show ? 'scale(1)' : 'scale(1.2)')};
-  ${props => (!props.show && 'cursor: none;')}
+  transform: ${(props) => (props.show ? 'scale(1)' : 'scale(1.2)')};
+  ${(props) => !props.show && 'cursor: none;'}
 
   position: absolute;
   top: 0;
@@ -80,7 +129,7 @@ export const Controlls = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: space-between;
   transition: all 0.2s ease-out;
 
   padding: 10px;
@@ -97,8 +146,11 @@ export const Controlls = styled.div`
     rgba(0, 0, 0, 1) 100%
   );
 
+  & * {
+    opacity: ${(props) => (props.show ? 1 : 0)};
+  }
+
   .back {
-    margin-bottom: auto;
     margin-top: 30px;
     margin-left: 50px;
     display: flex;
@@ -230,7 +282,7 @@ export const Controlls = styled.div`
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      background: ${props => props.primaryColor};
+      background: ${(props) => props.primaryColor};
       cursor: pointer;
 
       outline: none !important;
@@ -246,7 +298,7 @@ export const Controlls = styled.div`
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      background: ${props => props.primaryColor};
+      background: ${(props) => props.primaryColor};
       cursor: pointer;
 
       outline: none !important;
@@ -260,7 +312,7 @@ export const Controlls = styled.div`
       height: 6px;
     }
   }
-`;
+`
 
 export const VideoPreLoading = styled.div`
   position: absolute;
@@ -269,10 +321,10 @@ export const VideoPreLoading = styled.div`
   height: 100%;
   padding: 30px;
   // transition: all 0.5s linear;
-  z-index: ${props => (props.show ? 2 : 0)};
+  z-index: ${(props) => (props.show ? 2 : 0)};
   display: flex;
   flex-direction: column;
-  opacity: ${props => (props.show ? 1 : 0)};
+  opacity: ${(props) => (props.show ? 1 : 0)};
 
   header {
     display: flex;
@@ -280,18 +332,18 @@ export const VideoPreLoading = styled.div`
     align-items: center;
 
     h1 {
-      color: ${props => props.colorTitle};
+      color: ${(props) => props.colorTitle};
       font-size: 1.5em;
       font-weight: bold;
     }
 
     h2 {
-      color: ${props => props.colorSubTitle};
+      color: ${(props) => props.colorSubTitle};
       font-size: 1.1em;
     }
 
     svg {
-      color: ${props => props.colorIcon};
+      color: ${(props) => props.colorIcon};
       opacity: 0.5;
       margin-left: auto;
       font-size: 4em;
@@ -311,15 +363,15 @@ export const VideoPreLoading = styled.div`
     color: #ddd;
     margin: auto;
     transition: all 0.2s ease;
-    opacity: ${props => (props.showError ? 1 : 0)};
+    opacity: ${(props) => (props.showError ? 1 : 0)};
 
     .links-error {
       display: inline-flex;
       margin: auto;
 
       div {
-        color: ${props => props.colorButtonError};
-        background: ${props => props.backgroundColorButtonError};
+        color: ${(props) => props.colorButtonError};
+        background: ${(props) => props.backgroundColorButtonError};
         display: flex;
         align-items: center;
         margin: 0 5px;
@@ -330,8 +382,8 @@ export const VideoPreLoading = styled.div`
         transition: all 0.2s ease;
 
         &:hover {
-          background: ${props => props.backgroundColorHoverButtonError};
-          color: ${props => props.colorHoverButtonError};
+          background: ${(props) => props.backgroundColorHoverButtonError};
+          color: ${(props) => props.colorHoverButtonError};
         }
       }
     }
@@ -345,7 +397,7 @@ export const VideoPreLoading = styled.div`
       margin: 20px;
     }
   }
-`;
+`
 
 export const StandyByInfo = styled.div`
   position: absolute;
@@ -358,7 +410,7 @@ export const StandyByInfo = styled.div`
   justify-content: space-between;
   padding: 0 50px;
   transition: all 0.5s ease-out;
-  opacity: ${props => (props.show ? 1 : 0)};
+  opacity: ${(props) => (props.show ? 1 : 0)};
 
   section {
     margin: auto 0;
@@ -374,12 +426,12 @@ export const StandyByInfo = styled.div`
     h1 {
       font-weight: bold;
       font-size: 3em;
-      color: ${props => props.primaryColor};
+      color: ${(props) => props.primaryColor};
       margin: 10px 0;
     }
 
     h2 {
-      color: ${props => props.secundaryColor};
+      color: ${(props) => props.secundaryColor};
       font-size: 20px;
       margin-top: -5px;
       font-weight: bold;
@@ -393,7 +445,7 @@ export const StandyByInfo = styled.div`
     text-transform: uppercase;
     color: ${({ theme }) => theme.text};
   }
-`;
+`
 
 export const Loading = styled.div`
   position: absolute;
@@ -418,11 +470,11 @@ export const Loading = styled.div`
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: ${props => props.color};
+      background: ${(props) => props.color};
       margin: auto 5px;
     }
   }
-`;
+`
 
 export const VolumeControll = styled.div`
   .volumn-controll {
@@ -449,8 +501,8 @@ export const VolumeControll = styled.div`
       background: #999;
       background: linear-gradient(
         93deg,
-        ${props => props.primaryColor} ${props => props.percentVolume}%,
-        #fff ${props => props.percentVolume}%
+        ${(props) => props.primaryColor} ${(props) => props.percentVolume}%,
+        #fff ${(props) => props.percentVolume}%
       );
       width: 70px;
 
@@ -464,7 +516,7 @@ export const VolumeControll = styled.div`
         width: 18px;
         height: 18px;
         border-radius: 50%;
-        background: ${props => props.primaryColor};
+        background: ${(props) => props.primaryColor};
         cursor: pointer;
       }
 
@@ -475,12 +527,12 @@ export const VolumeControll = styled.div`
         width: 18px;
         height: 18px;
         border-radius: 50%;
-        background: ${props => props.primaryColor};
+        background: ${(props) => props.primaryColor};
         cursor: pointer;
       }
     }
   }
-`;
+`
 
 const ItemControllBar = styled.div`
   bottom: 20px;
@@ -494,7 +546,7 @@ const ItemControllBar = styled.div`
     height: 20px;
     width: 100%;
   }
-`;
+`
 
 export const IconPlayBackRate = styled.div`
   cursor: pointer;
@@ -515,7 +567,7 @@ export const IconPlayBackRate = styled.div`
       transform: scale(1.2);
     }
   }
-`;
+`
 
 export const ItemPlaybackRate = styled(ItemControllBar)`
   cursor: pointer;
@@ -559,7 +611,7 @@ export const ItemPlaybackRate = styled(ItemControllBar)`
       font-weight: bold;
     }
   }
-`;
+`
 
 export const ItemNext = styled(ItemControllBar)`
   & > div:first-child {
@@ -592,7 +644,7 @@ export const ItemNext = styled(ItemControllBar)`
       font-weight: bold;
     }
   }
-`;
+`
 
 export const ItemListReproduction = styled(ItemControllBar)`
   max-width: 400px;
@@ -665,7 +717,7 @@ export const ItemListReproduction = styled(ItemControllBar)`
       }
     }
   }
-`;
+`
 
 export const ItemListQuality = styled(ItemControllBar)`
   max-width: 120px;
@@ -704,4 +756,4 @@ export const ItemListQuality = styled(ItemControllBar)`
       margin-left: auto;
     }
   }
-`;
+`

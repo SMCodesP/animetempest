@@ -24,15 +24,33 @@ const MiniPlayer: React.FC<{
   const theme = useContext(ThemeContext)
   const [quality, setQuality] = useState<'locationhd' | 'locationsd' | 'location' | ''>('')
   const [virtualQuality, setVirtualQuality] = useState<string>('')
+  const [isContinue, setIsContinue] = useState<boolean | null>(false)
+  const [startVideoProgress, setStartVideoProgress] = useState(0)
   const router = useRouter()
 
   useEffect(() => {
     if (quality) {
       localStorage.setItem('default_quality', quality)
     }
+    if (isContinue === null) {
+      console.log('Continuando...')
+      const history = localStorage.getItem('history')
+      if (history) {
+        const historyParsed: {
+          video_id: string
+          progress: number
+        }[] = JSON.parse(history)
+        const videoProgress = historyParsed.find((el) => el.video_id === episode.video_id)
+        if (videoProgress) {
+          setStartVideoProgress(videoProgress.progress)
+        }
+      }
+    }
   }, [quality])
 
   useEffect(() => {
+    setIsContinue(false)
+    setStartVideoProgress(0)
     const default_quality = localStorage.getItem('default_quality')
     setQuality(() => {
       let quality_storage: 'locationhd' | 'locationsd' | 'location' | '' = ''
@@ -73,6 +91,7 @@ const MiniPlayer: React.FC<{
         extraInfoMedia={episode.title}
         playerLanguage="pt"
         onChangeQuality={(qualityId: 'locationhd' | 'locationsd' | 'location') => {
+          setIsContinue(null)
           setQuality(qualityId)
           setVirtualQuality((state) => episode[qualityId] || state)
         }}
@@ -99,10 +118,11 @@ const MiniPlayer: React.FC<{
               }
             : null,
         ].filter((el) => el !== null)}
+        videoId={episode.video_id}
         backButton={() => router.back()}
         fullPlayer
         autoPlay
-        startPosition={0}
+        startPosition={startVideoProgress}
         dataNext={{
           title: nextEpisode?.title || 'Não existe um próximo vídeo.',
         }}
