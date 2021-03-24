@@ -23,6 +23,7 @@ const MiniPlayer: React.FC<{
 }> = ({ episode, category, episodes, nextEpisode }) => {
   const theme = useContext(ThemeContext)
   const [quality, setQuality] = useState<'locationhd' | 'locationsd' | 'location' | ''>('')
+  const [virtualQuality, setVirtualQuality] = useState<string>('')
   const router = useRouter()
 
   useEffect(() => {
@@ -32,24 +33,40 @@ const MiniPlayer: React.FC<{
   }, [quality])
 
   useEffect(() => {
-    const default_quality: any = localStorage.getItem('default_quality')
-    setQuality(
-      default_quality !== null
-        ? default_quality
-        : episode.locationhd
-        ? 'locationhd'
-        : episode.locationsd
-        ? 'locationsd'
-        : episode.location
-        ? 'location'
-        : ''
-    )
+    const default_quality = localStorage.getItem('default_quality')
+    setQuality(() => {
+      let quality_storage: 'locationhd' | 'locationsd' | 'location' | '' = ''
+      if (
+        default_quality &&
+        (default_quality === 'locationhd' ||
+          default_quality === 'locationsd' ||
+          default_quality === 'location')
+      ) {
+        quality_storage = default_quality
+          ? default_quality
+          : episode.locationhd
+          ? 'locationhd'
+          : episode.locationsd
+          ? 'locationsd'
+          : episode.location
+          ? 'location'
+          : ''
+      }
+      setVirtualQuality(
+        episode[quality_storage] ||
+          episode['locationhd'] ||
+          episode['locationsd'] ||
+          episode['location'] ||
+          ''
+      )
+      return quality_storage
+    })
   }, [])
 
   return quality ? (
     <Container>
       <Player
-        src={episode[quality || 'location']}
+        src={virtualQuality}
         title={category.category_name}
         subTitle={episode.title}
         titleMedia={category.category_name}
@@ -63,19 +80,23 @@ const MiniPlayer: React.FC<{
             ? {
                 id: 'locationhd',
                 nome: 'FullHD',
-                playing: 'locationhd' === quality,
+                playing: episode['locationhd'] === virtualQuality,
               }
             : null,
-          episode.locationsd && {
-            id: 'locationsd',
-            nome: 'HD',
-            playing: 'locationsd' === quality,
-          },
-          episode.location && {
-            id: 'location',
-            nome: 'SD',
-            playing: 'location' === quality,
-          },
+          episode.locationsd
+            ? {
+                id: 'locationsd',
+                nome: 'HD',
+                playing: episode['locationsd'] === virtualQuality,
+              }
+            : null,
+          episode.location
+            ? {
+                id: 'location',
+                nome: 'SD',
+                playing: episode['location'] === virtualQuality,
+              }
+            : null,
         ].filter((el) => el !== null)}
         backButton={() => router.back()}
         fullPlayer
