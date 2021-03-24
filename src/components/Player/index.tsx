@@ -334,7 +334,7 @@ function ReactNetflixPlayer({
   }
 
   const hoverScreen = useCallback(
-    debounce(() => {
+    () => {
       setShowControls(true)
       setShowInfo(false)
 
@@ -344,7 +344,7 @@ function ReactNetflixPlayer({
         }
         return window.setTimeout(controllScreenTimeOut, 5000)
       })
-    }, 50),
+    },
     []
   )
 
