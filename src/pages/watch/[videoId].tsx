@@ -61,14 +61,14 @@ const MiniPlayer: React.FC<{
           default_quality === 'location')
       ) {
         quality_storage = default_quality
-          ? default_quality
-          : episode.locationhd
+      } else {
+        quality_storage = episode.locationhd
           ? 'locationhd'
           : episode.locationsd
-          ? 'locationsd'
-          : episode.location
-          ? 'location'
-          : ''
+            ? 'locationsd'
+            : episode.location
+              ? 'location'
+              : ''
       }
       if ((episode as any)[quality_storage]) {
         setVirtualQuality((episode as any)[quality_storage])
@@ -98,24 +98,24 @@ const MiniPlayer: React.FC<{
         qualities={[
           episode.locationhd
             ? {
-                id: 'locationhd',
-                nome: 'FullHD',
-                playing: episode['locationhd'] === virtualQuality,
-              }
+              id: 'locationhd',
+              nome: 'FullHD',
+              playing: episode['locationhd'] === virtualQuality,
+            }
             : null,
           episode.locationsd
             ? {
-                id: 'locationsd',
-                nome: 'HD',
-                playing: episode['locationsd'] === virtualQuality,
-              }
+              id: 'locationsd',
+              nome: 'HD',
+              playing: episode['locationsd'] === virtualQuality,
+            }
             : null,
           episode.location
             ? {
-                id: 'location',
-                nome: 'SD',
-                playing: episode['location'] === virtualQuality,
-              }
+              id: 'location',
+              nome: 'SD',
+              playing: episode['location'] === virtualQuality,
+            }
             : null,
         ].filter((el) => el !== null)}
         videoId={episode.video_id}
@@ -144,8 +144,8 @@ const MiniPlayer: React.FC<{
       />
     </Container>
   ) : (
-    <div />
-  )
+      <div />
+    )
 }
 
 const Watch: NextPage<{
@@ -200,8 +200,8 @@ const Watch: NextPage<{
       />
     </>
   ) : (
-    <div />
-  )
+      <div />
+    )
 }
 
 export const getStaticPaths = async () => {

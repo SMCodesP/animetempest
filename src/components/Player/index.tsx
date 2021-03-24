@@ -59,7 +59,7 @@ function ReactNetflixPlayer({
   onErrorVideo = false,
   onNextClick = false,
   onClickItemListReproduction = false,
-  onCrossClick = () => {},
+  onCrossClick = () => { },
   startPosition = 0,
 
   dataNext = {},
@@ -75,7 +75,7 @@ function ReactNetflixPlayer({
   secundaryColor = '#ffffff',
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
 }: // subtitleMedia,
-any) {
+  any) {
   const theme = useContext(ThemeContext)
   // Referências
   const videoComponent = useRef<HTMLVideoElement>(null)
@@ -169,7 +169,7 @@ any) {
 
     seekElement.current.style.background = `linear-gradient(93deg, ${primaryColor} ${
       (e.target.currentTime * 100 + 2 * (duration / 100)) / duration
-    }%, #fff ${(e.target.currentTime * 100 + 2 * (duration / 100)) / duration}%)`
+      }%, #fff ${(e.target.currentTime * 100 + 2 * (duration / 100)) / duration}%)`
     seekElement.current.value = Math.trunc(e.target.currentTime)
     progressTime.current.innerText = secondsToHms(Math.trunc(e.target.currentTime))
     if (playing) {
@@ -185,7 +185,7 @@ any) {
   const goToPosition = (position) => {
     seekElement.current.style.background = `linear-gradient(93deg, ${primaryColor} ${
       (position * 100 + 2 * (duration / 100)) / duration
-    }%, #fff ${(position * 100 + 2 * (duration / 100)) / duration}%)`
+      }%, #fff ${(position * 100 + 2 * (duration / 100)) / duration}%)`
     videoComponent.current.currentTime = position
   }
 
@@ -347,20 +347,22 @@ any) {
     }, 200),
     []
   )
+
+  const controlKeyBoard = {
+    76: () => nextSeconds(10),
+    39: () => nextSeconds(5),
+    74: () => previousSeconds(10),
+    37: () => previousSeconds(5),
+    75: () => play(),
+    32: () => play(),
+    70: () => {
+      fullscreen === true ? exitFullScreen() : enterFullScreen()
+    },
+    38: () => addVolumeAction(10),
+    40: () => addVolumeAction(-10),
+  }
+
   const keyboardInteractionCallback = (e) => {
-    const controlKeyBoard = {
-      76: () => nextSeconds(10),
-      39: () => nextSeconds(5),
-      74: () => previousSeconds(10),
-      37: () => previousSeconds(5),
-      75: () => play(),
-      32: () => play(),
-      70: () => {
-        fullscreen === true ? exitFullScreen() : enterFullScreen()
-      },
-      38: () => addVolumeAction(10),
-      40: () => addVolumeAction(-10),
-    }
     if (controlKeyBoard[e.keyCode] && videoComponent.current) {
       setShowControls(true)
       setShowInfo(false)
@@ -554,12 +556,15 @@ any) {
             onDoubleClick={chooseFullScreen}
             playing={playing}
           >
-            <div className="play" onClick={play}>
-              <FaPlay size={48} color={theme.text} />
-            </div>
-            <div className="pause" onClick={play}>
-              <FaPause size={48} color={theme.text} />
-            </div>
+            {playing ? (
+              <div className="pause" onClick={pauseVideo}>
+                <FaPause size={48} color={theme.text} />
+              </div>
+            ) : (
+                <div className="play" onClick={playVideo}>
+                  <FaPlay size={48} color={theme.text} />
+                </div>
+              )}
           </ContainerMain>
         )}
 
@@ -584,8 +589,8 @@ any) {
                   {!playing ? (
                     <FaPlay size={28} onClick={play} />
                   ) : (
-                    <FaPause size={28} onClick={play} />
-                  )}
+                      <FaPause size={28} onClick={play} />
+                    )}
                 </div>
 
                 <div className="item-control">
@@ -639,14 +644,14 @@ any) {
                         onClick={() => setMuttedAction(true)}
                       />
                     ) : (
-                      volume <= 0 && (
-                        <FaVolumeMute
-                          size={28}
-                          onMouseEnter={() => setShowControlVolume(true)}
-                          onClick={() => setVolumeAction(0)}
-                        />
-                      )
-                    )}
+                            volume <= 0 && (
+                              <FaVolumeMute
+                                size={28}
+                                onMouseEnter={() => setShowControlVolume(true)}
+                                onClick={() => setVolumeAction(0)}
+                              />
+                            )
+                          )}
                   </VolumeControll>
                 )}
 
@@ -739,7 +744,7 @@ any) {
                                   <div
                                     className={`item-list-reproduction ${
                                       item.playing && 'selected'
-                                    }`}
+                                      }`}
                                     onClick={() =>
                                       onClickItemListReproduction &&
                                       onClickItemListReproduction(item.id, item.playing)
@@ -755,22 +760,22 @@ any) {
                                 </a>
                               </Link>
                             ) : (
-                              <div
-                                key={`video-${item.id}-no-playing`}
-                                className={`item-list-reproduction ${item.playing && 'selected'}`}
-                                onClick={() =>
-                                  onClickItemListReproduction &&
-                                  onClickItemListReproduction(item.id, item.playing)
-                                }
-                              >
-                                <div className="bold">
-                                  <span style={{ marginRight: 15 }}>{index + 1}</span>
-                                  {item.nome}
-                                </div>
+                                <div
+                                  key={`video-${item.id}-no-playing`}
+                                  className={`item-list-reproduction ${item.playing && 'selected'}`}
+                                  onClick={() =>
+                                    onClickItemListReproduction &&
+                                    onClickItemListReproduction(item.id, item.playing)
+                                  }
+                                >
+                                  <div className="bold">
+                                    <span style={{ marginRight: 15 }}>{index + 1}</span>
+                                    {item.nome}
+                                  </div>
 
-                                {item.percent && <div className="percent" />}
-                              </div>
-                            )
+                                  {item.percent && <div className="percent" />}
+                                </div>
+                              )
                           )}
                         </div>
                       </div>
