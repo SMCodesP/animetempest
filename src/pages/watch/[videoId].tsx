@@ -61,7 +61,7 @@ const MiniPlayer: React.FC<{
       }
       return quality_storage
     })
-  }, [])
+  }, [episode])
 
   return quality ? (
     <Container>
