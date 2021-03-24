@@ -364,8 +364,7 @@ function ReactNetflixPlayer({
 
   const keyboardInteractionCallback = (e) => {
     if (controlKeyBoard[e.keyCode] && videoComponent.current) {
-      setShowControls(true)
-      setShowInfo(false)
+      hoverScreen()
       controlKeyBoard[e.keyCode]()
     }
   }
