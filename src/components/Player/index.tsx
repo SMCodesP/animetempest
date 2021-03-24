@@ -342,9 +342,9 @@ function ReactNetflixPlayer({
         if (oldTimeout !== null) {
           window.clearTimeout(oldTimeout)
         }
-        return window.setTimeout(controllScreenTimeOut, 3000)
+        return window.setTimeout(controllScreenTimeOut, 5000)
       })
-    }, 200),
+    }, 50),
     []
   )
 
