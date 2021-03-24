@@ -52,13 +52,13 @@ const MiniPlayer: React.FC<{
           ? 'location'
           : ''
       }
-      setVirtualQuality(
-        episode[quality_storage] ||
-          episode['locationhd'] ||
-          episode['locationsd'] ||
-          episode['location'] ||
-          ''
-      )
+      if ((episode as any)[quality_storage]) {
+        setVirtualQuality((episode as any)[quality_storage])
+      } else {
+        setVirtualQuality(
+          episode['locationhd'] || episode['locationsd'] || episode['location'] || ''
+        )
+      }
       return quality_storage
     })
   }, [])
