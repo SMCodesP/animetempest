@@ -74,6 +74,7 @@ const MiniPlayer: React.FC<{
         playerLanguage="pt"
         onChangeQuality={(qualityId: 'locationhd' | 'locationsd' | 'location') => {
           setQuality(qualityId)
+          setVirtualQuality((state) => episode[qualityId] || state)
         }}
         qualities={[
           episode.locationhd
