@@ -53,6 +53,7 @@ export const Menu = styled.div`
   padding: 25px;
   display: flex !important;
   align-items: center;
+  justify-content: space-between;
 
   & svg {
     cursor: pointer;
@@ -65,7 +66,6 @@ export const Menu = styled.div`
 `
 
 export const Input = styled.input`
-  margin: auto;
   background: ${({ theme }) => theme.background};
   height: 42px;
   border: 0;
@@ -75,6 +75,13 @@ export const Input = styled.input`
   font-size: 17px;
   color: ${({ theme }) => theme.fifthText};
   font-weight: bold;
+`
+
+export const ContainerInputCategory = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  z-index: 9999;
 `
 
 export const ContainerListAnime = styled.ul`

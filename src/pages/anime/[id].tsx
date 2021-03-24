@@ -151,13 +151,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         anime,
         episodes,
       },
-      revalidate: 1,
+      revalidate: 300,
     }
   } catch (error) {
     console.error(error)
     return {
       notFound: true,
-      revalidate: 1,
+      revalidate: 300,
     }
   }
 }

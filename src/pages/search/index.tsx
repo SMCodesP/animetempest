@@ -11,6 +11,9 @@ import { ThemeContext } from 'styled-components'
 import { FaHome } from 'react-icons/fa'
 import Wave from 'react-wavify'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import Select from 'react-select'
+
+import { defaultTheme } from 'react-select';
 
 import Category from '../../entities/Category'
 import api from '../../services/api'
@@ -27,8 +30,47 @@ import {
   Thumbnail,
   ContainerPage,
   LoadingComponent,
+  ContainerInputCategory,
 } from '../../shared/styles/search'
 import Footer from '../../components/Footer'
+import { lighten } from 'polished'
+
+const categories = [
+  { value: "all", label: "Todos" },
+  { value: "aventura", label: "Aventura" },
+  { value: "acao", label: "Ação" },
+  { value: "comedia", label: "Comédia" },
+  { value: "drama", label: "Drama" },
+  { value: "dublado", label: "Dublado" },
+  { value: "ecchi", label: "Ecchi" },
+  { value: "escolar", label: "Escolar" },
+  { value: "esporte", label: "Esporte" },
+  { value: "fantasia", label: "Fantasia" },
+  { value: "filme", label: "Filme" },
+  { value: "harem", label: "Harém" },
+  { value: "historico", label: "Histórico" },
+  { value: "jogo", label: "Jogo" },
+  { value: "josei", label: "Josei" },
+  { value: "magia", label: "Mágia" },
+  { value: "mecha", label: "Mecha" },
+  { value: "militar", label: "Militar" },
+  { value: "misterio", label: "Mistério" },
+  { value: "ova", label: "OVA" },
+  { value: "poderes", label: "Podres" },
+  { value: "psicologico", label: "Psicológico" },
+  { value: "romance", label: "Romance" },
+  { value: "samurai", label: "Samurai" },
+  { value: "sci-fi", label: "SCI-FI" },
+  { value: "seinen", label: "Seinen" },
+  { value: "shoujo", label: "Shoujo" },
+  { value: "shounen", label: "Shounen" },
+  { value: "slice_of_life", label: "Slice of Life" },
+  { value: "sobrenatural", label: "Sobrenatural" },
+  { value: "suspense", label: "Suspense" },
+  { value: "terror", label: "Terror" },
+  { value: "yaoi", label: "Yaoi" },
+  { value: "yuri", label: "Yuri" },
+]
 
 const Search: NextPage = ({ query: queryInitial }: any) => {
   const router = useRouter()
@@ -38,11 +80,17 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   const [query, setQuery] = useState(queryInitial)
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(1)
+  const [categorySelected, setCategorySelected] = useState(categories[0])
 
   const handleSearch = async () => {
     if (query && query.length > 3) {
       setLoading(true)
-      const animesList = await api.searchAnime(String(query))
+      let animesList;
+      if (categorySelected.value === 'all') {
+        animesList = await api.searchAnime(String(query))
+      } else {
+        animesList = await api.searchAnime(String(query), categorySelected.value)
+      }
       setPage(1)
       setAnimes(animesList)
       setLoading(false)
@@ -65,8 +113,13 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   }
 
   useEffect(() => {
+    console.log(defaultTheme)
     handleSearch()
   }, [])
+
+  useEffect(() => {
+    handleSearch()
+  }, [categorySelected])
 
   return (
     <>
@@ -115,6 +168,43 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                   onChange={handleChange}
                   placeholder="Procure por um anime"
                 />
+                <ContainerInputCategory>
+                  <div style={{ position: 'absolute', width: 256, right: 0, margin: 'auto' }}>
+                    <Select
+                      placeholder="Selecione uma categoria"
+                      options={categories}
+                      value={categorySelected}
+                      onChange={e => setCategorySelected(state => e || state)}
+                      theme={{
+                        borderRadius: 5,
+                        spacing: {
+                          baseUnit: 5,
+                          controlHeight: 5,
+                          menuGutter: 5
+                        },
+                        colors: {
+                          danger: "#DE350B",
+                          dangerLight: "#FFBDAD",
+                          neutral0: theme.background,
+                          neutral5: lighten(0.05, theme.background),
+                          neutral10: lighten(0.1, theme.background),
+                          neutral20: lighten(0.2, theme.background),
+                          neutral30: lighten(0.3, theme.background),
+                          neutral40: lighten(0.4, theme.background),
+                          neutral50: lighten(0.5, theme.background),
+                          neutral60: lighten(0.6, theme.background),
+                          neutral70: lighten(0.7, theme.background),
+                          neutral80: lighten(0.8, theme.background),
+                          neutral90: lighten(0.9, theme.background),
+                          primary: lighten(0.1, theme.secundaryText),
+                          primary75: lighten(0.075, theme.secundaryText),
+                          primary50: lighten(0.05, theme.secundaryText),
+                          primary25: lighten(0.025, theme.secundaryText),
+                        }
+                      }}
+                    />
+                  </div>
+                </ContainerInputCategory>
               </Menu>
               {loading && animes.length === 0 ? (
                 <>
@@ -128,8 +218,8 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                   </LoadingComponent>
                 </>
               ) : (
-                animes.length === 0 && <h1>Nenhum anime encontrado</h1>
-              )}
+                  animes.length === 0 && <h1>Nenhum anime encontrado</h1>
+                )}
               <InfiniteScroll
                 loader={
                   <LoadingComponent color={theme.tertiary}>
@@ -173,7 +263,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
 }
 
 Search.getInitialProps = ({ query }) => {
-  return query
+  return query || ''
 }
 
 export default Search

@@ -71,7 +71,7 @@ export async function getStaticProps() {
       animesLatest,
       animesPopular,
     },
-    revalidate: 900000,
+    revalidate: 300,
   }
 }
 

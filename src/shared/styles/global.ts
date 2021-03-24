@@ -15,6 +15,9 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     color: ${({ theme }) => theme.text};
   }
+  input, button {
+    outline: 0;
+  }
   ::-moz-selection {
     background: ${({ theme }) => theme.secundaryText};
   }
