@@ -1,9 +1,9 @@
-import styled from 'styled-components';
-import Image from 'next/image';
+import styled from 'styled-components'
+import Image from 'next/image'
 
 export const Container = styled.div`
   padding: 45px 25px 0 25px;
-`;
+`
 
 export const Back = styled.div`
   color: ${({ theme }) => theme.tertiary};
@@ -14,7 +14,7 @@ export const Back = styled.div`
   align-items: center;
   gap: 5px;
   cursor: pointer;
-  transition: .3s filter;
+  transition: 0.3s filter;
 
   &:hover {
     text-decoration: underline;
@@ -34,12 +34,12 @@ export const ContainerInfoAnime = styled.div`
     flex: 0 0 268px;
     border-radius: 15px;
     box-shadow: 2px 2px 8px ${({ theme }) => theme.secundaryText};
-    transition: box-shadow .3s, filter .3s, transform .3s;
+    transition: box-shadow 0.3s, filter 0.3s, transform 0.3s;
   }
 
   & > div:first-child:hover {
     box-shadow: 2px 2px 15px ${({ theme }) => theme.secundaryText};
-    transform: scale(1.075)
+    transform: scale(1.075);
   }
 `
 
@@ -74,7 +74,7 @@ export const ButtonWatch = styled.button`
   font-weight: bold;
   font-size: 18px;
   outline: 0;
-  transition: background .3s, color .3s, box-shadow .3s;
+  transition: background 0.3s, color 0.3s, box-shadow 0.3s;
 
   &:hover {
     box-shadow: 0 0 10px ${({ theme }) => theme.secundaryText};
@@ -91,6 +91,7 @@ export const ContainerListEpisodes = styled.div`
 `
 
 export const EpisodeTitle = styled.span`
+  word-break: break-all;
   background: ${({ theme }) => theme.secundaryBackground};
   color: ${({ theme }) => theme.tertiaryText};
   text-shadow: 0 0 1px ${({ theme }) => theme.tertiaryText};
@@ -103,13 +104,13 @@ export const EpisodeTitle = styled.span`
   top: 0;
   position: absolute;
   z-index: 999;
-  opacity: .9;
-  transition: filter .3s, opacity .3s;
+  opacity: 0.9;
+  transition: filter 0.3s, opacity 0.3s;
 `
 
 export const EpisodeImage = styled(AnimeImage)`
   border-radius: 10px !important;
-  transition: filter .3s;
+  transition: filter 0.3s;
 `
 
 export const ContainerItemEpisode = styled.div`
@@ -118,7 +119,7 @@ export const ContainerItemEpisode = styled.div`
   position: relative;
   cursor: pointer;
   border-radius: 10px;
-  transition: transform .3s, filter .3s, box-shadow .3s;
+  transition: transform 0.3s, filter 0.3s, box-shadow 0.3s;
 
   &:hover {
     box-shadow: 0 0 5px ${({ theme }) => theme.secundaryText};
