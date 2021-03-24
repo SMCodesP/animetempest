@@ -108,7 +108,7 @@ function ReactNetflixPlayer({
   const [showPlaybackRate, setShowPlaybackRate] = useState(false)
   const [showReproductionList, setShowReproductionList] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
-  const [timeout, setTimeout] = useState(null)
+  const [timeout, setTimeoutDebounce] = useState(null)
 
   const playbackRateOptions = ['0.25', '0.5', '0.75', 'Normal', '1.25', '1.5', '2']
 
@@ -338,7 +338,7 @@ function ReactNetflixPlayer({
       setShowControls(true)
       setShowInfo(false)
 
-      setTimeout((oldTimeout) => {
+      setTimeoutDebounce((oldTimeout) => {
         if (oldTimeout !== null) {
           window.clearTimeout(oldTimeout)
         }
