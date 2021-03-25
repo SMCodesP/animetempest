@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { NextPage } from 'next'
+import { NextPage, GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 
@@ -34,6 +34,7 @@ import {
 } from '../../shared/styles/search'
 import Footer from '../../components/Footer'
 import { lighten } from 'polished'
+import UserMenu from '../../components/UserMenu'
 
 const categories = [
   { value: "all", label: "Todos" },
@@ -168,43 +169,49 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                   onChange={handleChange}
                   placeholder="Procure por um anime"
                 />
-                <ContainerInputCategory>
-                  <div style={{ position: 'absolute', width: 256, right: 0, margin: 'auto' }}>
-                    <Select
-                      placeholder="Selecione uma categoria"
-                      options={categories}
-                      value={categorySelected}
-                      onChange={e => setCategorySelected(state => e || state)}
-                      theme={{
-                        borderRadius: 5,
-                        spacing: {
-                          baseUnit: 5,
-                          controlHeight: 5,
-                          menuGutter: 5
-                        },
-                        colors: {
-                          danger: "#DE350B",
-                          dangerLight: "#FFBDAD",
-                          neutral0: theme.background,
-                          neutral5: lighten(0.05, theme.background),
-                          neutral10: lighten(0.1, theme.background),
-                          neutral20: lighten(0.2, theme.background),
-                          neutral30: lighten(0.3, theme.background),
-                          neutral40: lighten(0.4, theme.background),
-                          neutral50: lighten(0.5, theme.background),
-                          neutral60: lighten(0.6, theme.background),
-                          neutral70: lighten(0.7, theme.background),
-                          neutral80: lighten(0.8, theme.background),
-                          neutral90: lighten(0.9, theme.background),
-                          primary: lighten(0.1, theme.secundaryText),
-                          primary75: lighten(0.075, theme.secundaryText),
-                          primary50: lighten(0.05, theme.secundaryText),
-                          primary25: lighten(0.025, theme.secundaryText),
-                        }
-                      }}
-                    />
-                  </div>
-                </ContainerInputCategory>
+                <div style={{
+                  display: 'flex',
+                  gap: 10
+                }}>
+                  <ContainerInputCategory>
+                    <div style={{ width: 256, right: 0, margin: 'auto' }}>
+                      <Select
+                        placeholder="Selecione uma categoria"
+                        options={categories}
+                        value={categorySelected}
+                        onChange={e => setCategorySelected(state => e || state)}
+                        theme={{
+                          borderRadius: 5,
+                          spacing: {
+                            baseUnit: 5,
+                            controlHeight: 5,
+                            menuGutter: 5
+                          },
+                          colors: {
+                            danger: "#DE350B",
+                            dangerLight: "#FFBDAD",
+                            neutral0: theme.background,
+                            neutral5: lighten(0.05, theme.background),
+                            neutral10: lighten(0.1, theme.background),
+                            neutral20: lighten(0.2, theme.background),
+                            neutral30: lighten(0.3, theme.background),
+                            neutral40: lighten(0.4, theme.background),
+                            neutral50: lighten(0.5, theme.background),
+                            neutral60: lighten(0.6, theme.background),
+                            neutral70: lighten(0.7, theme.background),
+                            neutral80: lighten(0.8, theme.background),
+                            neutral90: lighten(0.9, theme.background),
+                            primary: lighten(0.1, theme.secundaryText),
+                            primary75: lighten(0.075, theme.secundaryText),
+                            primary50: lighten(0.05, theme.secundaryText),
+                            primary25: lighten(0.025, theme.secundaryText),
+                          }
+                        }}
+                      />
+                    </div>
+                  </ContainerInputCategory>
+                  <UserMenu />
+                </div>
               </Menu>
               {loading && animes.length === 0 ? (
                 <>
@@ -262,8 +269,12 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   )
 }
 
-Search.getInitialProps = ({ query }) => {
-  return query || ''
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      query: query.query || null
+    }
+  };
 }
 
 export default Search
