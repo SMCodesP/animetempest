@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
           <Author>Desenvolvido por <a href="https://smcodes.tk">SMCodes</a></Author>
         </ProjectThis>
         <FooterContainer>
-          <Author>Feito com <span>❤️</span> por OtakuCity</Author>
+          <Author>Feito com <span>❤️</span> por OtakuTube</Author>
         </FooterContainer>
         <SocialNetworking>
           <Link href="https://discord.gg/SDYmjZG89B">

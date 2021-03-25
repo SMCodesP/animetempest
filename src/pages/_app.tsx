@@ -32,7 +32,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta name="copyright" content="© 2020 Samuel Pereira da Silva" />
       <link rel="canonical" href="https://anime.smcodes.tk" />
       <meta name="robots" content="index" />
-      <meta name="og:site_name" content="OtakuCity" />
+      <meta name="og:site_name" content="OtakuTube" />
       <meta property="og:type" content="website" />
       <meta property="og:image" content="/images/icons/icon.jpg" />
       <meta name="theme-color" content="#282a36" />
@@ -44,8 +44,8 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <link rel="manifest" href="/manifest.json" />
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="application-name" content="OtakuCity" />
-      <meta name="apple-mobile-web-app-title" content="OtakuCity" />
+      <meta name="application-name" content="OtakuTube" />
+      <meta name="apple-mobile-web-app-title" content="OtakuTube" />
       <meta name="msapplication-starturl" content="/" />
     </Head>
 

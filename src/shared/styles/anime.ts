@@ -46,6 +46,7 @@ export const ContainerInfoAnime = styled.div`
 export const AnimeImage = styled(Image)`
   border-radius: 15px;
   width: 268px;
+  height: fit-content;
 `
 
 export const AnimeInfo = styled.div`

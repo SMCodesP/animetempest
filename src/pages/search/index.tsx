@@ -125,7 +125,29 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   return (
     <>
       <Head>
-        <title>Resultados para {query}</title>
+        <title>Pesquise por um anime - OtakuTube</title>
+        <meta property="og:title" content={`Pesquise por um anime - OtakuTube`} key="title" />
+        <meta name="twitter:title" content={`Pesquise por um anime - OtakuTube`} />
+        <meta
+          name="description"
+          content={`Ache os melhores animes categorizados e classificados.`}
+        />
+        <meta
+          property="og:description"
+          content={`Ache os melhores animes categorizados e classificados.`}
+        />
+        <meta
+          name="description"
+          content={`Ache os melhores animes categorizados e classificados.`}
+        />
+        <meta
+          name="Description"
+          content={`Ache os melhores animes categorizados e classificados.`}
+        />
+        <meta
+          name="twitter:description"
+          content={`Ache os melhores animes categorizados e classificados.`}
+        />
       </Head>
       <div
         style={{

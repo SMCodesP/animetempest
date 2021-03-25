@@ -30,6 +30,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Loading from '../../components/Player/Loading'
 import Video from '../../entities/Video'
+import UserMenu from '../../components/UserMenu'
 
 const Anime: NextPage<{
   anime: Category
@@ -49,23 +50,56 @@ const Anime: NextPage<{
   return (
     <>
       <Head>
-        <title>{anime.category_name} - OtakuCity</title>
+        <title>{anime.category_name} - OtakuTube</title>
+        <meta property="og:title" content={`${anime.category_name} - OtakuTube`} key="title" />
+        <meta name="twitter:title" content={`${anime.category_name} - OtakuTube`} />
+        <meta
+          name="description"
+          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+        />
+        <meta
+          property="og:description"
+          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+        />
+        <meta
+          name="description"
+          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+        />
+        <meta
+          name="Description"
+          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+        />
+        <meta
+          name="twitter:description"
+          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+        />
       </Head>
       <Container
         style={{
           minHeight: '100vh',
         }}
       >
-        <Back onClick={handleBack}>
-          <IoIosArrowRoundBack size={46} color={theme.tertiary} />
-          Voltar
-        </Back>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}>
+          <Back onClick={handleBack}>
+            <IoIosArrowRoundBack size={46} color={theme.tertiary} />
+            Voltar
+          </Back>
+          <UserMenu />
+        </div>
         <ContainerInfoAnime>
-          <AnimeImage
-            src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
-            width={268}
-            height={348}
-          />
+          <div style={{
+            height: 'fit-content',
+            width: '100%'
+          }}>
+            <AnimeImage
+              src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
+              width={268}
+              height={348}
+            />
+          </div>
           <AnimeInfo>
             <AnimeTitle>{anime.category_name}</AnimeTitle>
             <AnimeDescription>{anime.category_description}</AnimeDescription>

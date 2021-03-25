@@ -38,6 +38,7 @@ const UserMenu: React.FC = () => {
         <AnimatePresence>
           {isOpen && (
             <Menu {...layerProps}>
+              <span>{session.user.name}</span>
               <ItemMenu>Meu perfil</ItemMenu>
               <ItemMenu>Configurações</ItemMenu>
               <hr />

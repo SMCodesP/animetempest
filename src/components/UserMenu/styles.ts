@@ -44,6 +44,11 @@ export const Menu = styled.ul`
     height: 1px;
     background: ${({ theme }) => theme.secundaryText};
   }
+
+  & span {
+    padding: 0 7.5px;
+    color: ${({ theme }) => theme.secundaryText};
+  }
 `
 
 export const ItemMenu = styled.li`
@@ -52,10 +57,10 @@ export const ItemMenu = styled.li`
   font-size: 17px;
   transition: background .2s;
   position: relative;
-  color: ${({ theme, color }) => color || theme.secundaryText};
+  color: ${({ theme, color }) => color || theme.tertiary};
   text-align: center;
 
   &:hover {
-    background: ${({ theme, color }) => transparentize(0.75, color || theme.secundaryText)};
+    background: ${({ theme, color }) => transparentize(0.75, color || theme.tertiary)};
   }
 `

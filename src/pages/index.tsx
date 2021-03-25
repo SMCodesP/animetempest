@@ -11,6 +11,7 @@ import Category from '../entities/Category'
 import Footer from '../components/Footer'
 import EpisodeResumeList from '../components/EpisodeResumeList'
 import { useEffect, useState } from 'react'
+import Head from 'next/head'
 
 const Home: NextPage<{
   animesLatest: Video[]
@@ -24,6 +25,31 @@ const Home: NextPage<{
 
   return (
     <>
+      <Head>
+        <title>Início - OtakuTube</title>
+        <meta property="og:title" content="Início - OtakuTube" key="title" />
+        <meta name="twitter:title" content="Início - OtakuTube" />
+        <meta
+          name="description"
+          content={`Venha aproveitar nosso serviço para assistir os melhores animes em HD e SD gratuitamente, legendados ou dublados.`}
+        />
+        <meta
+          property="og:description"
+          content={`Venha aproveitar nosso serviço para assistir os melhores animes em HD e SD gratuitamente, legendados ou dublados.`}
+        />
+        <meta
+          name="description"
+          content={`Venha aproveitar nosso serviço para assistir os melhores animes em HD e SD gratuitamente, legendados ou dublados.`}
+        />
+        <meta
+          name="Description"
+          content={`Venha aproveitar nosso serviço para assistir os melhores animes em HD e SD gratuitamente, legendados ou dublados.`}
+        />
+        <meta
+          name="twitter:description"
+          content={`Venha aproveitar nosso serviço para assistir os melhores animes em HD e SD gratuitamente, legendados ou dublados.`}
+        />
+      </Head>
       <div
         style={{
           minHeight: '100vh',

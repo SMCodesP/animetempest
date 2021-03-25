@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { useContext, useState } from 'react'
 
@@ -17,9 +16,6 @@ const AnimeResume: React.FC<{
 
   return (
     <>
-      <Head>
-        <title>Início - OtakuCity</title>
-      </Head>
       <ContainerAnime>
         <Image src={`https://cdn.appanimeplus.tk/img/${episode.category_image}`} />
         <ContainerCurtain>
@@ -36,17 +32,17 @@ const AnimeResume: React.FC<{
               onMouseLeave={() => setHoverStar(false)}
             />
           ) : (
-            <AiOutlineStar
-              size={24}
-              color={theme.text}
-              style={{
-                alignSelf: 'flex-end',
-                marginTop: 8,
-                marginRight: 8,
-              }}
-              onMouseEnter={() => setHoverStar(true)}
-            />
-          )}
+              <AiOutlineStar
+                size={24}
+                color={theme.text}
+                style={{
+                  alignSelf: 'flex-end',
+                  marginTop: 8,
+                  marginRight: 8,
+                }}
+                onMouseEnter={() => setHoverStar(true)}
+              />
+            )}
           <Link href={`/watch/${episode.video_id}`}>
             <a
               style={{

@@ -1,4 +1,3 @@
-import Head from 'next/head'
 import Link from 'next/link'
 import { useContext, useState } from 'react'
 import Anime from '../../entities/Anime'
@@ -17,9 +16,6 @@ const AnimeResume: React.FC<{
 
   return (
     <>
-      <Head>
-        <title>Início - OtakuCity</title>
-      </Head>
       <Link href={`/anime/${anime.id}`}>
         <a
           style={{
@@ -42,17 +38,17 @@ const AnimeResume: React.FC<{
                   onMouseLeave={() => setHoverStar(false)}
                 />
               ) : (
-                <AiOutlineStar
-                  size={24}
-                  color={theme.text}
-                  style={{
-                    alignSelf: 'flex-end',
-                    marginTop: 8,
-                    marginRight: 8,
-                  }}
-                  onMouseEnter={() => setHoverStar(true)}
-                />
-              )}
+                  <AiOutlineStar
+                    size={24}
+                    color={theme.text}
+                    style={{
+                      alignSelf: 'flex-end',
+                      marginTop: 8,
+                      marginRight: 8,
+                    }}
+                    onMouseEnter={() => setHoverStar(true)}
+                  />
+                )}
               <More
                 style={{
                   padding: '5px 15px',
