@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { signIn, useSession } from 'next-auth/client'
+
 import { useState, useEffect, useRef, useCallback, FormEvent, useContext } from 'react'
 
-import { FaSearch, FaPlay } from 'react-icons/fa'
+import { FaSearch, FaPlay, FaUserAlt } from 'react-icons/fa'
 import Wave from 'react-wavify'
 
 import Category from '../../entities/Category'
@@ -20,6 +22,8 @@ import {
   ContainerInput,
   Input,
   SearchIcon,
+  ContainerUser,
+  User,
 } from './styles'
 import { ThemeContext } from 'styled-components'
 
@@ -27,7 +31,10 @@ const AnimeHeader: React.FC<{
   anime: Category | null
 }> = ({ anime }) => {
   const router = useRouter()
+  const [session] = useSession()
   const theme = useContext(ThemeContext)
+
+  console.log(session)
 
   const [inputSearchActive, setInputSearchActive] = useState(false)
 
@@ -89,22 +96,38 @@ const AnimeHeader: React.FC<{
       </HeaderWave>
       <Menu>
         <Icon src="/images/icons/icon.jpg" />
-        <ContainerInput onSubmit={submitSearch}>
-          <Input
-            ref={inputSearch}
-            type="text"
-            name="search"
-            placeholder="Pesquise por um anime"
-            className={inputSearchActive ? 'actived' : 'no-actived'}
-          />
-          <SearchIcon
-            ref={iconSearch}
-            className={inputSearchActive ? 'actived' : 'no-actived'}
-            onClick={handleClickSearch}
-          >
-            <FaSearch size={20} />
-          </SearchIcon>
-        </ContainerInput>
+        <div style={{
+          display: 'flex',
+          gap: 15
+        }}>
+          <ContainerInput onSubmit={submitSearch}>
+            <Input
+              ref={inputSearch}
+              type="text"
+              name="search"
+              placeholder="Pesquise por um anime"
+              className={inputSearchActive ? 'actived' : 'no-actived'}
+            />
+            <SearchIcon
+              ref={iconSearch}
+              className={inputSearchActive ? 'actived' : 'no-actived'}
+              onClick={handleClickSearch}
+            >
+              <FaSearch size={18} color={theme.text} />
+            </SearchIcon>
+          </ContainerInput>
+          {(session && session.user.image) ? <User src={session.user.image} /> : ((
+            <ContainerUser
+              href="/api/auth/signin"
+              onClick={(e) => {
+                e.preventDefault()
+                signIn()
+              }}
+            >
+              <FaUserAlt size={18} color={theme.text} />
+            </ContainerUser>
+          ))}
+        </div>
       </Menu>
       {anime && (
         <ContainerAnime>
