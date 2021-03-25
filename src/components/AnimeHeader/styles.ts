@@ -138,21 +138,3 @@ export const Thumbnail = styled.img`
     transform: scale(1.05);
   }
 `
-
-export const ContainerUser = styled.a`
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: ${({ theme }) => theme.background};
-  z-index: 99;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
-export const User = styled.img`
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  z-index: 99;
-`
