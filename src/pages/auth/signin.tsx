@@ -1,10 +1,17 @@
+import Head from 'next/head'
+import Link from 'next/link'
 import { providers as getProviders, signIn } from 'next-auth/client'
 import { NextPage, GetServerSideProps } from 'next'
 import { AppProvider } from 'next-auth/providers'
-import { Container, ContainerHeader, HeaderWave, ContainerPage, Menu } from '../../shared/styles/search'
+import {
+  Container,
+  ContainerHeader,
+  HeaderWave,
+  ContainerPage,
+  Menu,
+} from '../../shared/styles/search'
 import Wave from 'react-wavify'
 import { useContext } from 'react'
-import Link from 'next/link'
 import { FaHome } from 'react-icons/fa'
 import { ThemeContext } from 'styled-components'
 
@@ -19,6 +26,31 @@ const SignIn: NextPage<{
 
   return (
     <>
+      <Head>
+        <title>Acessar - OtakuTube</title>
+        <meta property="og:title" content="Acessar - OtakuTube" key="title" />
+        <meta name="twitter:title" content="Acessar - OtakuTube" />
+        <meta
+          name="description"
+          content={`Acesse nossa plataforma usando sua conta liberando novos recursos.`}
+        />
+        <meta
+          property="og:description"
+          content={`Acesse nossa plataforma usando sua conta liberando novos recursos.`}
+        />
+        <meta
+          name="description"
+          content={`Acesse nossa plataforma usando sua conta liberando novos recursos.`}
+        />
+        <meta
+          name="Description"
+          content={`Acesse nossa plataforma usando sua conta liberando novos recursos.`}
+        />
+        <meta
+          name="twitter:description"
+          content={`Acesse nossa plataforma usando sua conta liberando novos recursos.`}
+        />
+      </Head>
       <div
         style={{
           position: 'relative',
@@ -60,20 +92,28 @@ const SignIn: NextPage<{
               <ContainerProvider>
                 {Object.values(providers as any).map((provider: any) => (
                   <div key={provider.name}>
-                    <button onClick={() => signIn(provider.id, {
-                      callbackUrl: callbackUrl || undefined,
-                    })}>Entrar com {provider.name}</button>
+                    <button
+                      onClick={() =>
+                        signIn(provider.id, {
+                          callbackUrl: callbackUrl || undefined,
+                        })
+                      }
+                    >
+                      Entrar com {provider.name}
+                    </button>
                   </div>
                 ))}
               </ContainerProvider>
             </ContainerPage>
           </ContainerHeader>
         </Container>
-        <div style={{
-          bottom: 0,
-          position: 'absolute',
-          width: '100%',
-        }}>
+        <div
+          style={{
+            bottom: 0,
+            position: 'absolute',
+            width: '100%',
+          }}
+        >
           <Footer />
         </div>
       </div>
@@ -85,9 +125,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   return {
     props: {
       callbackUrl: ctx.query.callbackUrl,
-      providers: await (getProviders as any)(ctx)
-    }
-  };
+      providers: await (getProviders as any)(ctx),
+    },
+  }
 }
 
 export default SignIn
