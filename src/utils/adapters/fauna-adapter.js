@@ -1,95 +1,26 @@
-/**
-* This is a faunadb adapter for next-auth
-* original source: https://gist.github.com/s-kris/fbb9e5d7ba5e9bb3a5f7bd11f3c42b96
- * create collections and indexes in your faunadb shell(dashboard or cli) using the following queries:
-
-CreateCollection({name: 'accounts'});
-CreateCollection({name: 'sessions'});
-CreateCollection({name: 'users'});
-CreateCollection({name: 'verification_requests'});
-
-
-CreateIndex({
-    name: 'ref_by_user_by_id',
-    source: Collection('users'),
-    unique: true,
-    terms: [
-        { field: ['data', 'id'] }
-    ]
-});
-CreateIndex({
-    name: 'ref_by_user_by_email',
-    source: Collection('users'),
-    unique: true,
-    terms: [
-        { field: ['data', 'email'] }
-    ]
-});
-CreateIndex({
-    name: 'ref_by_account_provider_account_id',
-    source: Collection('accounts'),
-    unique: true,
-    terms: [
-        { field: ['data', 'providerId'] },
-        { field: ['data', 'providerAccountId'] }
-    ]
-});
-
-CreateIndex({
-    name: 'ref_by_vertification_request_token',
-    source: Collection('verification_requests'),
-    unique: true,
-    terms: [
-        { field: ['data', 'token'] }
-    ]
-});
-CreateIndex({
-    name: 'ref_by_session_id',
-    source: Collection('sessions'),
-    unique: true,
-    terms: [
-        { field: ['data', 'id'] }
-    ]
-});
-CreateIndex({
-    name: 'ref_by_session_token',
-    source: Collection('sessions'),
-    unique: true,
-    terms: [
-        { field: ['data', 'sessionToken'] }
-    ]
-});
- */
-
-import faunadb, { query as q } from 'faunadb'
-import { v4 as uuidv4 } from 'uuid'
+import { query as q } from 'faunadb'
 import { createHash, randomBytes } from 'crypto'
 
-const INDEX_USERS_ID = 'ref_by_user_id'
-const INDEX_USERS_EMAIL = 'ref_by_user_email'
-const INDEX_USERS_ACCOUNT_ID_PROVIDER_ID = 'ref_by_account_provider_account_id'
-const INDEX_VERIFICATION_REQUESTS_TOKEN = 'ref_by_vertification_request_token'
-const INDEX_SESSIONS_ID = 'ref_by_session_id'
-const INDEX_SESSIONS_SESSION_TOKEN = 'ref_by_session_token'
-
-const faunaClient = new faunadb.Client({ secret: process.env.FAUNADB_SERVER_KEY })
-
-const Adapter = (_config, _options = {}) => {
-  function faunaWrapper(faunaQ, errorTag) {
-    try {
-      return faunaClient.query(faunaQ)
-    } catch (error) {
-      console.error(errorTag, error)
-      return Promise.reject(new Error(error)) // removed errorTag here cos typescript says it only accepts one params and `error` seems the most logical msg to be displayed as error msg
-    }
-  }
-  function _debug(...args) {
-    console.log('[next-auth-fauna][debug]', ...args)
-  }
+const Adapter = (config, options = {}) => {
+  const {
+    faunaClient,
+    collections = {
+      User: 'users',
+      Account: 'accounts',
+      Session: 'sessions',
+      VerificationRequest: 'verification_requests',
+    },
+    indexes = {
+      Account: 'account_by_provider_account_id',
+      User: 'user_by_email',
+      Session: 'session_by_token',
+      VerificationRequest: 'verification_request_by_token',
+    },
+  } = config
 
   async function getAdapter(appOptions) {
-    if (appOptions && (!appOptions.session || !appOptions.session.maxAge)) {
-      console.log('no default options for session')
+    function _debug(debugCode, ...args) {
+      console.info(`fauna_${debugCode}`, ...args)
     }
 
     const defaultSessionMaxAge = 30 * 24 * 60 * 60 * 1000
@@ -100,98 +31,140 @@ const Adapter = (_config, _options = {}) => {
     const sessionUpdateAge =
       appOptions && appOptions.session && appOptions.session.updateAge
         ? appOptions.session.updateAge * 1000
-        : 24 * 60 * 60 * 1000
+        : 0
 
     async function createUser(profile) {
-      _debug('CREATE_USER', profile)
-      return faunaWrapper(
-        q.Select(
-          'data',
-          q.Create(q.Collection('users'), {
-            data: {
-              ...profile,
-              emailVerified: profile.emailVerified ? profile.emailVerified.toISOString() : null,
-              id: uuidv4(),
-              createdAt: Date.now(),
-              updatedAt: Date.now(),
-            },
-          })
-        ),
-        'CREATE_USER_ERROR'
-      )
+      _debug('createUser', profile)
+
+      const FQL = q.Create(q.Collection(collections.User), {
+        data: {
+          name: profile.name,
+          email: profile.email,
+          image: profile.image,
+          emailVerified: profile.emailVerified ? q.Time(profile.emailVerified.toISOString()) : null,
+          username: profile.username,
+          createdAt: q.Now(),
+          updatedAt: q.Now(),
+        },
+      })
+
+      try {
+        const newUser = await faunaClient.query(FQL)
+        newUser.data.id = newUser.ref.id
+
+        return newUser.data
+      } catch (error) {
+        console.error('CREATE_USER', error)
+        return Promise.reject(new Error('CREATE_USER'))
+      }
     }
 
     async function getUser(id) {
-      _debug('GET_USER', id)
-      const user = await faunaWrapper(
-        q.Select('data', q.Get(q.Match(q.Index(INDEX_USERS_ID), id))),
-        'GET_USER_BY_ID_ERROR'
-      )
-      return user
+      _debug('getUser', id)
+
+      const FQL = q.Get(q.Ref(q.Collection(collections.User), id))
+
+      try {
+        const user = await faunaClient.query(FQL)
+        user.data.id = user.ref.id
+
+        return user.data
+      } catch (error) {
+        console.error('GET_USER', error)
+        return Promise.reject(new Error('GET_USER'))
+      }
     }
 
     async function getUserByEmail(email) {
-      _debug('GET_USER_BY_EMAIL', email)
-      return faunaWrapper(
-        q.Let(
-          {
-            ref: q.Match(q.Index(INDEX_USERS_EMAIL), email),
-          },
-          q.If(q.Exists(q.Var('ref')), q.Select('data', q.Get(q.Var('ref'))), null)
-        ),
-        'GET_USER_BY_EMAIL_ERROR'
+      _debug('getUserByEmail', email)
+
+      if (!email) {
+        return null
+      }
+
+      const FQL = q.Let(
+        {
+          ref: q.Match(q.Index(indexes.User), email),
+        },
+        q.If(q.Exists(q.Var('ref')), q.Get(q.Var('ref')), null)
       )
+
+      try {
+        const user = await faunaClient.query(FQL)
+
+        if (user == null) {
+          return null
+        }
+
+        user.data.id = user.ref.id
+        return user.data
+      } catch (error) {
+        console.error('GET_USER_BY_EMAIL', error)
+        return Promise.reject(new Error('GET_USER_BY_EMAIL'))
+      }
     }
 
     async function getUserByProviderAccountId(providerId, providerAccountId) {
-      _debug('GET_USER_BY_PROVIDER_ACCOUNT_ID', providerId, providerAccountId)
-      return faunaWrapper(
-        q.Let(
-          {
-            ref: q.Match(q.Index(INDEX_USERS_ACCOUNT_ID_PROVIDER_ID), [
-              providerId,
-              providerAccountId,
-            ]),
-          },
-          q.If(
-            q.Exists(q.Var('ref')),
-            q.Select(
-              'data',
-              q.Get(
-                q.Match(
-                  q.Index(INDEX_USERS_ID),
-                  q.Select('userId', q.Select('data', q.Get(q.Var('ref'))))
-                )
-              )
-            ),
-            null
-          )
-        ),
-        'GET_USER_BY_PROVIDER_ACCOUNT_ID_ERROR'
+      _debug('getUserByProviderAccountId', providerId, providerAccountId)
+
+      const FQL = q.Let(
+        {
+          ref: q.Match(q.Index(indexes.Account), [providerId, providerAccountId]),
+        },
+        q.If(
+          q.Exists(q.Var('ref')),
+          q.Get(
+            q.Ref(q.Collection(collections.User), q.Select(['data', 'userId'], q.Get(q.Var('ref'))))
+          ),
+          null
+        )
       )
+
+      try {
+        const user = await faunaClient.query(FQL)
+
+        if (user == null) {
+          return null
+        }
+
+        user.data.id = user.ref.id
+
+        return user.data
+      } catch (error) {
+        console.error('GET_USER_BY_PROVIDER_ACCOUNT_ID', error)
+        return Promise.reject(new Error('GET_USER_BY_PROVIDER_ACCOUNT_ID'))
+      }
     }
 
     async function updateUser(user) {
-      _debug('UPDATE_USER', user)
-      return faunaWrapper(
-        q.Select(
-          'data',
-          q.Update(q.Select('ref', q.Get(q.Match(q.Index(INDEX_USERS_ID), user.id))), {
-            data: {
-              ...user,
-              updatedAt: Date.now(),
-              emailVerified: user.emailVerified ? user.emailVerified.toISOString() : null,
-            },
-          })
-        ),
-        'UPDATE_USER_ERROR'
-      )
+      _debug('updateUser', user)
+
+      const FQL = q.Update(q.Ref(q.Collection(collections.User), user.id), {
+        data: {
+          name: user.name,
+          email: user.email,
+          image: user.image,
+          emailVerified: user.emailVerified ? q.Time(user.emailVerified.toISOString()) : null,
+          username: user.username,
+          updatedAt: q.Now(),
+        },
+      })
+
+      try {
+        const user = await faunaClient.query(FQL)
+        user.data.id = user.ref.id
+
+        return user.data
+      } catch (error) {
+        console.error('UPDATE_USER_ERROR', error)
+        return Promise.reject(new Error('UPDATE_USER_ERROR'))
+      }
     }
 
     async function deleteUser(userId) {
-      _debug('DELETE_USER', userId)
+      _debug('deleteUser', userId)
 
-      const FQL = q.Delete(q.Ref(q.Collection('user'), userId))
+      const FQL = q.Delete(q.Ref(q.Collection(collections.User), userId))
 
       try {
         await faunaClient.query(FQL)
@@ -211,7 +184,7 @@ const Adapter = (_config, _options = {}) => {
       accessTokenExpires
     ) {
       _debug(
-        'LINK_ACCOUNT',
+        'linkAccount',
         userId,
         providerId,
         providerType,
@@ -220,45 +193,49 @@ const Adapter = (_config, _options = {}) => {
         accessToken,
         accessTokenExpires
       )
-      return faunaWrapper(
-        q.Select(
-          'data',
-          q.Create(q.Collection('accounts'), {
+
+      try {
+        const account = await faunaClient.query(
+          q.Create(q.Collection(collections.Account), {
             data: {
-              userId,
-              providerId,
-              providerType,
-              providerAccountId,
-              refreshToken,
-              accessToken,
-              accessTokenExpires,
-              id: uuidv4(),
-              createdAt: Date.now(),
-              updatedAt: Date.now(),
+              userId: userId,
+              providerId: providerId,
+              providerType: providerType,
+              providerAccountId: providerAccountId,
+              refreshToken: refreshToken,
+              accessToken: accessToken,
+              accessTokenExpires: accessTokenExpires,
+              createdAt: q.Now(),
+              updatedAt: q.Now(),
             },
           })
-        ),
-        'LINK_ACCOUNT_ERROR'
-      )
+        )
+
+        return account.data
+      } catch (error) {
+        console.error('LINK_ACCOUNT_ERROR', error)
+        return Promise.reject(new Error('LINK_ACCOUNT_ERROR'))
+      }
     }
 
     async function unlinkAccount(userId, providerId, providerAccountId) {
-      _debug('UNLINK_ACCOUNT', userId, providerId, providerAccountId)
+      _debug('unlinkAccount', userId, providerId, providerAccountId)
 
       const FQL = q.Delete(
-        q.Match(q.Index(INDEX_USERS_ACCOUNT_ID_PROVIDER_ID), [providerId, providerAccountId])
+        q.Select('ref', q.Get(q.Match(q.Index(indexes.Account), [providerId, providerAccountId])))
       )
 
       try {
-        return await faunaClient.query(FQL)
+        await faunaClient.query(FQL)
       } catch (error) {
         console.error('UNLINK_ACCOUNT_ERROR', error)
-        return Promise.reject(new Error(error))
+        return Promise.reject(new Error('UNLINK_ACCOUNT_ERROR'))
       }
     }
 
     async function createSession(user) {
-      _debug('CREATE_SESSION', user)
+      _debug('createSession', user)
+
       let expires = null
       if (sessionMaxAge) {
         const dateExpires = new Date()
@@ -266,51 +243,68 @@ const Adapter = (_config, _options = {}) => {
         expires = dateExpires.toISOString()
       }
 
-      return faunaWrapper(
-        q.Select(
-          'data',
-          q.Create(q.Collection('sessions'), {
-            data: {
-              expires,
-              userId: user.id,
-              sessionToken: randomBytes(32).toString('hex'),
-              accessToken: randomBytes(32).toString('hex'),
-              id: uuidv4(),
-              createdAt: Date.now(),
-              updatedAt: Date.now(),
-            },
-          })
-        ),
-        'CREATE_SESSION_ERROR'
-      )
+      const FQL = q.Create(q.Collection(collections.Session), {
+        data: {
+          userId: user.id,
+          expires: q.Time(expires),
+          sessionToken: randomBytes(32).toString('hex'),
+          accessToken: randomBytes(32).toString('hex'),
+          createdAt: q.Now(),
+          updatedAt: q.Now(),
+        },
+      })
+
+      try {
+        const session = await faunaClient.query(FQL)
+
+        session.data.id = session.ref.id
+
+        return session.data
+      } catch (error) {
+        console.error('CREATE_SESSION_ERROR', error)
+        return Promise.reject(new Error('CREATE_SESSION_ERROR'))
+      }
     }
 
     async function getSession(sessionToken) {
-      _debug('GET_SESSION', sessionToken)
-      const session = await faunaClient.query(
-        q.Let(
-          {
-            ref: q.Match(q.Index(INDEX_SESSIONS_SESSION_TOKEN), sessionToken),
-          },
-          q.If(q.Exists(q.Var('ref')), q.Select('data', q.Get(q.Var('ref'))), null)
-        )
-      )
-      // Check session has not expired (do not return it if it has)
-      if (session && session.expires && new Date() > session.expires) {
-        await faunaClient.query(
-          q.Delete(
-            q.Select('ref', q.Get(q.Match(q.Index(INDEX_SESSIONS_SESSION_TOKEN), sessionToken)))
-          )
-        )
-        return null
-      }
+      _debug('getSession', sessionToken)
 
-      return session
+      try {
+        var sessionFQL = q.Get(q.Match(q.Index(indexes.Session), sessionToken))
+
+        const session = await faunaClient.query({
+          id: q.Select(['ref', 'id'], sessionFQL),
+          userId: q.Select(['data', 'userId'], sessionFQL),
+          expires: q.ToMillis(q.Select(['data', 'expires'], sessionFQL)),
+          sessionToken: q.Select(['data', 'sessionToken'], sessionFQL),
+          accessToken: q.Select(['data', 'accessToken'], sessionFQL),
+          createdAt: q.ToMillis(q.Select(['data', 'createdAt'], sessionFQL)),
+          updatedAt: q.ToMillis(q.Select(['data', 'updatedAt'], sessionFQL)),
+        })
+
+        // Check session has not expired (do not return it if it has)
+        if (session && session.expires && new Date() > session.expires) {
+          await _deleteSession(sessionToken)
+          return null
+        }
+
+        return session
+      } catch (error) {
+        console.error('GET_SESSION_ERROR', error)
+        return Promise.reject(new Error('GET_SESSION_ERROR'))
+      }
     }
 
     async function updateSession(session, force) {
-      _debug('UPDATE_SESSION', session)
-      if (sessionMaxAge && (sessionUpdateAge || sessionUpdateAge === 0) && session.expires) {
+      _debug('updateSession', session)
+
+      try {
+        const shouldUpdate =
+          sessionMaxAge && (sessionUpdateAge || sessionUpdateAge === 0) && session.expires
+        if (!shouldUpdate && !force) {
+          return null
+        }
+
         // Calculate last updated date, to throttle write updates to database
         // Formula: ({expiry date} - sessionMaxAge) + sessionUpdateAge
         //     e.g. ({expiry date} - 30 days) + 1 hour
@@ -325,140 +319,151 @@ const Adapter = (_config, _options = {}) => {
 
         // Trigger update of session expiry date and write to database, only
         // if the session was last updated more than {sessionUpdateAge} ago
-        if (new Date() > dateSessionIsDueToBeUpdated) {
-          const newExpiryDate = new Date()
-          newExpiryDate.setTime(newExpiryDate.getTime() + sessionMaxAge)
-          session.expires = newExpiryDate
-        } else if (!force) {
+        const currentDate = new Date()
+        if (currentDate < dateSessionIsDueToBeUpdated && !force) {
           return null
         }
-      } else {
-        // If session MaxAge, session UpdateAge or session.expires are
-        // missing then don't even try to save changes, unless force is set.
-        if (!force) {
-          return null
-        }
-      }
 
-      const { id, expires } = session
-      const newSession = faunaWrapper(
-        q.Update(q.Select('ref', q.Get(q.Match(q.Index(INDEX_SESSIONS_ID), id))), {
-          data: {
-            expires,
-            updatedAt: Date.now(),
-          },
-        }),
-        'UPDATE_SESSION_ERROR'
-      )
-      return newSession
-    }
+        const newExpiryDate = new Date()
+        newExpiryDate.setTime(newExpiryDate.getTime() + sessionMaxAge)
 
-    async function deleteSession(sessionToken) {
-      _debug('DELETE_SESSION', sessionToken)
-      return faunaWrapper(
-        q.Delete(
-          q.Select('ref', q.Get(q.Match(q.Index(INDEX_SESSIONS_SESSION_TOKEN), sessionToken)))
-        ),
-        'DELETE_SESSION_ERROR'
-      )
-    }
-
-    async function createVerificationRequest(identifier, url, token, secret, provider) {
-      _debug('CREATE_VERIFICATION_REQUEST', identifier)
-      // console.log((identifier, url, token, secret, provider));
-      try {
-        const { baseUrl } = appOptions
-        const { sendVerificationRequest, maxAge } = provider
-
-        // Store hashed token (using secret as salt) so that tokens cannot be exploited
-        // even if the contents of the database is compromised.
-        // @TODO Use bcrypt function here instead of simple salted hash
-        const hashedToken = createHash('sha256').update(`${token}${secret}`).digest('hex')
-
-        let expires = null
-        if (maxAge) {
-          const dateExpires = new Date()
-          dateExpires.setTime(dateExpires.getTime() + maxAge * 1000)
-          expires = dateExpires.toISOString()
-        }
-
-        // Save to database
-        const verificationRequest = await faunaClient.query(
-          q.Create(q.Collection('verification_requests'), {
+        const updatedSession = await faunaClient.query(
+          q.Update(q.Ref(q.Collection(collections.Session), session.id), {
             data: {
-              id: uuidv4(),
-              identifier,
-              token: hashedToken,
-              expires,
-              createdAt: Date.now(),
-              updatedAt: Date.now(),
+              expires: q.Time(newExpiryDate.toISOString()),
+              updatedAt: q.Time(new Date().toISOString()),
             },
           })
         )
 
-        // With the verificationCallback on a provider, you can send an email, or queue
-        // an email to be sent, or perform some other action (e.g. send a text message)
-        await sendVerificationRequest({ identifier, url, token, baseUrl, provider })
+        updatedSession.data.id = updatedSession.ref.id
 
-        return verificationRequest
+        return updatedSession.data
       } catch (error) {
-        return Promise.reject(new Error(error))
+        console.error('UPDATE_SESSION_ERROR', error)
+        return Promise.reject(new Error('UPDATE_SESSION_ERROR'))
       }
     }
 
-    async function getVerificationRequest(_identifier, token, secret, _provider) {
-      _debug('GET_VERIFICATION_REQUEST', _identifier, token)
-      // console.log((identifier, token, secret, provider));
+    async function _deleteSession(sessionToken) {
+      const FQL = q.Delete(q.Select('ref', q.Get(q.Match(q.Index(indexes.Session), sessionToken))))
+
+      return faunaClient.query(FQL)
+    }
+
+    async function deleteSession(sessionToken) {
+      _debug('deleteSession', sessionToken)
+
       try {
-        // Hash token provided with secret before trying to match it with database
-        // @TODO Use bcrypt instead of salted SHA-256 hash for token
-        const hashedToken = createHash('sha256').update(`${token}${secret}`).digest('hex')
-        const verificationRequest = await faunaClient.query(
-          q.Let(
-            {
-              ref: q.Match(q.Index(INDEX_VERIFICATION_REQUESTS_TOKEN), hashedToken),
-            },
-            q.If(q.Exists(q.Var('ref')), q.Select('data', q.Get(q.Var('ref'))), null)
-          )
+        return await _deleteSession(sessionToken)
+      } catch (error) {
+        console.error('DELETE_SESSION_ERROR', error)
+        return Promise.reject(new Error('DELETE_SESSION_ERROR'))
+      }
+    }
+
+    async function createVerificationRequest(identifier, url, token, secret, provider) {
+      _debug('createVerificationRequest', identifier)
+
+      const { baseUrl } = appOptions
+      const { sendVerificationRequest, maxAge } = provider
+
+      // Store hashed token (using secret as salt) so that tokens cannot be exploited
+      // even if the contents of the database is compromised
+      // @TODO Use bcrypt function here instead of simple salted hash
+      const hashedToken = createHash('sha256').update(`${token}${secret}`).digest('hex')
+
+      let expires = null
+      if (maxAge) {
+        const dateExpires = new Date()
+        dateExpires.setTime(dateExpires.getTime() + maxAge * 1000)
+
+        expires = dateExpires.toISOString()
+      }
+
+      const FQL = q.Create(q.Collection(collections.VerificationRequest), {
+        data: {
+          identifier: identifier,
+          token: hashedToken,
+          expires: expires === null ? null : q.Time(expires),
+          createdAt: q.Now(),
+          updatedAt: q.Now(),
+        },
+      })
+
+      try {
+        const verificationRequest = await faunaClient.query(FQL)
+
+        // With the verificationCallback on a provider, you can send an email, or queue
+        // an email to be sent, or perform some other action (e.g. send a text message)
+        await sendVerificationRequest({
+          identifier,
+          url,
+          token,
+          baseUrl,
+          provider,
+        })
+
+        return verificationRequest.data
+      } catch (error) {
+        console.error('CREATE_VERIFICATION_REQUEST_ERROR', error)
+        return Promise.reject(new Error('CREATE_VERIFICATION_REQUEST_ERROR'))
+      }
+    }
+
+    async function getVerificationRequest(identifier, token, secret, provider) {
+      _debug('getVerificationRequest', identifier, token)
+
+      const hashedToken = createHash('sha256').update(`${token}${secret}`).digest('hex')
+      const FQL = q.Let(
+        {
+          ref: q.Match(q.Index(indexes.VerificationRequest), hashedToken),
+        },
+        q.If(
+          q.Exists(q.Var('ref')),
+          {
+            ref: q.Var('ref'),
+            request: q.Select('data', q.Get(q.Var('ref'))),
+          },
+          null
         )
+      )
+
+      try {
+        const { ref, request: verificationRequest } = await faunaClient.query(FQL)
+        const nowDate = Date.now()
 
         if (
           verificationRequest &&
           verificationRequest.expires &&
-          new Date() > verificationRequest.expires
+          verificationRequest.expires < nowDate
         ) {
-          // Delete verification entry so it cannot be used again
-          await faunaClient.query(
-            q.Delete(
-              q.Select(
-                'ref',
-                q.Get(q.Match(q.Index(INDEX_VERIFICATION_REQUESTS_TOKEN), hashedToken))
-              )
-            )
-          )
+          // Delete the expired request so it cannot be used
+          await faunaClient.query(q.Delete(ref))
+
           return null
         }
 
         return verificationRequest
       } catch (error) {
         console.error('GET_VERIFICATION_REQUEST_ERROR', error)
-        return Promise.reject(new Error(error))
+        return Promise.reject(new Error('GET_VERIFICATION_REQUEST_ERROR'))
       }
     }
 
-    async function deleteVerificationRequest(_identifier, token, secret, _provider) {
-      _debug('DELETE_VERIFICATION', _identifier, token)
+    async function deleteVerificationRequest(identifier, token, secret, provider) {
+      _debug('deleteVerification', identifier, token)
+
+      const hashedToken = createHash('sha256').update(`${token}${secret}`).digest('hex')
+      const FQL = q.Delete(
+        q.Select('ref', q.Get(q.Match(q.Index(indexes.VerificationRequest), hashedToken)))
+      )
+
       try {
-        // Delete verification entry so it cannot be used again
-        const hashedToken = createHash('sha256').update(`${token}${secret}`).digest('hex')
-        await faunaClient.query(
-          q.Delete(
-            q.Select('ref', q.Get(q.Match(q.Index(INDEX_VERIFICATION_REQUESTS_TOKEN), hashedToken)))
-          )
-        )
+        await faunaClient.query(FQL)
       } catch (error) {
         console.error('DELETE_VERIFICATION_REQUEST_ERROR', error)
-        return Promise.reject(new Error(error))
+        return Promise.reject(new Error('DELETE_VERIFICATION_REQUEST_ERROR'))
       }
     }
 

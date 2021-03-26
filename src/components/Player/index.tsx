@@ -250,23 +250,21 @@ any) {
   }
 
   const setVolumeAction = (value) => {
-    setVolume(value)
-    videoComponent.current.volume = value / 100
-  }
-
-  const addVolumeAction = (quantity) => {
-    setVolume((state) => {
-      if (state + quantity >= 100) {
+    setVolume(oldValue => {
+      if (value >= 100) {
         videoComponent.current.volume = 1
         return 100
-      }
-      if (state + quantity <= 0) {
+      } else if (value <= 0) {
         videoComponent.current.volume = 0
         return 0
       }
-      videoComponent.current.volume = Math.round((state + quantity) / 100)
-      return state + quantity
+      videoComponent.current.volume = Math.round(value / 100)
+      return value
     })
+  }
+
+  const addVolumeAction = (quantity) => {
+    setVolumeAction(volume + quantity)
   }
 
   const exitFullScreen = () => {
