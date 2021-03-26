@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { useSession, signIn, signOut } from 'next-auth/client';
-import { ThemeContext } from 'styled-components';
-import { User, ContainerUser, Menu, ItemMenu } from './styles';
-import { FaUserAlt } from 'react-icons/fa';
+import React, { useContext, useState } from 'react'
+import { useSession, signIn, signOut } from 'next-auth/client'
+import { ThemeContext } from 'styled-components'
+import { User, ContainerUser, Menu, ItemMenu } from './styles'
+import { FaUserAlt } from 'react-icons/fa'
 
-import { useLayer, Arrow } from "react-laag";
-import { AnimatePresence } from "framer-motion";
+import { useLayer, Arrow } from 'react-laag'
+import { AnimatePresence } from 'framer-motion'
 
 // import { Container } from './styles';
 
@@ -16,7 +16,7 @@ const UserMenu: React.FC = () => {
   const [isOpen, setOpen] = useState(false)
 
   function close() {
-    setOpen(false);
+    setOpen(false)
   }
 
   const { renderLayer, triggerProps, layerProps, arrowProps } = useLayer({
@@ -25,15 +25,15 @@ const UserMenu: React.FC = () => {
     onDisappear: close, // close the menu when the menu gets scrolled out of sight
     overflowContainer: false, // keep the menu positioned inside the container
     auto: true, // automatically find the best placement
-    placement: "bottom-center", // we prefer to place the menu "top-end"
+    placement: 'bottom-center', // we prefer to place the menu "top-end"
     triggerOffset: 16, // keep some distance to the trigger
-    containerOffset: 10, // give the menu some room to breath relative to the container
+    containerOffset: 20, // give the menu some room to breath relative to the container
     arrowOffset: 0, // let the arrow have some room to breath also
-  });
+  })
 
-  return (session && session.user.image) ? (
+  return session && session.user.image ? (
     <>
-      <User src={session.user.image} {...triggerProps} onClick={() => setOpen(state => !state)} />
+      <User src={session.user.image} {...triggerProps} onClick={() => setOpen((state) => !state)} />
       {renderLayer(
         <AnimatePresence>
           {isOpen && (
@@ -51,13 +51,18 @@ const UserMenu: React.FC = () => {
               >
                 <ItemMenu color={theme.fifthText}>Sair</ItemMenu>
               </a>
-              <Arrow {...arrowProps} backgroundColor={theme.background} borderColor={theme.secundaryBackground} borderWidth={2} />
+              <Arrow
+                {...arrowProps}
+                backgroundColor={theme.background}
+                borderColor={theme.secundaryBackground}
+                borderWidth={2}
+              />
             </Menu>
           )}
         </AnimatePresence>
       )}
     </>
-  ) : ((
+  ) : (
     <ContainerUser
       href="/api/auth/signin"
       onClick={(e) => {
@@ -67,7 +72,7 @@ const UserMenu: React.FC = () => {
     >
       <FaUserAlt size={18} color={theme.text} />
     </ContainerUser>
-  ));
+  )
 }
 
-export default UserMenu;
+export default UserMenu

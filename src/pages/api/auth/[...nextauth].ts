@@ -1,11 +1,7 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import faunadb from 'faunadb'
-import FaunaAdapter from '../../../utils/adapters/fauna-adapter'
-
-const faunaClient = new faunadb.Client({
-  secret: String(process.env.FAUNADB_SERVER_KEY),
-})
+import Firebase from '../../../utils/adapters/firebase'
+import firebaseAdmin from '../../../utils/lib/firebaseAdmin'
 
 export default (req: any, res: any) =>
   NextAuth(req, res, {
@@ -19,8 +15,12 @@ export default (req: any, res: any) =>
         clientSecret: String(process.env.FACEBOOK_CLIENT_SECRET),
       }),
     ],
-    adapter: FaunaAdapter.Adapter({
-      faunaClient,
+    adapter: Firebase.Adapter({
+      firestoreAdmin: firebaseAdmin().firestore,
+      usersCollection: 'users',
+      accountsCollection: 'accounts',
+      sessionsCollection: 'sessions',
+      verificationRequestsCollection: 'verificationRequests',
     }),
     secret: process.env.SECRET,
     session: {
@@ -33,4 +33,4 @@ export default (req: any, res: any) =>
     callbacks: {},
     events: {},
     debug: false,
-  })
+  } as any)
