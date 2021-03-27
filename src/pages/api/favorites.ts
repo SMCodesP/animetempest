@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from 'next-auth/client'
 import nc from 'next-connect'
+import api from '../../services/api'
 import firebaseAdmin from '../../utils/lib/firebaseAdmin'
 
 const handler = nc<NextApiRequest, NextApiResponse>()
@@ -24,6 +25,7 @@ const handler = nc<NextApiRequest, NextApiResponse>()
         const animeRef = await firestore.collection('animes').add({
           animeId: String(animeId),
           userId: session.userId,
+          imageId: (await api.getAnime(animeId)).category_image,
           favorite,
         })
         const animeSnapshot = await animeRef.get()

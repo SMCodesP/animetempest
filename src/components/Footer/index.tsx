@@ -1,6 +1,14 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { Container, Author, BorderCustom, SocialNetworking, Discord, FooterContainer, ProjectThis } from './styles';
+import {
+  Container,
+  Author,
+  BorderCustom,
+  SocialNetworking,
+  Discord,
+  FooterContainer,
+  ProjectThis,
+} from './styles'
 
 const Footer: React.FC = () => {
   return (
@@ -8,23 +16,35 @@ const Footer: React.FC = () => {
       <BorderCustom />
       <Container>
         <ProjectThis>
-          <Author>Desenvolvido por <a href="https://smcodes.tk">SMCodes</a></Author>
+          <Author
+            style={{
+              alignSelf: 'flex-end',
+            }}
+          >
+            Desenvolvido por <a href="https://smcodes.tk">SMCodes</a>
+          </Author>
         </ProjectThis>
         <FooterContainer>
-          <Author>Feito com <span>❤️</span> por OtakuTube</Author>
+          <Author
+            style={{
+              fontWeight: 'bold',
+              margin: 0,
+            }}
+          >
+            Feito com <span>❤️</span> por OtakuTube
+          </Author>
+          <span>Não hospedamos nenhum vídeo em nossos servidores, apenas os indexamos.</span>
         </FooterContainer>
         <SocialNetworking>
           <Link href="https://discord.gg/SDYmjZG89B">
             <a>
-              <Discord
-                title="Link para nosso discord"
-              />
+              <Discord title="Link para nosso discord" />
             </a>
           </Link>
         </SocialNetworking>
       </Container>
     </>
-  );
+  )
 }
 
-export default Footer;
+export default Footer

@@ -1,7 +1,7 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import { FaHome } from 'react-icons/fa'
 import { ThemeContext } from 'styled-components'
 import { signOut, useSession } from 'next-auth/client'
@@ -19,18 +19,16 @@ import {
   HeadProfile,
   Name,
   Description,
+  BodyProfile,
+  ListFavorites,
+  ItemFavorite,
 } from '../../shared/styles/profile'
-import axios from 'axios'
+import { useProfile } from '../../contexts/ProfileContext'
 
 const Profile: NextPage = () => {
   const theme = useContext(ThemeContext)
   const [session, loading] = useSession()
-
-  useEffect(() => {
-    ;(async () => {
-      await axios.get('/api/favorites')
-    })()
-  }, [])
+  const { favorites } = useProfile()
 
   return (
     <>
@@ -82,7 +80,7 @@ const Profile: NextPage = () => {
                     <Skeleton width={100} />
                   ) : (
                     <>
-                      <b>Favoritos »</b> 5
+                      <b>Favoritos »</b> {favorites.length}
                     </>
                   )}
                 </Description>
@@ -91,7 +89,7 @@ const Profile: NextPage = () => {
                     <Skeleton width={112} />
                   ) : (
                     <>
-                      <b>Completos »</b> 10
+                      <b>Completos »</b> 0
                     </>
                   )}
                 </Description>
@@ -110,10 +108,34 @@ const Profile: NextPage = () => {
                 <FiLogOut size={30} color={theme.fifthText} />
               </a>
             </HeadProfile>
+            <BodyProfile>
+              {favorites.length === 0 ? (
+                <h1>Você não tem nenhum anime favorito em sua lista</h1>
+              ) : (
+                <h2>Favoritos</h2>
+              )}
+              <ListFavorites>
+                {favorites.map((favorite) => (
+                  <Link href={`/anime/${favorite.animeId}`} key={`favorite-${favorite.id}`}>
+                    <a>
+                      <ItemFavorite>
+                        <img src={`https://cdn.appanimeplus.tk/img/${favorite.imageId}`} />
+                      </ItemFavorite>
+                    </a>
+                  </Link>
+                ))}
+              </ListFavorites>
+            </BodyProfile>
           </ProfileComponent>
+          <div
+            style={{
+              marginTop: 'auto',
+            }}
+          >
+            <Footer />
+          </div>
         </Container>
       </SkeletonTheme>
-      <Footer />
     </>
   )
 }

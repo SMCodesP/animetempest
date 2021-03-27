@@ -8,47 +8,51 @@ import { ContainerAnime, ContainerCurtain, Image, More } from './styles'
 
 import { useProfile } from '../../contexts/ProfileContext'
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
+import { useSession } from 'next-auth/client'
 
 const AnimeResume: React.FC<{
   anime: Anime
 }> = ({ anime }) => {
   const theme = useContext(ThemeContext)
   const { toggleFavorite, isFavorite } = useProfile()
+  const [session, loading] = useSession()
   const [hoverFavorite, setHoverFavorite] = useState(false)
+
+  const MarkFavorite = () => (isFavorite(anime.id) || hoverFavorite) ? (
+    <FaBookmark
+      size={24}
+      color={theme.text}
+      style={{
+        alignSelf: 'flex-end',
+        marginTop: 8,
+        marginRight: 8,
+        position: 'relative',
+        zIndex: 9999,
+      }}
+      onClick={() => toggleFavorite(anime.id)}
+      onMouseLeave={() => setHoverFavorite(false)}
+    />
+  ) : (
+    <FaRegBookmark
+      size={24}
+      color={theme.text}
+      style={{
+        alignSelf: 'flex-end',
+        marginTop: 8,
+        marginRight: 8,
+        position: 'relative',
+        zIndex: 9999,
+      }}
+      onClick={() => toggleFavorite(anime.id)}
+      onMouseEnter={() => setHoverFavorite(true)}
+    />
+  )
 
   return (
     <ContainerAnime>
       <Image src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
       <ContainerCurtain>
-        {isFavorite(anime.id) || hoverFavorite ? (
-          <FaBookmark
-            size={24}
-            color={theme.text}
-            style={{
-              alignSelf: 'flex-end',
-              marginTop: 8,
-              marginRight: 8,
-              position: 'relative',
-              zIndex: 9999,
-            }}
-            onClick={() => toggleFavorite(anime.id)}
-            onMouseLeave={() => setHoverFavorite(false)}
-          />
-        ) : (
-          <FaRegBookmark
-            size={24}
-            color={theme.text}
-            style={{
-              alignSelf: 'flex-end',
-              marginTop: 8,
-              marginRight: 8,
-              position: 'relative',
-              zIndex: 9999,
-            }}
-            onClick={() => toggleFavorite(anime.id)}
-            onMouseEnter={() => setHoverFavorite(true)}
-          />
-        )}
+      {(session && !loading) ? <MarkFavorite /> : <span />}
         <Link href={`/anime/${anime.id}`}>
           <a
             style={{

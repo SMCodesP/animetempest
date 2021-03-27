@@ -1,7 +1,6 @@
 import Link from 'next/link'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 
-import { AiOutlineStar, AiTwotoneStar } from 'react-icons/ai'
 import { ThemeContext } from 'styled-components'
 
 import { ContainerAnime, IconPlay, ContainerCurtain, Image, More } from './styles'
@@ -11,38 +10,13 @@ const AnimeResume: React.FC<{
   episode: Video
 }> = ({ episode }) => {
   const theme = useContext(ThemeContext)
-  const [hoverStar, setHoverStar] = useState(false)
-  const [isFavorite, setIsFavorite] = useState(false)
 
   return (
     <>
       <ContainerAnime>
         <Image src={`https://cdn.appanimeplus.tk/img/${episode.category_image}`} />
         <ContainerCurtain>
-          {isFavorite || hoverStar ? (
-            <AiTwotoneStar
-              size={24}
-              color={theme.text}
-              style={{
-                alignSelf: 'flex-end',
-                marginTop: 8,
-                marginRight: 8,
-              }}
-              onClick={() => setIsFavorite((state) => !state)}
-              onMouseLeave={() => setHoverStar(false)}
-            />
-          ) : (
-              <AiOutlineStar
-                size={24}
-                color={theme.text}
-                style={{
-                  alignSelf: 'flex-end',
-                  marginTop: 8,
-                  marginRight: 8,
-                }}
-                onMouseEnter={() => setHoverStar(true)}
-              />
-            )}
+          <span />
           <Link href={`/watch/${episode.video_id}`}>
             <a
               style={{

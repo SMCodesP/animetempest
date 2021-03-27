@@ -16,7 +16,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <link
         rel="preload"
         as="style"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap"
       />
       <link
         rel="preload"
@@ -25,7 +25,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       />
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap"
       />
       <link
         href="https://fonts.googleapis.com/css?family=Passion%20One&display=swap"
