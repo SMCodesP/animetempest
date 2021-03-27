@@ -1,6 +1,5 @@
 import admin from 'firebase-admin'
 import { createHash, randomBytes } from 'crypto'
-import { AppOptions } from 'next-auth'
 
 interface IAdapterConfig {
   firestoreAdmin: admin.firestore.Firestore
@@ -55,7 +54,7 @@ interface IVerificationRequest {
 }
 
 const Adapter = (config: IAdapterConfig, _options = {}) => {
-  async function getAdapter(appOptions: AppOptions) {
+  async function getAdapter(appOptions: any) {
     // Display debug output if debug option enabled
     function _debug(...args: any[]) {
       if (appOptions.debug) {
@@ -63,18 +62,18 @@ const Adapter = (config: IAdapterConfig, _options = {}) => {
       }
     }
 
-    if (appOptions && (!(appOptions as any).session || !(appOptions as any).session.maxAge)) {
+    if (appOptions && (!appOptions.session || !appOptions.session.maxAge)) {
       _debug('GET_ADAPTER', 'Session expiry not configured (defaulting to 30 days')
     }
 
     const DEFAULT_SESSION_MAX_AGE = 30 * 24 * 60 * 60 * 1000
     const SESSION_MAX_AGE =
-      appOptions && (appOptions as any).session && (appOptions as any).session.maxAge
-        ? (appOptions as any).session.maxAge * 1000
+      appOptions && appOptions.session && appOptions.session.maxAge
+        ? appOptions.session.maxAge * 1000
         : DEFAULT_SESSION_MAX_AGE
     const SESSION_UPDATE_AGE =
-      appOptions && (appOptions as any).session && (appOptions as any).session.updateAge
-        ? (appOptions as any).session.updateAge * 1000
+      appOptions && appOptions.session && appOptions.session.updateAge
+        ? appOptions.session.updateAge * 1000
         : 0
 
     async function createUser(profile: IProfile): Promise<IUser | null> {

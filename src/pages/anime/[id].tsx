@@ -22,7 +22,7 @@ import {
   EpisodeTitle,
   EpisodeImage,
 } from '../../shared/styles/anime'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { ThemeContext } from 'styled-components'
 
 import { IoIosArrowRoundBack } from 'react-icons/io'
@@ -31,6 +31,8 @@ import { useRouter } from 'next/router'
 import Loading from '../../components/Player/Loading'
 import Video from '../../entities/Video'
 import UserMenu from '../../components/UserMenu'
+import { useProfile } from '../../contexts/ProfileContext'
+import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
 
 const Anime: NextPage<{
   anime: Category
@@ -38,6 +40,8 @@ const Anime: NextPage<{
 }> = ({ anime, episodes }) => {
   const theme = useContext(ThemeContext)
   const router = useRouter()
+  const { toggleFavorite, isFavorite } = useProfile()
+  const [hoverFavorite, setHoverFavorite] = useState(false)
 
   const handleBack = () => {
     router.back()
@@ -55,23 +59,33 @@ const Anime: NextPage<{
         <meta name="twitter:title" content={`${anime.category_name} - OtakuTube`} />
         <meta
           name="description"
-          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+          content={`Venha assistir agora ${
+            anime.category_name
+          }. ${anime.category_description?.substring(0, 110)}...`}
         />
         <meta
           property="og:description"
-          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+          content={`Venha assistir agora ${
+            anime.category_name
+          }. ${anime.category_description?.substring(0, 110)}...`}
         />
         <meta
           name="description"
-          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+          content={`Venha assistir agora ${
+            anime.category_name
+          }. ${anime.category_description?.substring(0, 110)}...`}
         />
         <meta
           name="Description"
-          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+          content={`Venha assistir agora ${
+            anime.category_name
+          }. ${anime.category_description?.substring(0, 110)}...`}
         />
         <meta
           name="twitter:description"
-          content={`Venha assistir agora ${anime.category_name}. ${anime.category_description?.substring(0, 110)}...`}
+          content={`Venha assistir agora ${
+            anime.category_name
+          }. ${anime.category_description?.substring(0, 110)}...`}
         />
       </Head>
       <Container
@@ -79,10 +93,12 @@ const Anime: NextPage<{
           minHeight: '100vh',
         }}
       >
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between'
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <Back onClick={handleBack}>
             <IoIosArrowRoundBack size={46} color={theme.tertiary} />
             Voltar
@@ -90,10 +106,12 @@ const Anime: NextPage<{
           <UserMenu />
         </div>
         <ContainerInfoAnime>
-          <div style={{
-            height: 'fit-content',
-            width: '100%'
-          }}>
+          <div
+            style={{
+              height: 'fit-content',
+              width: '100%',
+            }}
+          >
             <AnimeImage
               src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
               width={268}
@@ -101,7 +119,36 @@ const Anime: NextPage<{
             />
           </div>
           <AnimeInfo>
-            <AnimeTitle>{anime.category_name}</AnimeTitle>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+              }}
+            >
+              <AnimeTitle>{anime.category_name}</AnimeTitle>
+              {isFavorite(anime.id) || hoverFavorite ? (
+                <FaBookmark
+                  size={24}
+                  color={theme.text}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => toggleFavorite(anime.id)}
+                  onMouseLeave={() => setHoverFavorite(false)}
+                />
+              ) : (
+                <FaRegBookmark
+                  size={24}
+                  color={theme.text}
+                  style={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => toggleFavorite(anime.id)}
+                  onMouseLeave={() => setHoverFavorite(false)}
+                  onMouseEnter={() => setHoverFavorite(true)}
+                />
+              )}
+            </div>
             <AnimeDescription>{anime.category_description}</AnimeDescription>
             <Link href={`/watch/${episodes[episodes.length - 1].video_id}`}>
               <a style={{ width: 'fit-content' }}>

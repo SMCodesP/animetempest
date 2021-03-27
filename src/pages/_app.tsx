@@ -6,6 +6,7 @@ import { Provider } from 'next-auth/client'
 import { GlobalStyle } from '../shared/styles/global'
 
 import themes from '../shared/themes'
+import { ProfileProvider } from '../contexts/ProfileContext'
 
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
   <>
@@ -18,17 +19,23 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       />
       <link
+        rel="preload"
+        as="style"
+        href="https://fonts.googleapis.com/css?family=Passion%20One&display=swap"
+      />
+      <link
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      />
+      <link
+        href="https://fonts.googleapis.com/css?family=Passion%20One&display=swap"
+        rel="stylesheet"
       />
       <meta charSet="utf-8" />
       <link rel="icon" href="/images/icons/icon.jpg" />
       <meta name="googlebot" content="all" />
       <meta name="author" content="Samuel Pereira da Silva" />
-      <meta
-        name="keywords"
-        content="Animes, mangas"
-      />
+      <meta name="keywords" content="Animes, mangas" />
       <meta name="copyright" content="© 2020 Samuel Pereira da Silva" />
       <link rel="canonical" href="https://anime.smcodes.tk" />
       <meta name="robots" content="index" />
@@ -36,10 +43,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta property="og:type" content="website" />
       <meta property="og:image" content="/images/icons/icon.jpg" />
       <meta name="theme-color" content="#282a36" />
-      <meta
-        name="apple-mobile-web-app-status-bar-style"
-        content="#282a36"
-      />
+      <meta name="apple-mobile-web-app-status-bar-style" content="#282a36" />
       <meta name="msapplication-navbutton-color" content="#282a36" />
       <link rel="manifest" href="/manifest.json" />
       <meta name="mobile-web-app-capable" content="yes" />
@@ -65,12 +69,14 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
         //
         // Note: If a session has expired when keep alive is triggered, all open
         // windows / tabs will be updated to reflect the user is signed out.
-        keepAlive: 0
+        keepAlive: 0,
       }}
       session={pageProps.session}
     >
       <ThemeProvider theme={themes['dark']}>
-        <Component {...pageProps} />
+        <ProfileProvider>
+          <Component {...pageProps} />
+        </ProfileProvider>
 
         <GlobalStyle />
       </ThemeProvider>

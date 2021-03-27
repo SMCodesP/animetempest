@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth'
 import Providers from 'next-auth/providers'
-import Firebase from '../../../utils/adapters/firebase'
+import Firebase, { IUser } from '../../../utils/adapters/firebase'
 import firebaseAdmin from '../../../utils/lib/firebaseAdmin'
 
 export default (req: any, res: any) =>
@@ -22,15 +22,18 @@ export default (req: any, res: any) =>
       sessionsCollection: 'sessions',
       verificationRequestsCollection: 'verificationRequests',
     }),
-    secret: process.env.SECRET,
-    session: {
-      jwt: true,
-    },
-    jwt: {},
     pages: {
       signIn: '/auth/signin',
     },
-    callbacks: {},
-    events: {},
+    callbacks: {
+      session: async (session: any, user: IUser) => {
+        const updatedSession = {
+          ...session,
+          userId: user.id,
+        }
+
+        return Promise.resolve(updatedSession)
+      },
+    },
     debug: false,
   } as any)

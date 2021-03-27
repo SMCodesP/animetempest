@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react'
+import Link from 'next/link'
+import { useContext, useState } from 'react'
 import { useSession, signIn, signOut } from 'next-auth/client'
 import { ThemeContext } from 'styled-components'
 import { User, ContainerUser, Menu, ItemMenu } from './styles'
@@ -6,8 +7,6 @@ import { FaUserAlt } from 'react-icons/fa'
 
 import { useLayer, Arrow } from 'react-laag'
 import { AnimatePresence } from 'framer-motion'
-
-// import { Container } from './styles';
 
 const UserMenu: React.FC = () => {
   const [session] = useSession()
@@ -39,7 +38,11 @@ const UserMenu: React.FC = () => {
           {isOpen && (
             <Menu {...layerProps}>
               <span>{session.user.name}</span>
-              <ItemMenu>Meu perfil</ItemMenu>
+              <Link href="/profile">
+                <a>
+                  <ItemMenu>Meu perfil</ItemMenu>
+                </a>
+              </Link>
               <ItemMenu>Configurações</ItemMenu>
               <hr />
               <a

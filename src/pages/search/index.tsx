@@ -13,7 +13,7 @@ import Wave from 'react-wavify'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Select from 'react-select'
 
-import { defaultTheme } from 'react-select';
+import { defaultTheme } from 'react-select'
 
 import Category from '../../entities/Category'
 import api from '../../services/api'
@@ -37,40 +37,40 @@ import { lighten } from 'polished'
 import UserMenu from '../../components/UserMenu'
 
 const categories = [
-  { value: "all", label: "Todos" },
-  { value: "aventura", label: "Aventura" },
-  { value: "acao", label: "Ação" },
-  { value: "comedia", label: "Comédia" },
-  { value: "drama", label: "Drama" },
-  { value: "dublado", label: "Dublado" },
-  { value: "ecchi", label: "Ecchi" },
-  { value: "escolar", label: "Escolar" },
-  { value: "esporte", label: "Esporte" },
-  { value: "fantasia", label: "Fantasia" },
-  { value: "filme", label: "Filme" },
-  { value: "harem", label: "Harém" },
-  { value: "historico", label: "Histórico" },
-  { value: "jogo", label: "Jogo" },
-  { value: "josei", label: "Josei" },
-  { value: "magia", label: "Mágia" },
-  { value: "mecha", label: "Mecha" },
-  { value: "militar", label: "Militar" },
-  { value: "misterio", label: "Mistério" },
-  { value: "ova", label: "OVA" },
-  { value: "poderes", label: "Podres" },
-  { value: "psicologico", label: "Psicológico" },
-  { value: "romance", label: "Romance" },
-  { value: "samurai", label: "Samurai" },
-  { value: "sci-fi", label: "SCI-FI" },
-  { value: "seinen", label: "Seinen" },
-  { value: "shoujo", label: "Shoujo" },
-  { value: "shounen", label: "Shounen" },
-  { value: "slice_of_life", label: "Slice of Life" },
-  { value: "sobrenatural", label: "Sobrenatural" },
-  { value: "suspense", label: "Suspense" },
-  { value: "terror", label: "Terror" },
-  { value: "yaoi", label: "Yaoi" },
-  { value: "yuri", label: "Yuri" },
+  { value: 'all', label: 'Todos' },
+  { value: 'aventura', label: 'Aventura' },
+  { value: 'acao', label: 'Ação' },
+  { value: 'comedia', label: 'Comédia' },
+  { value: 'drama', label: 'Drama' },
+  { value: 'dublado', label: 'Dublado' },
+  { value: 'ecchi', label: 'Ecchi' },
+  { value: 'escolar', label: 'Escolar' },
+  { value: 'esporte', label: 'Esporte' },
+  { value: 'fantasia', label: 'Fantasia' },
+  { value: 'filme', label: 'Filme' },
+  { value: 'harem', label: 'Harém' },
+  { value: 'historico', label: 'Histórico' },
+  { value: 'jogo', label: 'Jogo' },
+  { value: 'josei', label: 'Josei' },
+  { value: 'magia', label: 'Mágia' },
+  { value: 'mecha', label: 'Mecha' },
+  { value: 'militar', label: 'Militar' },
+  { value: 'misterio', label: 'Mistério' },
+  { value: 'ova', label: 'OVA' },
+  { value: 'poderes', label: 'Podres' },
+  { value: 'psicologico', label: 'Psicológico' },
+  { value: 'romance', label: 'Romance' },
+  { value: 'samurai', label: 'Samurai' },
+  { value: 'sci-fi', label: 'SCI-FI' },
+  { value: 'seinen', label: 'Seinen' },
+  { value: 'shoujo', label: 'Shoujo' },
+  { value: 'shounen', label: 'Shounen' },
+  { value: 'slice_of_life', label: 'Slice of Life' },
+  { value: 'sobrenatural', label: 'Sobrenatural' },
+  { value: 'suspense', label: 'Suspense' },
+  { value: 'terror', label: 'Terror' },
+  { value: 'yaoi', label: 'Yaoi' },
+  { value: 'yuri', label: 'Yuri' },
 ]
 
 const Search: NextPage = ({ query: queryInitial }: any) => {
@@ -86,7 +86,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   const handleSearch = async () => {
     if (query && query.length > 3) {
       setLoading(true)
-      let animesList;
+      let animesList
       if (categorySelected.value === 'all') {
         animesList = await api.searchAnime(String(query))
       } else {
@@ -191,27 +191,29 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                   onChange={handleChange}
                   placeholder="Procure por um anime"
                 />
-                <div style={{
-                  display: 'flex',
-                  gap: 10
-                }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    gap: 10,
+                  }}
+                >
                   <ContainerInputCategory>
                     <div style={{ width: 256, right: 0, margin: 'auto' }}>
                       <Select
                         placeholder="Selecione uma categoria"
                         options={categories}
                         value={categorySelected}
-                        onChange={e => setCategorySelected(state => e || state)}
+                        onChange={(e) => setCategorySelected((state) => e || state)}
                         theme={{
                           borderRadius: 5,
                           spacing: {
                             baseUnit: 5,
                             controlHeight: 5,
-                            menuGutter: 5
+                            menuGutter: 5,
                           },
                           colors: {
-                            danger: "#DE350B",
-                            dangerLight: "#FFBDAD",
+                            danger: '#DE350B',
+                            dangerLight: '#FFBDAD',
                             neutral0: theme.background,
                             neutral5: lighten(0.05, theme.background),
                             neutral10: lighten(0.1, theme.background),
@@ -227,7 +229,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                             primary75: lighten(0.075, theme.secundaryText),
                             primary50: lighten(0.05, theme.secundaryText),
                             primary25: lighten(0.025, theme.secundaryText),
-                          }
+                          },
                         }}
                       />
                     </div>
@@ -247,8 +249,8 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                   </LoadingComponent>
                 </>
               ) : (
-                  animes.length === 0 && <h1>Nenhum anime encontrado</h1>
-                )}
+                animes.length === 0 && <h1>Nenhum anime encontrado</h1>
+              )}
               <InfiniteScroll
                 loader={
                   <LoadingComponent color={theme.tertiary}>
@@ -294,9 +296,9 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   return {
     props: {
-      query: query.query || null
-    }
-  };
+      query: query.query || null,
+    },
+  }
 }
 
 export default Search

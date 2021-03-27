@@ -30,7 +30,6 @@ export const IconPlay = styled(BiPlayCircle)`
 export const ContainerAnime = styled.div`
   position: relative;
   margin: 0;
-  cursor: pointer;
 
   &:hover img {
     border-bottom-left-radius: 10px;
