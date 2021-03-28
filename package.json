@@ -41,11 +41,13 @@
     "react-player": "^2.9.0",
     "react-select": "^4.3.0",
     "react-wavify": "^1.5.2",
+    "socket.io-client": "^4.0.0",
     "sqlite3": "^5.0.2",
     "styled-components": "^5.2.1",
     "swr": "^0.5.4",
     "typescript": "^4.2.3",
-    "unfetch": "^4.2.0"
+    "unfetch": "^4.2.0",
+    "use-debounce": "^6.0.0"
   },
   "devDependencies": {
     "@types/lodash.debounce": "^4.0.6",

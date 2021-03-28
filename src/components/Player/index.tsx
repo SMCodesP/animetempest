@@ -1,8 +1,8 @@
 // @ts-nocheck
 
 import React, { useEffect, memo, useState, useRef, useCallback, useContext } from 'react'
-
 import debounce from 'lodash.debounce'
+import { useDebouncedCallback } from 'use-debounce'
 
 import {
   FaUndoAlt,
@@ -38,6 +38,9 @@ import {
 import Link from 'next/link'
 import Loading from './Loading'
 import { ThemeContext } from 'styled-components'
+import useSocket from '../../hooks/useSocket'
+import { useSession } from 'next-auth/client'
+import Progress from '../../entities/Progress'
 
 function ReactNetflixPlayer({
   title = false,
@@ -52,6 +55,7 @@ function ReactNetflixPlayer({
   src = '',
   autoPlay = false,
   videoId = '',
+  animeId = '',
 
   onCanPlay = false,
   onTimeUpdate = false,
@@ -77,6 +81,9 @@ function ReactNetflixPlayer({
 }: // subtitleMedia,
 any) {
   const theme = useContext(ThemeContext)
+  const socket = useSocket('https://hurkita-bot.herokuapp.com', [videoId])
+  const [session, loadingSession] = useSession()
+
   // Referências
   const videoComponent = useRef<HTMLVideoElement>(null)
 
@@ -159,6 +166,20 @@ any) {
     }
   }
 
+  const saveOnlineProgress = useDebouncedCallback(
+    (value) => {
+      socket.emit('progress', {
+        userId: session?.userId,
+        videoId,
+        animeId,
+        progress: value,
+        completed: duration - value < 180,
+      } as Progress)
+    },
+    15000,
+    { maxWait: 15000 }
+  )
+
   const timeCallBack = (e) => {
     setShowInfo(false)
     setEnd(false)
@@ -174,6 +195,9 @@ any) {
     progressTime.current.innerText = secondsToHms(Math.trunc(e.target.currentTime))
     if (playing) {
       saveVideoProgress(Math.trunc(e.target.currentTime))
+      if (session && !loadingSession) {
+        saveOnlineProgress(Math.trunc(e.target.currentTime))
+      }
     }
   }
 
@@ -230,6 +254,7 @@ any) {
   const startVideo = async () => {
     setDuration(videoComponent.current.duration)
     setVideoReady(true)
+    goToPosition(startPosition)
 
     if (onCanPlay) {
       onCanPlay()
@@ -250,7 +275,7 @@ any) {
   }
 
   const setVolumeAction = (value) => {
-    setVolume(oldValue => {
+    setVolume((oldValue) => {
       if (value >= 100) {
         videoComponent.current.volume = 1
         return 100
@@ -258,7 +283,7 @@ any) {
         videoComponent.current.volume = 0
         return 0
       }
-      videoComponent.current.volume = Math.round(value / 100)
+      videoComponent.current.volume = value / 100
       return value
     })
   }
@@ -402,6 +427,8 @@ any) {
       setShowDataNext(false)
       if (videoComponent && videoComponent.current) {
         videoComponent.current.currentTime = startPosition
+        console.log(startPosition)
+        console.log(seekElement)
       }
     }
   }, [src, startPosition])

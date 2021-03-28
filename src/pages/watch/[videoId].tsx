@@ -14,18 +14,24 @@ import Video from '../../entities/Video'
 import Loading from '../../components/Player/Loading'
 
 import Player from '../../components/Player'
+import { useSession } from 'next-auth/client'
+import Progress from '../../entities/Progress'
+import axios from 'axios'
 
 const MiniPlayer: React.FC<{
   episode: Episode
   episodes: Episode[]
   category: Category
+  initialProgress: Progress | null
   nextEpisode: Episode | null
-}> = ({ episode, category, episodes, nextEpisode }) => {
+}> = ({ episode, category, episodes, initialProgress, nextEpisode }) => {
   const theme = useContext(ThemeContext)
   const [quality, setQuality] = useState<'locationhd' | 'locationsd' | 'location' | ''>('')
   const [virtualQuality, setVirtualQuality] = useState<string>('')
   const [isContinue, setIsContinue] = useState<boolean | null>(false)
-  const [startVideoProgress, setStartVideoProgress] = useState(0)
+  const [startVideoProgress, setStartVideoProgress] = useState(
+    initialProgress !== null ? initialProgress?.progress : 0
+  )
   const router = useRouter()
 
   useEffect(() => {
@@ -33,7 +39,6 @@ const MiniPlayer: React.FC<{
       localStorage.setItem('default_quality', quality)
     }
     if (isContinue === null) {
-      console.log('Continuando...')
       const history = localStorage.getItem('history')
       if (history) {
         const historyParsed: {
@@ -50,7 +55,7 @@ const MiniPlayer: React.FC<{
 
   useEffect(() => {
     setIsContinue(false)
-    setStartVideoProgress(0)
+    setStartVideoProgress(initialProgress?.progress || 0)
     const default_quality = localStorage.getItem('default_quality')
     setQuality(() => {
       let quality_storage: 'locationhd' | 'locationsd' | 'location' | '' = ''
@@ -65,10 +70,10 @@ const MiniPlayer: React.FC<{
         quality_storage = episode.locationhd
           ? 'locationhd'
           : episode.locationsd
-            ? 'locationsd'
-            : episode.location
-              ? 'location'
-              : ''
+          ? 'locationsd'
+          : episode.location
+          ? 'location'
+          : ''
       }
       if ((episode as any)[quality_storage]) {
         setVirtualQuality((episode as any)[quality_storage])
@@ -89,6 +94,7 @@ const MiniPlayer: React.FC<{
         subTitle={episode.title}
         titleMedia={category.category_name}
         extraInfoMedia={episode.title}
+        animeId={episode.category_id}
         playerLanguage="pt"
         onChangeQuality={(qualityId: 'locationhd' | 'locationsd' | 'location') => {
           setIsContinue(null)
@@ -98,24 +104,24 @@ const MiniPlayer: React.FC<{
         qualities={[
           episode.locationhd
             ? {
-              id: 'locationhd',
-              nome: 'FullHD',
-              playing: episode['locationhd'] === virtualQuality,
-            }
+                id: 'locationhd',
+                nome: 'FullHD',
+                playing: episode['locationhd'] === virtualQuality,
+              }
             : null,
           episode.locationsd
             ? {
-              id: 'locationsd',
-              nome: 'HD',
-              playing: episode['locationsd'] === virtualQuality,
-            }
+                id: 'locationsd',
+                nome: 'HD',
+                playing: episode['locationsd'] === virtualQuality,
+              }
             : null,
           episode.location
             ? {
-              id: 'location',
-              nome: 'SD',
-              playing: episode['location'] === virtualQuality,
-            }
+                id: 'location',
+                nome: 'SD',
+                playing: episode['location'] === virtualQuality,
+              }
             : null,
         ].filter((el) => el !== null)}
         videoId={episode.video_id}
@@ -144,8 +150,8 @@ const MiniPlayer: React.FC<{
       />
     </Container>
   ) : (
-      <div />
-    )
+    <div />
+  )
 }
 
 const Watch: NextPage<{
@@ -156,8 +162,27 @@ const Watch: NextPage<{
 }> = ({ episode, episodes, category, nextEpisode }) => {
   const router = useRouter()
   const theme = useContext(ThemeContext)
+  const [session, loading] = useSession()
+  const [loadingProgress, setLoadingProgress] = useState(false)
+  const [initialProgress, setInitialProgress] = useState<Progress | null>(null)
 
-  if (router.isFallback) {
+  useEffect(() => {
+    if (session) {
+      setLoadingProgress(true)
+      ;(async () => {
+        try {
+          const { data } = await axios.get<Progress>(`/api/episode/${episode.video_id}`)
+          console.log(data)
+          setInitialProgress(data)
+          setLoadingProgress(false)
+        } catch (error) {
+          setLoadingProgress(false)
+        }
+      })()
+    }
+  }, [session, episode])
+
+  if (router.isFallback || loadingProgress || loading) {
     return <Loading color={theme.tertiary} />
   }
 
@@ -165,7 +190,7 @@ const Watch: NextPage<{
     return <Error statusCode={404} />
   }
 
-  return episode ? (
+  return (
     <>
       <Head>
         <title>{episode.title}</title>
@@ -196,12 +221,11 @@ const Watch: NextPage<{
         episode={episode}
         nextEpisode={nextEpisode}
         episodes={episodes}
+        initialProgress={initialProgress}
         category={category}
       />
     </>
-  ) : (
-      <div />
-    )
+  )
 }
 
 export const getStaticPaths = async () => {
