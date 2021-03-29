@@ -135,13 +135,11 @@ const MiniPlayer: React.FC<{
         onNextClick={() => {
           nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
         }}
-        reprodutionList={episodes
-          .map((ep: any) => ({
-            nome: ep.title,
-            id: ep.video_id,
-            playing: ep.video_id === episode.video_id,
-          }))
-          .reverse()}
+        reprodutionList={episodes.map((ep: any) => ({
+          nome: ep.title,
+          id: ep.video_id,
+          playing: ep.video_id === episode.video_id,
+        }))}
         overlayEnabled={true}
         autoControllCloseEnabled
         primaryColor={theme.tertiary}
