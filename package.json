@@ -1,5 +1,5 @@
 {
-  "name": "otakucity",
+  "name": "otakutube",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SMCodesP/otakucity.git"
+    "url": "git+https://github.com/SMCodesP/otakutube.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SMCodesP/otakucity/issues"
+    "url": "https://github.com/SMCodesP/otakutube/issues"
   },
-  "homepage": "https://github.com/SMCodesP/otakucity#readme",
+  "homepage": "https://github.com/SMCodesP/otakutube#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "firebase-admin": "^9.5.0",
