@@ -180,7 +180,7 @@ const Watch: NextPage<{
         }
       })()
     }
-  }, [session, episode])
+  }, [episode])
 
   if (router.isFallback || loadingProgress || loading) {
     return <Loading color={theme.tertiary} />

@@ -427,18 +427,9 @@ any) {
       setShowDataNext(false)
       if (videoComponent && videoComponent.current) {
         videoComponent.current.currentTime = startPosition
-        console.log(startPosition)
-        console.log(seekElement)
       }
     }
-  }, [src, startPosition])
-
-  useEffect(() => {
-    document.addEventListener('keydown', keyboardInteractionCallback)
-    return () => {
-      document.removeEventListener('keydown', keyboardInteractionCallback)
-    }
-  }, [])
+  }, [src])
 
   useEffect(() => {
     document.addEventListener(
@@ -452,6 +443,10 @@ any) {
       },
       false
     )
+    document.addEventListener('keydown', keyboardInteractionCallback)
+    return () => {
+      document.removeEventListener('keydown', keyboardInteractionCallback)
+    }
   }, [])
 
   function InfoVideo() {
