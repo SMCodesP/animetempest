@@ -37,7 +37,6 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta name="author" content="Samuel Pereira da Silva" />
       <meta name="keywords" content="Animes, mangas" />
       <meta name="copyright" content="© 2020 Samuel Pereira da Silva" />
-      <link rel="canonical" href="https://anime.smcodes.tk" />
       <meta name="robots" content="index" />
       <meta name="og:site_name" content="OtakuTube" />
       <meta property="og:type" content="website" />
@@ -51,6 +50,12 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta name="application-name" content="OtakuTube" />
       <meta name="apple-mobile-web-app-title" content="OtakuTube" />
       <meta name="msapplication-starturl" content="/" />
+      <link rel="canonical" href="https://otakutube.vercel.app" />
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:url" content="https://otakutube.vercel.app" />
+      <meta name="twitter:image" content="https://otakutube.vercel.app/images/icons/icon.jpg" />
+      <meta property="og:url" content="https://otakutube.vercel.app" />
+      <meta property="og:image" content="https://otakutube.vercel.app/images/icons/icon.jpg" />
     </Head>
 
     <Provider
