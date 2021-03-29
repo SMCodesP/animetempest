@@ -36,11 +36,9 @@ export default {
     const { data } = await api.get<Category[]>(`/api-animesbr-10.php?info=${anime_id}`)
     return data[0]
   },
-  nextEpisode: async (episode_id: string, anime_id: string) => {
-    let { data } = await api.get<Episode[]>(`/api-animesbr-10.php?cat_id=${anime_id}`)
-    data.sort((a, b) => (a.title > b.title ? 1 : b.title > a.title ? -1 : 0))
-    const index = data.findIndex((episode) => episode.video_id === episode_id)
-    return data && data[index + 1]
+  nextEpisode: async (episode_id: string, episodes: Episode[]) => {
+    const index = episodes.findIndex((episode) => episode.video_id === episode_id)
+    return episodes[index + 1]
   },
   searchAnime: async (query: string, category?: string) => {
     const { data } = await axios.get<Category[]>(
