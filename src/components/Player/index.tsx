@@ -81,7 +81,7 @@ function ReactNetflixPlayer({
 }: // subtitleMedia,
 any) {
   const theme = useContext(ThemeContext)
-  const socket = useSocket('https://hurkita-bot.herokuapp.com', [videoId])
+  const socket = useSocket('https://otakutube.herokuapp.com', [videoId])
   const [session, loadingSession] = useSession()
 
   // Referências
