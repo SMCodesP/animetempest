@@ -163,16 +163,14 @@ const Watch: NextPage<{
   const router = useRouter()
   const theme = useContext(ThemeContext)
   const [session, loading] = useSession()
-  const [loadingProgress, setLoadingProgress] = useState(false)
+  const [loadingProgress, setLoadingProgress] = useState(true)
   const [initialProgress, setInitialProgress] = useState<Progress | null>(null)
 
   useEffect(() => {
     if (session) {
-      setLoadingProgress(true)
       ;(async () => {
         try {
           const { data } = await axios.get<Progress>(`/api/episode/${episode.video_id}`)
-          console.log(data)
           setInitialProgress(data)
           setLoadingProgress(false)
         } catch (error) {
@@ -180,7 +178,7 @@ const Watch: NextPage<{
         }
       })()
     }
-  }, [episode])
+  }, [session, episode])
 
   if (router.isFallback || loadingProgress || loading) {
     return <Loading color={theme.tertiary} />

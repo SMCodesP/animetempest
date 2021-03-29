@@ -49,6 +49,7 @@ const handler = nc<NextApiRequest, NextApiResponse>()
     }
   })
   .get(async (req, res) => {
+    res.setHeader('Cache-Control', 's-maxage=3600')
     const session: any = await getSession({ req })
 
     try {

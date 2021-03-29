@@ -168,6 +168,7 @@ any) {
 
   const saveOnlineProgress = useDebouncedCallback(
     (value) => {
+      console.log('Saving online progress...')
       socket.emit('progress', {
         userId: session?.userId,
         videoId,
@@ -176,8 +177,8 @@ any) {
         completed: duration - value < 180,
       } as Progress)
     },
-    15000,
-    { maxWait: 15000 }
+    5000,
+    { maxWait: 5000 }
   )
 
   const timeCallBack = (e) => {
@@ -195,7 +196,7 @@ any) {
     progressTime.current.innerText = secondsToHms(Math.trunc(e.target.currentTime))
     if (playing) {
       saveVideoProgress(Math.trunc(e.target.currentTime))
-      if (session && !loadingSession) {
+      if (session) {
         saveOnlineProgress(Math.trunc(e.target.currentTime))
       }
     }
