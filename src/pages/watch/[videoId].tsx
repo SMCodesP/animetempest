@@ -1,14 +1,13 @@
+import { useContext, useState, useEffect } from 'react'
 import Head from 'next/head'
 import Error from 'next/error'
 import { useRouter } from 'next/router'
-import { NextPage, GetStaticProps } from 'next'
 
 import Episode from '../../entities/Episode'
 import api from '../../services/api'
 
 import { Container } from '../../shared/styles/watch'
 import Category from '../../entities/Category'
-import { useContext, useState, useEffect } from 'react'
 import { ThemeContext } from 'styled-components'
 import Video from '../../entities/Video'
 import Loading from '../../components/Player/Loading'
@@ -17,6 +16,7 @@ import Player from '../../components/Player'
 import { useSession } from 'next-auth/client'
 import Progress from '../../entities/Progress'
 import axios from 'axios'
+import { GetStaticProps, NextPage } from 'next'
 
 const MiniPlayer: React.FC<{
   episode: Episode
@@ -245,13 +245,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const episode = await api.getEpisode(String(params?.videoId))
 
-    if (!episode) throw 'Error array.'
-    if (!episode.location) throw 'Error array.'
+    if (!episode) throw `Episode ${String(params?.videoId)} null.`
+    if (!episode.location) throw `Episode location video not found ${String(params?.videoId)}.`
     const episodes = await api.getEpisodesFromAnime(episode.category_id)
     const category = await api.getAnime(episode.category_id)
     let nextEpisode = await api.nextEpisode(episode.video_id, episode.category_id)
 
-    if (!category || !episodes) throw 'Error array.'
+    if (!category || !episodes) throw `Category and episodes of ${params?.videoId} not found.`
 
     return {
       props: {
