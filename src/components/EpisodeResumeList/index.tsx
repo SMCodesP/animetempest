@@ -12,6 +12,7 @@ const EpisodeResumeList: React.FC<{
 }> = ({ episodes }) => {
   return (
     <Carousel
+      swipeable
       responsive={{
         desktop: {
           breakpoint: { max: 3000, min: 1024 },
@@ -29,7 +30,7 @@ const EpisodeResumeList: React.FC<{
           slidesToSlide: 1,
         },
       }}
-      ssr
+      ssr={true}
       infinite={true}
     >
       {episodes.map((episode) => (

@@ -18,6 +18,7 @@ const handler = nc<NextApiRequest, NextApiResponse>().get(async (req, res) => {
 
     return res.json(animeWatch.docs.map((doc) => doc.data()))
   } catch (error) {
+    console.error(error)
     res.status(400).send(error.message)
   }
 })
