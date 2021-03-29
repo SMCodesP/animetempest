@@ -245,7 +245,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     if (!episode.location) throw `Episode location video not found ${String(params?.videoId)}.`
     const episodes = await api.getEpisodesFromAnime(episode.category_id)
     const category = await api.getAnime(episode.category_id)
-    let nextEpisode = await api.nextEpisode(episode.video_id, episodes)
+    const nextEpisode = await api.nextEpisode(episode.video_id, episodes)
 
     if (!category || !episodes) throw `Category and episodes of ${params?.videoId} not found.`
 

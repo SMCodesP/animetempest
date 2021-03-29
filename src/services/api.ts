@@ -38,7 +38,7 @@ export default {
   },
   nextEpisode: async (episode_id: string, episodes: Episode[]) => {
     const index = episodes.findIndex((episode) => episode.video_id === episode_id)
-    return episodes[index + 1]
+    return episodes[index + 1] ? episodes[index + 1] : null
   },
   searchAnime: async (query: string, category?: string) => {
     const { data } = await axios.get<Category[]>(
