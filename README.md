@@ -11,8 +11,6 @@
   </p>
 </div>
 
----
-
 # OtakuTube
 
 <div align="center">
@@ -68,6 +66,8 @@ npm run dev
 ```
 
 <br>
+
+---
 
 <p align="center">
   Copyright © 2020-present, <b>SMCodes<b>.
