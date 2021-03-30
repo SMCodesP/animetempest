@@ -18,13 +18,14 @@
 <div align="center">
 
 [![Discord Group](https://shields.io/discord/803654181839700038?style=for-the-badge&logo=discord&color=67E480)](https://discord.gg/s9jKHJwxqH)
-[![Github status](https://shields.io/github/last-commit/SMCodesP/otakutube?style=for-the-badge&logo=discord&color=24292e)](https://github.com/SMCodesP/otakutube)
+[![Github status](https://shields.io/github/last-commit/SMCodesP/otakutube?style=for-the-badge&logo=github&color=24292e)](https://github.com/SMCodesP/otakutube)
+![Status website](https://shields.io/uptimerobot/ratio/m787671147-8868d3c940ecb9962ee47482?style=for-the-badge&label=UPTIME%2030)
 
 </div>
 
 ![Screens](./public/images/screens.png)
 
-Esse projeto é um website simples para asssitir animes online, nesse website não hospedo nenhum animes, apenas uso de uma API que disponibiliza dados dos animes, porém caso você for usar essa API produtivamente lembre-se que ela tem alguns bugs nos episódios como listagem bagunçada e alguns faltando episódios.
+Esse projeto é um website simples usando React com NextJS para asssitir animes online, nesse website não hospedo nenhum animes, apenas uso de uma API que disponibiliza dados dos animes, porém caso você for usar essa API produtivamente lembre-se que ela tem alguns bugs nos episódios como listagem bagunçada e alguns faltando episódios.
 
 ## Funções
 
@@ -34,6 +35,37 @@ Esse projeto é um website simples para asssitir animes online, nesse website n�
 - [x] **Salvando dados** (Progresso do video, histórico, favoritos)
 - [ ] **Perfil**
 - [ ] **Estatísticas e top de usuários**
+
+## Como usar
+
+1. **Clone esse repositório**
+
+```bash
+git clone https://github.com/SMCodesP/otakutube
+```
+
+2. **Configure variáveis ambientes**
+
+```bash
+# Copie o arquivo de examples das variaveis ambientes e siga os comentários para preenchê-las
+cp .env.example .env
+```
+
+3. **Instale dependências**
+
+```bash
+yarn
+# or
+npm install
+```
+
+4. **Iniciar**
+
+```bash
+yarn dev
+# or
+npm run dev
+```
 
 <br>
 
