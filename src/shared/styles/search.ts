@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import styled, { keyframes } from 'styled-components'
 
 const toUpOpacity = keyframes`
@@ -90,12 +89,17 @@ export const ContainerListAnime = styled.ul`
   width: 100%;
   padding: 10px 30px;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   list-style: none;
   gap: 20px 10px;
+
+  & a {
+    height: fit-content;
+  }
 `
 
-export const Thumbnail = styled(Image)`
+export const Thumbnail = styled.img`
+  min-height: 255px;
   width: 100%;
   background: ${({ theme }) => theme.secundary};
   border-top-left-radius: 10px;

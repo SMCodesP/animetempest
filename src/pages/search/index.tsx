@@ -84,29 +84,24 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   const [categorySelected, setCategorySelected] = useState(categories[0])
 
   const handleSearch = async () => {
-    if (query && query.length > 3) {
-      setLoading(true)
-      let animesList
-      if (categorySelected.value === 'all') {
-        animesList = await api.searchAnime(String(query))
-      } else {
-        animesList = await api.searchAnime(String(query), categorySelected.value)
-      }
-      setPage(1)
-      setAnimes(animesList)
-      setLoading(false)
+    setLoading(true)
+    setAnimes([])
+    setPage(1)
+    let animesList
+    if (categorySelected.value === 'all') {
+      animesList = await api.searchAnime(String(query))
     } else {
-      setPage(1)
-      setLoading(false)
-      setAnimes([])
+      animesList = await api.searchAnime(String(query), categorySelected.value)
     }
+    setAnimes(animesList)
+    setLoading(false)
   }
 
   const handleChangeCallback = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     router.query.query = e.target.value
     router.push(router)
     handleSearch()
-  }, 100)
+  }, 500)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
@@ -273,7 +268,6 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                           <Thumbnail
                             src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
                             width={256}
-                            height={345}
                           />
                           <ContainerName>
                             <Name>{anime.category_name}</Name>
