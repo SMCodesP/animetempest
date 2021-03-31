@@ -33,6 +33,7 @@ import Video from '../../entities/Video'
 import UserMenu from '../../components/UserMenu'
 import { useProfile } from '../../contexts/ProfileContext'
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
+import { useSession } from 'next-auth/client'
 
 const Anime: NextPage<{
   anime: Category
@@ -40,6 +41,7 @@ const Anime: NextPage<{
 }> = ({ anime, episodes }) => {
   const theme = useContext(ThemeContext)
   const router = useRouter()
+  const [session] = useSession()
   const { toggleFavorite, isFavorite } = useProfile()
   const [hoverFavorite, setHoverFavorite] = useState(false)
 
@@ -50,6 +52,29 @@ const Anime: NextPage<{
   if (router.isFallback) {
     return <Loading color={theme.tertiary} />
   }
+
+  const MarkFavorite = () => isFavorite(anime.id) || hoverFavorite ? (
+    <FaBookmark
+      size={24}
+      color={theme.text}
+      style={{
+        cursor: 'pointer',
+      }}
+      onClick={() => toggleFavorite(anime.id)}
+      onMouseLeave={() => setHoverFavorite(false)}
+    />
+  ) : (
+    <FaRegBookmark
+      size={24}
+      color={theme.text}
+      style={{
+        cursor: 'pointer',
+      }}
+      onClick={() => toggleFavorite(anime.id)}
+      onMouseLeave={() => setHoverFavorite(false)}
+      onMouseEnter={() => setHoverFavorite(true)}
+    />
+  )
 
   return (
     <>
@@ -121,33 +146,13 @@ const Anime: NextPage<{
           <AnimeInfo>
             <div
               style={{
+                width: '100%',
                 display: 'flex',
                 justifyContent: 'space-between',
               }}
             >
               <AnimeTitle>{anime.category_name}</AnimeTitle>
-              {isFavorite(anime.id) || hoverFavorite ? (
-                <FaBookmark
-                  size={24}
-                  color={theme.text}
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => toggleFavorite(anime.id)}
-                  onMouseLeave={() => setHoverFavorite(false)}
-                />
-              ) : (
-                <FaRegBookmark
-                  size={24}
-                  color={theme.text}
-                  style={{
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => toggleFavorite(anime.id)}
-                  onMouseLeave={() => setHoverFavorite(false)}
-                  onMouseEnter={() => setHoverFavorite(true)}
-                />
-              )}
+              {(session) ? <MarkFavorite /> : <span />}
             </div>
             <AnimeDescription>{anime.category_description}</AnimeDescription>
             <Link href={`/watch/${episodes[episodes.length - 1].video_id}`}>

@@ -30,8 +30,8 @@ const AnimeResumeList: React.FC<{
           slidesToSlide: 1,
         },
       }}
-      ssr
       infinite={true}
+      ssr
     >
       {(animes as any).map((anime: any) => (
         <AnimeResume anime={anime} key={`image-${anime.id || anime.video_id}`} />

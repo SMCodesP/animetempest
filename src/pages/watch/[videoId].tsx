@@ -177,8 +177,12 @@ const Watch: NextPage<{
           setLoadingProgress(false)
         }
       })()
+    } else {
+      if (!loading) {
+        setLoadingProgress(false)
+      }
     }
-  }, [session, episode])
+  }, [session, loading, episode])
 
   if (router.isFallback || loadingProgress || loading) {
     return <Loading color={theme.tertiary} />

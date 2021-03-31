@@ -50,6 +50,7 @@ export const AnimeImage = styled(Image)`
 `
 
 export const AnimeInfo = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   padding: 5px 25px;
@@ -92,7 +93,7 @@ export const ContainerListEpisodes = styled.div`
 `
 
 export const EpisodeTitle = styled.span`
-  word-break: break-all;
+  word-break: break-word;
   background: ${({ theme }) => theme.secundaryBackground};
   color: ${({ theme }) => theme.tertiaryText};
   text-shadow: 0 0 1px ${({ theme }) => theme.tertiaryText};
