@@ -65,7 +65,8 @@ export const Input = styled.input`
   outline: 0;
   height: 38px;
   font-size: 17px;
-  color: ${({ theme }) => theme.text};
+  font-weight: bold;
+  color: ${({ theme }) => theme.fifthText};
   border-radius: 18px;
   border: 0;
   padding-left: 15px;
@@ -119,7 +120,7 @@ export const ButtonWatch = styled.button`
   font-weight: bold;
   font-size: 18px;
   outline: none;
-    filter: brightness(85%);
+  filter: brightness(85%);
   transition: filter 0.2s;
 
   &:hover {

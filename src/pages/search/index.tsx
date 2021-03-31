@@ -101,7 +101,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
     router.query.query = e.target.value
     router.push(router)
     handleSearch()
-  }, 500)
+  }, 750)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)

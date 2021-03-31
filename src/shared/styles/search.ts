@@ -87,7 +87,7 @@ export const ContainerListAnime = styled.ul`
   z-index: 999;
   position: relative;
   width: 100%;
-  padding: 10px 30px;
+  padding: 30px;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   list-style: none;
