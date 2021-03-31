@@ -135,11 +135,13 @@ const MiniPlayer: React.FC<{
         onNextClick={() => {
           nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
         }}
-        reprodutionList={episodes.map((ep: any) => ({
-          nome: ep.title,
-          id: ep.video_id,
-          playing: ep.video_id === episode.video_id,
-        }))}
+        reprodutionList={episodes
+          .map((ep: any) => ({
+            nome: ep.title,
+            id: ep.video_id,
+            playing: ep.video_id === episode.video_id,
+          }))
+          .reverse()}
         overlayEnabled={true}
         autoControllCloseEnabled
         primaryColor={theme.tertiary}
@@ -245,7 +247,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     if (!episode.location) throw `Episode location video not found ${String(params?.videoId)}.`
     const episodes = await api.getEpisodesFromAnime(episode.category_id)
     const category = await api.getAnime(episode.category_id)
-    const nextEpisode = await api.nextEpisode(episode.video_id, episodes)
+    const nextEpisode = await api.nextEpisode(episode.video_id, episode.category_id)
 
     if (!category || !episodes) throw `Category and episodes of ${params?.videoId} not found.`
 
