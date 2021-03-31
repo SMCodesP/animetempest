@@ -7,11 +7,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { query, category } = req.query
 
   if (category) {
-    const items = await api.getCategory(String(category));
-    return res.json(items.filter(item => item.category_name.toUpperCase().indexOf(String(query).toUpperCase()) > -1));
+    const items = await api.getCategory(String(category))
+    return res.json(
+      items.filter(
+        (item) => item.category_name.toUpperCase().indexOf(String(query).toUpperCase()) > -1
+      )
+    )
   }
 
-  const animes = await api.directSearchAnime(query)
+  const animes = await api.directSearchAnime(query || '')
 
   if (!animes) return res.json([])
 

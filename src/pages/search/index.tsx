@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 
 import { useEffect, useState, useContext } from 'react'
 
-import debounce from 'lodash.debounce'
+import { useDebouncedCallback } from 'use-debounce'
 import { ThemeContext } from 'styled-components'
 
 import { FaHome } from 'react-icons/fa'
@@ -78,7 +78,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   const theme = useContext(ThemeContext)
 
   const [animes, setAnimes] = useState<Category[]>([])
-  const [query, setQuery] = useState(queryInitial)
+  const [query, setQuery] = useState(queryInitial || '')
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(1)
   const [categorySelected, setCategorySelected] = useState(categories[0])
@@ -97,7 +97,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
     setLoading(false)
   }
 
-  const handleChangeCallback = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeCallback = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     router.query.query = e.target.value
     router.push(router)
     handleSearch()

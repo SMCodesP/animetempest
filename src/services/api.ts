@@ -48,7 +48,8 @@ export default {
   },
   directSearchAnime: async (query: any) => {
     const { data } = await api.get<Category[]>(
-      `https://appanimeplus.tk/api-animesbr-10.php?search=${query || ""}`    )
+      `https://appanimeplus.tk/api-animesbr-10.php?search=${query || ""}`
+      )
     return data
   },
 }
