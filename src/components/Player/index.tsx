@@ -1,8 +1,14 @@
-// @ts-nocheck
-
-import React, { useEffect, memo, useState, useRef, useCallback, useContext } from 'react'
+import Link from 'next/link'
+import React, {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useContext,
+} from 'react'
 import debounce from 'lodash.debounce'
 import { useDebouncedCallback } from 'use-debounce'
+import { ThemeContext } from 'styled-components'
 
 import {
   FaUndoAlt,
@@ -20,11 +26,9 @@ import {
   FaCompress,
   FaRedoAlt,
 } from 'react-icons/fa'
+import { FiCheck } from 'react-icons/fi'
 
-import { FiCheck, FiX } from 'react-icons/fi'
 import {
-  StandyByInfo,
-  VideoPreLoading,
   Container,
   Controlls,
   VolumeControll,
@@ -35,79 +39,98 @@ import {
   ItemListQuality,
   ContainerMain,
 } from './styles'
-import Link from 'next/link'
+
 import Loading from './Loading'
-import { ThemeContext } from 'styled-components'
+import InfoVideo from './InfoVideo'
+import CloseVideo from './CloseVideo'
+
 import useSocket from '../../hooks/useSocket'
 import { useSession } from 'next-auth/client'
 import Progress from '../../entities/Progress'
 
-function ReactNetflixPlayer({
-  title = false,
-  subTitle = false,
-  titleMedia = false,
-  extraInfoMedia = false,
-  playerLanguage = 'pt',
+type PlayerProps = {
+  src?: string
+  title?: string | null
+  subTitle?: string | null
+  fontFamily?: string
+  extraInfoMedia?: string | null
+  playbackRateEnable?: boolean
+  backButton?: (...args: any) => void
+  onCanPlay?: (...args: any) => void
+  onTimeUpdate?: (...args: any) => void
+  onEnded?: (...args: any) => void
+  onErrorVideo?: (...args: any) => void
+  onNextClick?: (...args: any) => void
+  onClickItemListReproduction?: (...args: any) => void
+  onCrossClick?: (...args: any) => void
+  onChangeQuality?: (...args: any) => void
+  titleMedia: string | null
+  fullPlayer: boolean
+  autoPlay: boolean
+  videoId: string
+  animeId: string
+  startPosition: number
+  dataNext: any
+  reprodutionList: Array<any>
+  qualities: Array<any>
+  overlayEnabled: boolean
+  autoControllCloseEnabled: boolean
+  primaryColor: string
+  secundaryColor: string
+}
 
+const ReactNetflixPlayer: React.FC<PlayerProps> = ({
+  title = null,
+  subTitle = null,
+  titleMedia = null,
+  extraInfoMedia = null,
   fullPlayer = true,
-  backButton = false,
-
   src = '',
   autoPlay = false,
   videoId = '',
   animeId = '',
-
-  onCanPlay = false,
-  onTimeUpdate = false,
-  onEnded = false,
-  onErrorVideo = false,
-  onNextClick = false,
-  onClickItemListReproduction = false,
+  backButton = () => {},
+  onCanPlay = () => {},
+  onTimeUpdate = () => {},
+  onEnded = () => {},
+  onErrorVideo = () => {},
+  onNextClick = () => {},
+  onClickItemListReproduction = () => {},
   onCrossClick = () => {},
+  onChangeQuality = () => {},
   startPosition = 0,
-
   dataNext = {},
   reprodutionList = [],
   qualities = [],
-  onChangeQuality = [],
   playbackRateEnable = true,
   overlayEnabled = true,
   autoControllCloseEnabled = true,
-
-  // Styles
   primaryColor = '#03dffc',
   secundaryColor = '#ffffff',
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
-}: // subtitleMedia,
-any) {
+}) => {
   const theme = useContext(ThemeContext)
   const socket = useSocket('https://otakutube.herokuapp.com', [videoId])
-  const [session, loadingSession] = useSession()
+  const [session]: any = useSession()
 
-  // Referências
   const videoComponent = useRef<HTMLVideoElement>(null)
-
-  const [timerBuffer, setTimerBuffer] = useState(null)
   const playerElement = useRef(null)
-  const listReproduction = useRef(null)
-  const controls = useRef<HTMLDivElement>(null)
+  const listReproduction = useRef<HTMLDivElement>(null)
   const seekElement = useRef<HTMLInputElement>(null)
   const progressTime = useRef<HTMLSpanElement>(null)
 
-  // Estados
   const [videoReady, setVideoReady] = useState(false)
   const [playing, setPlaying] = useState(false)
-  const [progress, setProgress] = useState(0)
   const [duration, setDuration] = useState(0)
   const [end, setEnd] = useState(false)
   const [controlBackEnd, setControlBackEnd] = useState(false)
   const [volume, setVolume] = useState(100)
   const [muted, setMuted] = useState(false)
-  const [error, setError] = useState(false)
-  const [waitingBuffer, setWaitingBuffer] = useState(false)
+  const [error, setError] = useState('')
+  const [waitingBuffer] = useState(false)
   const [showControls, setShowControls] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
-  const [playbackRate, setPlaybackRate] = useState(1)
+  const [playbackRate, setPlaybackRate] = useState<string | number>(1)
 
   const [showControlVolume, setShowControlVolume] = useState(false)
   const [showQuality, setShowQuality] = useState(false)
@@ -115,19 +138,25 @@ any) {
   const [showPlaybackRate, setShowPlaybackRate] = useState(false)
   const [showReproductionList, setShowReproductionList] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
-  const [timeout, setTimeoutDebounce] = useState(null)
+  const [, setTimeoutDebounce] = useState<any | null>(null)
 
-  const playbackRateOptions = ['0.25', '0.5', '0.75', 'Normal', '1.25', '1.5', '2']
+  const playbackRateOptions = [
+    '0.25',
+    '0.5',
+    '0.75',
+    'Normal',
+    '1.25',
+    '1.5',
+    '2',
+  ]
 
-  const secondsToHms = (d) => {
+  const secondsToHms = (d: any) => {
     d = Number(d)
     const h = Math.floor(d / 3600)
     const m = Math.floor((d % 3600) / 60)
     let s = Math.floor((d % 3600) % 60)
-
-    if (s < 10) {
-      s = `0${s}`
-    }
+      .toString()
+      .padStart(2, '0')
 
     if (h) {
       return `${h}:${m}:${s}`
@@ -169,7 +198,7 @@ any) {
   const saveOnlineProgress = useDebouncedCallback(
     (value) => {
       console.log('Saving online progress...')
-      socket.emit('progress', {
+      socket?.emit('progress', {
         userId: session?.userId,
         videoId,
         animeId,
@@ -181,7 +210,7 @@ any) {
     { maxWait: 5000 }
   )
 
-  const timeCallBack = (e) => {
+  const timeCallBack = (e: any) => {
     setShowInfo(false)
     setEnd(false)
 
@@ -189,11 +218,15 @@ any) {
       onTimeUpdate(e)
     }
 
-    seekElement.current.style.background = `linear-gradient(93deg, ${primaryColor} ${
+    seekElement.current!.style.background = `linear-gradient(93deg, ${primaryColor} ${
       (e.target.currentTime * 100 + 2 * (duration / 100)) / duration
-    }%, #fff ${(e.target.currentTime * 100 + 2 * (duration / 100)) / duration}%)`
-    seekElement.current.value = Math.trunc(e.target.currentTime)
-    progressTime.current.innerText = secondsToHms(Math.trunc(e.target.currentTime))
+    }%, #fff ${
+      (e.target.currentTime * 100 + 2 * (duration / 100)) / duration
+    }%)`
+    seekElement.current!.value = String(Math.trunc(e.target.currentTime))
+    progressTime.current!.innerText = secondsToHms(
+      Math.trunc(e.target.currentTime)
+    )
     if (playing) {
       saveVideoProgress(Math.trunc(e.target.currentTime))
       if (session) {
@@ -202,29 +235,33 @@ any) {
     }
   }
 
-  const timeUpdate = (e) => {
+  const timeUpdate = (e: any) => {
     e.persist()
     timeCallBack(e)
   }
 
-  const goToPosition = (position) => {
-    seekElement.current.style.background = `linear-gradient(93deg, ${primaryColor} ${
+  const goToPosition = (position: number) => {
+    seekElement.current!.style.background = `linear-gradient(93deg, ${primaryColor} ${
       (position * 100 + 2 * (duration / 100)) / duration
     }%, #fff ${(position * 100 + 2 * (duration / 100)) / duration}%)`
-    videoComponent.current.currentTime = position
+    videoComponent.current!.currentTime = position
   }
 
   const play = debounce(() => {
-    videoComponent.current.paused ? playVideo() : pauseVideo()
+    videoComponent.current!.paused ? playVideo() : pauseVideo()
   }, 500)
 
   const onEndedFunction = () => {
-    if (+startPosition === +videoComponent.current.duration && !controlBackEnd) {
+    if (
+      +startPosition === +videoComponent.current!.duration &&
+      !controlBackEnd
+    ) {
       setControlBackEnd(true)
-      videoComponent.current.currentTime = videoComponent.current.duration - 30
+      videoComponent.current!.currentTime =
+        videoComponent.current!.duration - 30
 
       if (autoPlay) {
-        videoComponent.current.play()
+        videoComponent.current!.play()
       } else {
         setPlaying(false)
       }
@@ -237,23 +274,23 @@ any) {
     }
   }
 
-  const nextSeconds = (seconds) => {
-    goToPosition(videoComponent.current.currentTime + seconds)
+  const nextSeconds = (seconds: number) => {
+    goToPosition(videoComponent.current!.currentTime + seconds)
   }
 
-  const previousSeconds = (seconds) => {
-    const current = videoComponent.current.currentTime
+  const previousSeconds = (seconds: number) => {
+    const current = videoComponent.current!.currentTime
 
     if (current - seconds <= 0) {
-      videoComponent.current.currentTime = 0
+      videoComponent.current!.currentTime = 0
       return
     }
 
-    videoComponent.current.currentTime -= seconds
+    videoComponent.current!.currentTime -= seconds
   }
 
   const startVideo = async () => {
-    setDuration(videoComponent.current.duration)
+    setDuration(videoComponent.current!.duration)
     setVideoReady(true)
     goToPosition(startPosition)
 
@@ -269,63 +306,63 @@ any) {
     setError('Ocorreu um erro ao tentar reproduzir este vídeo')
   }
 
-  const setMuttedAction = (value) => {
+  const setMuttedAction = (value: boolean) => {
     setMuted(value)
     setShowControlVolume(false)
-    videoComponent.current.muted = value
+    videoComponent.current!.muted = value
   }
 
-  const setVolumeAction = (value) => {
-    setVolume((oldValue) => {
+  const setVolumeAction = (value: number) => {
+    setVolume(() => {
       if (value >= 100) {
-        videoComponent.current.volume = 1
+        videoComponent.current!.volume = 1
         return 100
       } else if (value <= 0) {
-        videoComponent.current.volume = 0
+        videoComponent.current!.volume = 0
         return 0
       }
-      videoComponent.current.volume = value / 100
+      videoComponent.current!.volume = value / 100
       return value
     })
   }
 
-  const addVolumeAction = (quantity) => {
+  const addVolumeAction = (quantity: number) => {
     setVolumeAction(volume + quantity)
   }
 
   const exitFullScreen = () => {
     if (
-      document.webkitIsFullScreen ||
-      document.mozFullScreen ||
-      document.msFullscreenElement ||
+      (document as any).webkitIsFullScreen ||
+      (document as any).mozFullScreen ||
+      (document as any).msFullscreenElement ||
       document.fullscreenElement
     ) {
       if (document.exitFullscreen) {
         document.exitFullscreen()
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen()
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen()
+      } else if ((document as any).msExitFullscreen) {
+        ;(document as any).msExitFullscreen()
+      } else if ((document as any).mozCancelFullScreen) {
+        ;(document as any).mozCancelFullScreen()
       } else {
-        document.webkitExitFullscreen()
+        ;(document as any).webkitExitFullscreen()
       }
     }
   }
 
   const enterFullScreen = () => {
     setShowInfo(true)
-    if (playerElement.current.requestFullscreen) {
-      playerElement.current.requestFullscreen()
-    } else if (playerElement.current.webkitRequestFullscreen) {
-      playerElement.current.webkitRequestFullscreen()
+    if ((playerElement.current as any)!.requestFullscreen) {
+      ;(playerElement.current as any)!.requestFullscreen()
+    } else if ((playerElement.current as any)!.webkitRequestFullscreen) {
+      ;(playerElement.current as any)!.webkitRequestFullscreen()
     }
   }
 
   const chooseFullScreen = debounce(() => {
     if (
-      document.webkitIsFullScreen ||
-      document.mozFullScreen ||
-      document.msFullscreenElement ||
+      (document as any).webkitIsFullScreen ||
+      (document as any).mozFullScreen ||
+      (document as any).msFullscreenElement ||
       document.fullscreenElement
     ) {
       document.exitFullscreen()
@@ -334,14 +371,14 @@ any) {
 
     setShowInfo(true)
 
-    if (playerElement.current.requestFullscreen) {
-      playerElement.current.requestFullscreen()
-    } else if (playerElement.current.webkitRequestFullscreen) {
-      playerElement.current.webkitRequestFullscreen()
-    } else if (playerElement.current.mozRequestFullScreen) {
-      playerElement.current.mozRequestFullScreen()
-    } else if (playerElement.current.msRequestFullscreen) {
-      playerElement.current.msRequestFullscreen()
+    if ((playerElement.current as any)!.requestFullscreen) {
+      ;(playerElement.current as any)!.requestFullscreen()
+    } else if ((playerElement.current as any)!.webkitRequestFullscreen) {
+      ;(playerElement.current as any)!.webkitRequestFullscreen()
+    } else if ((playerElement.current as any)!.mozRequestFullScreen) {
+      ;(playerElement.current as any)!.mozRequestFullScreen()
+    } else if ((playerElement.current as any)!.msRequestFullscreen) {
+      ;(playerElement.current as any)!.msRequestFullscreen()
     }
   }, 500)
 
@@ -361,29 +398,29 @@ any) {
     setShowControls(true)
     setShowInfo(false)
 
-    setTimeoutDebounce((oldTimeout) => {
+    setTimeoutDebounce((oldTimeout: any) => {
       if (oldTimeout !== null) {
-        window.clearTimeout(oldTimeout)
+        clearTimeout(oldTimeout)
       }
-      return window.setTimeout(controllScreenTimeOut, 5000)
+      return setTimeout(controllScreenTimeOut, 5000)
     })
   }, [])
 
-  const controlKeyBoard = {
+  const controlKeyBoard: {
+    [key: number]: () => void
+  } = {
     76: () => nextSeconds(10),
     39: () => nextSeconds(5),
     74: () => previousSeconds(10),
     37: () => previousSeconds(5),
     75: () => play(),
     32: () => play(),
-    70: () => {
-      fullscreen === true ? exitFullScreen() : enterFullScreen()
-    },
+    70: () => chooseFullScreen(),
     38: () => addVolumeAction(10),
     40: () => addVolumeAction(-10),
   }
 
-  const keyboardInteractionCallback = (e) => {
+  const keyboardInteractionCallback = (e: any) => {
     if (controlKeyBoard[e.keyCode] && videoComponent.current) {
       hoverScreen()
       controlKeyBoard[e.keyCode]()
@@ -392,15 +429,15 @@ any) {
 
   const scrollToSelected = () => {
     const element = listReproduction.current
-    const selected = element.getElementsByClassName('selected')[0]
-    const position = selected.offsetTop
-    const height = selected.offsetHeight
-    element.scrollTop = position - height * 2
+    const selected = element!.getElementsByClassName('selected')[0]
+    const position = (selected as any).offsetTop
+    const height = (selected as any).offsetHeight
+    element!.scrollTop = position - height * 2
   }
 
-  const onChangePlayBackRate = (speed) => {
+  const onChangePlayBackRate = (speed: any) => {
     speed = speed === 'Normal' ? 1 : speed
-    videoComponent.current.playbackRate = speed
+    videoComponent.current!.playbackRate = speed
     setPlaybackRate(speed)
   }
 
@@ -423,7 +460,7 @@ any) {
     if (src) {
       setPlaying(false)
       setVideoReady(false)
-      setError(false)
+      setError('')
       setShowReproductionList(false)
       setShowDataNext(false)
       if (videoComponent && videoComponent.current) {
@@ -450,73 +487,6 @@ any) {
     }
   }, [])
 
-  function InfoVideo() {
-    return (
-      <StandyByInfo
-        primaryColor={primaryColor}
-        secundaryColor={secundaryColor}
-        show={showInfo === true && videoReady === true && playing === false}
-      >
-        {(title || subTitle) && (
-          <section className="center">
-            <h3 className="text">Você está assistindo</h3>
-            <h1 className="title">{title}</h1>
-            <h2 className="sub-title">{subTitle.replace(new RegExp(title, 'ig'), '').trim()}</h2>
-          </section>
-        )}
-        <footer>Pausado</footer>
-      </StandyByInfo>
-    )
-  }
-
-  function CloseVideo() {
-    return (
-      <VideoPreLoading
-        backgroundColorHoverButtonError="#f78b28"
-        colorHoverButtonError="#ddd"
-        colorButtonError="#ddd"
-        backgroundColorButtonError="#333"
-        colorTitle="#fff"
-        colorSubTitle="#fff"
-        colorIcon="#fff"
-        show={videoReady === false || (videoReady === true && error)}
-        showError={!!error}
-      >
-        {(title || subTitle) && (
-          <header>
-            <div>
-              <h1>{title}</h1>
-              <h2>{subTitle.replace(new RegExp(title, 'ig'), '').trim()}</h2>
-            </div>
-            <FiX onClick={onCrossClick} />
-          </header>
-        )}
-
-        <section>
-          {error && (
-            <div>
-              <h1>{error}</h1>
-              {qualities.length > 1 && (
-                <div>
-                  <p>Tente acessar por outra qualidade</p>
-                  <div className="links-error">
-                    {qualities.map((item, index) => (
-                      <div key={`quality-error-${index}`} onClick={() => onChangeQuality(item.id)}>
-                        {item.prefix && <span>HD</span>}
-                        <span>{item.nome}</span>
-                        {item.playing && <FiX />}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </section>
-      </VideoPreLoading>
-    )
-  }
-
   return (
     <Container
       onMouseMove={hoverScreen}
@@ -525,13 +495,31 @@ any) {
       hideVideo={!!error}
       fontFamily={fontFamily}
     >
-      {(videoReady === false || (waitingBuffer === true && playing === true)) && !error && !end && (
-        <Loading color={primaryColor} />
+      {(videoReady === false || (waitingBuffer === true && playing === true)) &&
+        !error &&
+        !end && <Loading color={primaryColor} />}
+
+      {overlayEnabled && (
+        <InfoVideo
+          playing={playing}
+          primaryColor={primaryColor}
+          secundaryColor={secundaryColor}
+          showInfo={showInfo}
+          subTitle={subTitle}
+          title={title}
+          videoReady={videoReady}
+        />
       )}
 
-      {overlayEnabled && <InfoVideo />}
-
-      <CloseVideo />
+      <CloseVideo
+        error={error}
+        onChangeQuality={onChangeQuality}
+        onCrossClick={onCrossClick}
+        qualities={qualities}
+        subTitle={subTitle}
+        title={title}
+        videoReady={videoReady}
+      />
 
       <video
         ref={videoComponent}
@@ -545,8 +533,7 @@ any) {
       />
 
       <Controlls
-        ref={controls}
-        show={showControls === true && videoReady === true && error === false}
+        show={showControls === true && videoReady === true && !error}
         primaryColor={primaryColor}
       >
         {backButton && (
@@ -558,9 +545,9 @@ any) {
           </div>
         )}
 
-        {videoReady === true && error === false && !showInfo && (
+        {videoReady && !error && !showInfo && (
           <ContainerMain
-            show={showControls === true && videoReady === true && error === false}
+            show={showControls}
             onDoubleClick={chooseFullScreen}
             playing={playing}
           >
@@ -584,7 +571,7 @@ any) {
               ref={seekElement}
               className="progress-bar"
               max={duration}
-              onChange={(e) => goToPosition(e.target.value)}
+              onChange={(e) => goToPosition(Number(e.target.value))}
               title=""
             />
             <span>{secondsToHms(duration)}</span>
@@ -616,7 +603,7 @@ any) {
                     primaryColor={primaryColor}
                     percentVolume={volume}
                   >
-                    {showControlVolume === true && (
+                    {showControlVolume && (
                       <div className="volumn-controll">
                         <div className="box-connector" />
                         <div className="box">
@@ -625,8 +612,11 @@ any) {
                             min={0}
                             className="volumn-input"
                             max={100}
+                            step={1}
                             value={volume}
-                            onChange={(e) => setVolumeAction(e.target.value)}
+                            onChange={(e) =>
+                              setVolumeAction(Number(e.target.value))
+                            }
                             title=""
                           />
                         </div>
@@ -663,23 +653,31 @@ any) {
                   </VolumeControll>
                 )}
 
-                {muted === true && (
+                {muted && (
                   <div className="item-control">
-                    <FaVolumeMute size={28} onClick={() => setMuttedAction(false)} />
+                    <FaVolumeMute
+                      size={28}
+                      onClick={() => setMuttedAction(false)}
+                    />
                   </div>
                 )}
 
                 <div className="item-control info-video">
                   <span className="info-first">{titleMedia}</span>
                   <span className="info-secund">
-                    {extraInfoMedia.replace(new RegExp(titleMedia, 'ig'), '').trim()}
+                    {extraInfoMedia
+                      ?.replace(new RegExp(titleMedia || '', 'ig'), '')
+                      .trim()}
                   </span>
                 </div>
               </div>
 
               <div className="end">
                 {!!playbackRateEnable && (
-                  <div className="item-control" onMouseLeave={() => setShowPlaybackRate(false)}>
+                  <div
+                    className="item-control"
+                    onMouseLeave={() => setShowPlaybackRate(false)}
+                  >
                     {showPlaybackRate === true && (
                       <ItemPlaybackRate>
                         <div>
@@ -691,9 +689,12 @@ any) {
                               onClick={() => onChangePlayBackRate(item)}
                             >
                               {(+item === +playbackRate ||
-                                (item === 'Normal' && +playbackRate === 1)) &&
-                                FiCheck()}
-                              <div className="bold">{item === 'Normal' ? item : `${item}x`}</div>
+                                (item === 'Normal' && +playbackRate === 1)) && (
+                                <FiCheck size={28} />
+                              )}
+                              <div className="bold">
+                                {item === 'Normal' ? item : `${item}x`}
+                              </div>
                             </div>
                           ))}
                         </div>
@@ -714,14 +715,19 @@ any) {
                 )}
 
                 {onNextClick && (
-                  <div className="item-control" onMouseLeave={() => setShowDataNext(false)}>
+                  <div
+                    className="item-control"
+                    onMouseLeave={() => setShowDataNext(false)}
+                  >
                     {showDataNext === true && dataNext.title && (
                       <ItemNext>
                         <div>
                           <div className="title">Próximo Episódio</div>
                           <div className="item" onClick={onNextClick}>
                             <div className="bold">{dataNext.title}</div>
-                            {dataNext.description && <div>{dataNext.description}</div>}
+                            {dataNext.description && (
+                              <div>{dataNext.description}</div>
+                            )}
                           </div>
                         </div>
                         <div className="box-connector" />
@@ -736,7 +742,10 @@ any) {
                   </div>
                 )}
 
-                <div className="item-control" onMouseLeave={() => setShowReproductionList(false)}>
+                <div
+                  className="item-control"
+                  onMouseLeave={() => setShowReproductionList(false)}
+                >
                   {showReproductionList && (
                     <ItemListReproduction>
                       <div>
@@ -747,7 +756,10 @@ any) {
                         >
                           {reprodutionList.map((item, index) =>
                             !item.playing ? (
-                              <Link href={`/watch/${item.id}`} key={`video-${item.id}`}>
+                              <Link
+                                href={`/watch/${item.id}`}
+                                key={`video-${item.id}`}
+                              >
                                 <a>
                                   <div
                                     className={`item-list-reproduction ${
@@ -755,29 +767,43 @@ any) {
                                     }`}
                                     onClick={() =>
                                       onClickItemListReproduction &&
-                                      onClickItemListReproduction(item.id, item.playing)
+                                      onClickItemListReproduction(
+                                        item.id,
+                                        item.playing
+                                      )
                                     }
                                   >
                                     <div className="bold">
-                                      <span style={{ marginRight: 15 }}>{index + 1}</span>
+                                      <span style={{ marginRight: 15 }}>
+                                        {index + 1}
+                                      </span>
                                       {item.nome}
                                     </div>
 
-                                    {item.percent && <div className="percent" />}
+                                    {item.percent && (
+                                      <div className="percent" />
+                                    )}
                                   </div>
                                 </a>
                               </Link>
                             ) : (
                               <div
                                 key={`video-${item.id}-no-playing`}
-                                className={`item-list-reproduction ${item.playing && 'selected'}`}
+                                className={`item-list-reproduction ${
+                                  item.playing && 'selected'
+                                }`}
                                 onClick={() =>
                                   onClickItemListReproduction &&
-                                  onClickItemListReproduction(item.id, item.playing)
+                                  onClickItemListReproduction(
+                                    item.id,
+                                    item.playing
+                                  )
                                 }
                               >
                                 <div className="bold">
-                                  <span style={{ marginRight: 15 }}>{index + 1}</span>
+                                  <span style={{ marginRight: 15 }}>
+                                    {index + 1}
+                                  </span>
                                   {item.nome}
                                 </div>
 
@@ -791,12 +817,18 @@ any) {
                     </ItemListReproduction>
                   )}
                   {reprodutionList && reprodutionList.length > 1 && (
-                    <FaClone size={28} onMouseEnter={() => setShowReproductionList(true)} />
+                    <FaClone
+                      size={28}
+                      onMouseEnter={() => setShowReproductionList(true)}
+                    />
                   )}
                 </div>
 
                 {qualities && qualities.length > 1 && (
-                  <div className="item-control" onMouseLeave={() => setShowQuality(false)}>
+                  <div
+                    className="item-control"
+                    onMouseLeave={() => setShowQuality(false)}
+                  >
                     {showQuality === true && (
                       <ItemListQuality>
                         <div>
@@ -820,13 +852,20 @@ any) {
                       </ItemListQuality>
                     )}
 
-                    <FaCog size={28} onMouseEnter={() => setShowQuality(true)} />
+                    <FaCog
+                      size={28}
+                      onMouseEnter={() => setShowQuality(true)}
+                    />
                   </div>
                 )}
 
                 <div className="item-control">
-                  {fullscreen === false && <FaExpand size={28} onClick={enterFullScreen} />}
-                  {fullscreen === true && <FaCompress size={28} onClick={exitFullScreen} />}
+                  {fullscreen === false && (
+                    <FaExpand size={28} onClick={enterFullScreen} />
+                  )}
+                  {fullscreen === true && (
+                    <FaCompress size={28} onClick={exitFullScreen} />
+                  )}
                 </div>
               </div>
             </div>

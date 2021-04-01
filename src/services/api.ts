@@ -12,7 +12,9 @@ const api = axios.create({
 export default {
   ...api,
   getCategory: async (category: string) => {
-    const { data } = await api.get<Category[]>(`/api-animesbr-10.php?categoria=${category}`)
+    const { data } = await api.get<Category[]>(
+      `/api-animesbr-10.php?categoria=${category}`
+    )
     return data
   },
   getEpisode: async (episode: string) => {
@@ -29,11 +31,15 @@ export default {
     return data[0]
   },
   getEpisodesFromAnime: async (anime_id: string) => {
-    const { data } = await api.get<Episode[]>(`/api-animesbr-10.php?cat_id=${anime_id}`)
+    const { data } = await api.get<Episode[]>(
+      `/api-animesbr-10.php?cat_id=${anime_id}`
+    )
     return data
   },
   getAnime: async (anime_id: string) => {
-    const { data } = await api.get<Category[]>(`/api-animesbr-10.php?info=${anime_id}`)
+    const { data } = await api.get<Category[]>(
+      `/api-animesbr-10.php?info=${anime_id}`
+    )
     return data[0]
   },
   nextEpisode: async (episode_id: string, anime_id: string) => {
@@ -43,13 +49,15 @@ export default {
     return data && data[0]
   },
   searchAnime: async (query: string, category?: string) => {
-    const { data } = await axios.get<Category[]>(`/api/search?query=${query}${category ? `&category=${category}` : ''}`)
+    const { data } = await axios.get<Category[]>(
+      `/api/search?query=${query}${category ? `&category=${category}` : ''}`
+    )
     return data
   },
   directSearchAnime: async (query: any) => {
     const { data } = await api.get<Category[]>(
-      `https://appanimeplus.tk/api-animesbr-10.php?search=${query || ""}`
-      )
+      `https://appanimeplus.tk/api-animesbr-10.php?search=${query || ''}`
+    )
     return data
   },
 }
