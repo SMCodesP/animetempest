@@ -65,7 +65,6 @@ export const Container = styled.div<{
   ${(props) =>
     props.fullPlayer &&
     css`
-      position: fixed;
       top: 0;
       left: 0;
       z-index: 10000;
