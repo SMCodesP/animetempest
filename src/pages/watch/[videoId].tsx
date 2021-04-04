@@ -26,7 +26,9 @@ const MiniPlayer: React.FC<{
   nextEpisode: Episode | null
 }> = ({ episode, category, episodes, initialProgress, nextEpisode }) => {
   const theme = useContext(ThemeContext)
-  const [quality, setQuality] = useState<'locationhd' | 'locationsd' | 'location' | ''>('')
+  const [quality, setQuality] = useState<
+    'locationhd' | 'locationsd' | 'location' | ''
+  >('')
   const [virtualQuality, setVirtualQuality] = useState<string>('')
   const [isContinue, setIsContinue] = useState<boolean | null>(false)
   const [startVideoProgress, setStartVideoProgress] = useState(
@@ -45,7 +47,9 @@ const MiniPlayer: React.FC<{
           video_id: string
           progress: number
         }[] = JSON.parse(history)
-        const videoProgress = historyParsed.find((el) => el.video_id === episode.video_id)
+        const videoProgress = historyParsed.find(
+          (el) => el.video_id === episode.video_id
+        )
         if (videoProgress) {
           setStartVideoProgress(videoProgress.progress)
         }
@@ -79,7 +83,10 @@ const MiniPlayer: React.FC<{
         setVirtualQuality((episode as any)[quality_storage])
       } else {
         setVirtualQuality(
-          episode['locationhd'] || episode['locationsd'] || episode['location'] || ''
+          episode['locationhd'] ||
+            episode['locationsd'] ||
+            episode['location'] ||
+            ''
         )
       }
       return quality_storage
@@ -95,8 +102,9 @@ const MiniPlayer: React.FC<{
         titleMedia={category.category_name}
         extraInfoMedia={episode.title}
         animeId={episode.category_id}
-        playerLanguage="pt"
-        onChangeQuality={(qualityId: 'locationhd' | 'locationsd' | 'location') => {
+        onChangeQuality={(
+          qualityId: 'locationhd' | 'locationsd' | 'location'
+        ) => {
           setIsContinue(null)
           setQuality(qualityId)
           setVirtualQuality((state) => episode[qualityId] || state)
@@ -170,7 +178,9 @@ const Watch: NextPage<{
     if (session) {
       ;(async () => {
         try {
-          const { data } = await axios.get<Progress>(`/api/episode/${episode.video_id}`)
+          const { data } = await axios.get<Progress>(
+            `/api/episode/${episode.video_id}`
+          )
           setInitialProgress(data)
           setLoadingProgress(false)
         } catch (error) {
@@ -231,7 +241,9 @@ const Watch: NextPage<{
 }
 
 export const getStaticPaths = async () => {
-  const { data: releases } = await api.get<Video[]>('/api-animesbr-10.php?latest')
+  const { data: releases } = await api.get<Video[]>(
+    '/api-animesbr-10.php?latest'
+  )
 
   return {
     paths: releases.map((release) => ({
@@ -248,12 +260,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     const episode = await api.getEpisode(String(params?.videoId))
 
     if (!episode) throw `Episode ${String(params?.videoId)} null.`
-    if (!episode.location) throw `Episode location video not found ${String(params?.videoId)}.`
+    if (!episode.location)
+      throw `Episode location video not found ${String(params?.videoId)}.`
     const episodes = await api.getEpisodesFromAnime(episode.category_id)
     const category = await api.getAnime(episode.category_id)
-    const nextEpisode = await api.nextEpisode(episode.video_id, episode.category_id)
+    const nextEpisode = await api.nextEpisode(
+      episode.video_id,
+      episode.category_id
+    )
 
-    if (!category || !episodes) throw `Category and episodes of ${params?.videoId} not found.`
+    if (!category || !episodes)
+      throw `Category and episodes of ${params?.videoId} not found.`
 
     return {
       props: {

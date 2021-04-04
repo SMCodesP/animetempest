@@ -12,5 +12,7 @@ export default {
   fifthText: '#E96379',
   inverseText: '#333333',
 
+  number: '#78D1E1',
+
   light: '#fafafa',
-};
+}

@@ -19,7 +19,11 @@ const toUpOpacity = keyframes`
   }
 `
 
-export const Container = styled.div`
+export const Container = styled.div<{
+  fullPlayer: boolean
+  hideVideo: boolean
+  fontFamily: string
+}>`
   & > * {
     user-select: none;
     outline: 0;
@@ -61,14 +65,16 @@ export const Container = styled.div`
   ${(props) =>
     props.fullPlayer &&
     css`
-      position: fixed;
       top: 0;
       left: 0;
       z-index: 10000;
     `}
 `
 
-export const ContainerMain = styled.div`
+export const ContainerMain = styled.div<{
+  show: boolean
+  playing: boolean
+}>`
   flex: 1;
   display: flex;
   justify-content: center;
@@ -118,7 +124,10 @@ export const ContainerMain = styled.div`
   }
 `
 
-export const Controlls = styled.div`
+export const Controlls = styled.div<{
+  show: boolean
+  primaryColor: string
+}>`
   transform: ${(props) => (props.show ? 'scale(1)' : 'scale(1.2)')};
   ${(props) => !props.show && 'cursor: none;'}
 
@@ -314,139 +323,6 @@ export const Controlls = styled.div`
   }
 `
 
-export const VideoPreLoading = styled.div`
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  padding: 30px;
-  // transition: all 0.5s linear;
-  z-index: ${(props) => (props.show ? 2 : 0)};
-  display: flex;
-  flex-direction: column;
-  opacity: ${(props) => (props.show ? 1 : 0)};
-
-  header {
-    display: flex;
-    color: ${({ theme }) => theme.text};
-    align-items: center;
-
-    h1 {
-      color: ${(props) => props.colorTitle};
-      font-size: 1.5em;
-      font-weight: bold;
-    }
-
-    h2 {
-      color: ${(props) => props.colorSubTitle};
-      font-size: 1.1em;
-    }
-
-    svg {
-      color: ${(props) => props.colorIcon};
-      opacity: 0.5;
-      margin-left: auto;
-      font-size: 4em;
-      padding: 10px;
-      cursor: pointer;
-      transition: transform 0.2s linear, opacity 0.2s linear;
-
-      &:hover {
-        transform: scale(1.2);
-        opacity: 1;
-      }
-    }
-  }
-
-  section {
-    text-align: center;
-    color: #ddd;
-    margin: auto;
-    transition: all 0.2s ease;
-    opacity: ${(props) => (props.showError ? 1 : 0)};
-
-    .links-error {
-      display: inline-flex;
-      margin: auto;
-
-      div {
-        color: ${(props) => props.colorButtonError};
-        background: ${(props) => props.backgroundColorButtonError};
-        display: flex;
-        align-items: center;
-        margin: 0 5px;
-        padding: 10px;
-        font-weight: bold;
-        cursor: pointer;
-        border-radius: 5px;
-        transition: all 0.2s ease;
-
-        &:hover {
-          background: ${(props) => props.backgroundColorHoverButtonError};
-          color: ${(props) => props.colorHoverButtonError};
-        }
-      }
-    }
-
-    h1 {
-      font-size: 2em;
-    }
-
-    p {
-      font-size: 1.5em;
-      margin: 20px;
-    }
-  }
-`
-
-export const StandyByInfo = styled.div`
-  position: absolute;
-  top: 0;
-  background: rgba(0, 0, 0, 0.8);
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 0 50px;
-  transition: all 0.5s ease-out;
-  opacity: ${(props) => (props.show ? 1 : 0)};
-
-  section {
-    margin: auto 0;
-    padding-top: 100px;
-    padding-left: 100px;
-
-    h3 {
-      color: ${({ theme }) => theme.text};
-      font-size: 1.1em;
-      margin-bottom: 5px;
-    }
-
-    h1 {
-      font-weight: bold;
-      font-size: 3em;
-      color: ${(props) => props.primaryColor};
-      margin: 10px 0;
-    }
-
-    h2 {
-      color: ${(props) => props.secundaryColor};
-      font-size: 20px;
-      margin-top: -5px;
-      font-weight: bold;
-    }
-  }
-
-  footer {
-    margin-top: auto;
-    margin-bottom: 50px;
-    margin-left: auto;
-    text-transform: uppercase;
-    color: ${({ theme }) => theme.text};
-  }
-`
-
 export const Loading = styled.div`
   position: absolute;
   height: 100% !important;
@@ -476,7 +352,10 @@ export const Loading = styled.div`
   }
 `
 
-export const VolumeControll = styled.div`
+export const VolumeControll = styled.div<{
+  primaryColor: string
+  percentVolume: number
+}>`
   .volumn-controll {
     bottom: 70px;
     left: -50px;

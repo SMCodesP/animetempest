@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import { Loading as LoadingComponent } from './styles';
+import { Loading as LoadingComponent } from './styles'
 
 const Loading: React.FC<{
   color: string
@@ -13,7 +13,7 @@ const Loading: React.FC<{
         <div />
       </div>
     </LoadingComponent>
-  );
+  )
 }
 
-export default Loading;
+export default Loading
