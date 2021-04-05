@@ -10,6 +10,8 @@ const handler = nc<NextApiRequest, NextApiResponse>().post(async (req, res) => {
   const { content } = req.body
 
   try {
+    if (content.length === 0)
+      throw new Error('Nenhuma mensagem digitada.')
     if (!videoId) throw new Error('Video inválido.')
 
     const session = await getSession({ req })

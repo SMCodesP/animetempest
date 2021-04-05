@@ -19,6 +19,9 @@ import {
   Avatar,
   DateComponent,
   Name,
+  Error as ErrorComponent,
+  ContainerCommentDetail,
+  Limit,
 } from './styles'
 import axios from 'axios'
 import { useSession } from 'next-auth/client'
@@ -37,6 +40,9 @@ const Comments: React.FC<{
 
   const [comments, setComments] = useState<Comment[]>([])
   const [comment, setComment] = useState('')
+  const [commenting, setCommenting] = useState(false)
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
 
   const listComments = useRef<HTMLDivElement>(null)
 
@@ -47,6 +53,7 @@ const Comments: React.FC<{
         list.push(snap.val())
       })
       setComments(list)
+      setLoading(false)
     })
   }, [])
 
@@ -57,10 +64,19 @@ const Comments: React.FC<{
   }, [listComments, comments])
 
   const handleSubmit = async () => {
-    await axios.post(`/api/chat/${videoId}`, {
-      content: comment,
-    })
-    setComment('')
+    try {
+      if (commenting) throw new Error('Espere para postar um novo comentário.')
+      if (comment.length === 0) throw new Error('Nenhum comentário digitado.')
+
+      setComment('')
+      setCommenting(true)
+      await axios.post(`/api/chat/${videoId}`, {
+        content: comment,
+      })
+      setCommenting(false)
+    } catch (error) {
+      setError(error.message)
+    }
   }
 
   const handleKeydown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -117,31 +133,43 @@ const Comments: React.FC<{
               ))}
             </ContainerListComments>
           ) : (
-            <CommentsEmpty>Nenhum comentário feito</CommentsEmpty>
+            <CommentsEmpty>
+              {loading ? 'Crregando...' : 'Nenhum comentário feito'}
+            </CommentsEmpty>
           )}
         </ContainerCommentBody>
         {session && (
           <ContainerInput>
-            <small
-              style={{
-                color:
-                  comment.length === 512
-                    ? theme.fifthText
-                    : comment.length >= 512 / 3
-                    ? theme.tertiaryText
-                    : theme.primary,
-              }}
-            >
-              {comment.length}/512
-            </small>
+            <ContainerCommentDetail>
+              {!!error && <ErrorComponent>{error}</ErrorComponent>}
+              <Limit
+                style={{
+                  color:
+                    comment.length === 512
+                      ? theme.fifthText
+                      : comment.length >= 512 / 3
+                      ? theme.tertiaryText
+                      : theme.primary,
+                }}
+              >
+                {comment.length}/512
+              </Limit>
+            </ContainerCommentDetail>
             <InputComment
               name="comment"
-              placeholder="Digite um novo comentário"
+              placeholder={
+                commenting
+                  ? 'Postando novo comentário...'
+                  : 'Digite um novo comentário'
+              }
               cols={30}
               rows={3}
               maxLength={512}
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              onChange={(e) => {
+                setError('')
+                setComment(e.target.value)
+              }}
               onSubmit={handleSubmit}
               onKeyDown={handleKeydown}
             ></InputComment>
