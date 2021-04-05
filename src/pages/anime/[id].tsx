@@ -29,7 +29,6 @@ import { IoIosArrowRoundBack } from 'react-icons/io'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Loading from '../../components/Player/Loading'
-import Video from '../../entities/Video'
 import UserMenu from '../../components/UserMenu'
 import { useProfile } from '../../contexts/ProfileContext'
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
@@ -185,36 +184,8 @@ const Anime: NextPage<{
 }
 
 export const getStaticPaths = async () => {
-  const { data: videosLatest } = await api.get<Video[]>('/api-animesbr-10.php?latest')
-  const { data: animesPopular } = await api.get<Category[]>('/api-animesbr-10.php?populares')
-
-  const paths = [
-    ...videosLatest.map((video) => ({
-      params: {
-        id: video.category_id,
-      },
-    })),
-    ...animesPopular.map((anime) => ({
-      params: {
-        id: anime.id,
-      },
-    })),
-  ]
-
-  var pathsUnique: {
-    params: {
-      id: string
-    }
-  }[] = []
-  paths.forEach((item) => {
-    var i = pathsUnique.findIndex((x) => x.params.id == item.params.id)
-    if (i <= -1) {
-      pathsUnique.push({ params: { id: item.params.id } })
-    }
-  })
-
   return {
-    paths: pathsUnique,
+    paths: [],
     fallback: true,
   }
 }

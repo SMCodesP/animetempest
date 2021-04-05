@@ -19,12 +19,11 @@ const Home: NextPage<{
   animesLatest: Video[]
   animesPopular: Category[]
   allAnimes: Category[]
-}> = ({ allAnimes, animesLatest, animesPopular }) => {
-  const [animePopular, setAnimePopular] = useState<Category | null>(null)
+  animePopular: Category
+}> = ({ allAnimes, animesLatest, animesPopular, animePopular }) => {
   const [animesWatching, setAnimesWatching] = useState<Video[]>([])
 
   useEffect(() => {
-    setAnimePopular(animesPopular[Math.floor(Math.random() * animesPopular.length)])
     ;(async () => {
       try {
         const { data } = await axios.get<Progress[]>('/api/progress')
@@ -142,6 +141,7 @@ export async function getStaticProps() {
       animesLatest,
       animesPopular,
       allAnimes,
+      animePopular: animesPopular[Math.floor(Math.random() * animesPopular.length)]
     },
     revalidate: 300,
   }

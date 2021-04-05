@@ -295,7 +295,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     console.error(error)
     return {
       notFound: true,
-      revalidate: 300,
+      revalidate: 1,
     }
   }
 }
