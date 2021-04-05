@@ -111,8 +111,6 @@ export const Name = styled.p`
   }
 `
 
-export const Content = styled.p``
-
 export const DateComponent = styled.p`
   font-size: 13px;
   opacity: 0.25;
@@ -124,13 +122,6 @@ export const ContainerInput = styled.div`
   flex-direction: column;
   box-shadow: 0 -2px 2px ${({ theme }) => theme.secundaryText};
   border-radius: 5px;
-
-  & small {
-    align-self: flex-end;
-    padding: 5px;
-    font-weight: bold;
-    transition: 0.5s color;
-  }
 `
 
 export const InputComment = styled.textarea`
@@ -145,4 +136,25 @@ export const InputComment = styled.textarea`
   outline: 0;
   resize: none;
   position: relative;
+`
+
+export const ContainerCommentDetail = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+`
+
+export const Error = styled.p`
+  font-size: 14px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.fifthText};
+  align-self: flex-end;
+`
+
+export const Limit = styled.p`
+  font-size: 14px;
+  font-weight: bold;
+  flex: 1;
+  text-align: end;
+  transition: 0.5s color;
 `
