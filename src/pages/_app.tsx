@@ -11,7 +11,6 @@ import { ProfileProvider } from '../contexts/ProfileContext'
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
   <>
     <Head>
-      <script async src="https://arc.io/widget.min.js#1zKySetE"></script>
       <meta name="viewport" content="viewport-fit=cover" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
       <link
@@ -57,24 +56,12 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta name="twitter:image" content="https://otakutube.vercel.app/images/icons/icon.jpg" />
       <meta property="og:url" content="https://otakutube.vercel.app" />
       <meta property="og:image" content="https://otakutube.vercel.app/images/icons/icon.jpg" />
+      <script async src="https://arc.io/widget.min.js#1zKySetE"></script>
     </Head>
 
     <Provider
-      // Provider options are not required but can be useful in situations where
-      // you have a short session maxAge time. Shown here with default values.
       options={{
-        // Client Max Age controls how often the useSession in the client should
-        // contact the server to sync the session state. Value in seconds.
-        // e.g.
-        // * 0  - Disabled (always use cache value)
-        // * 60 - Sync session state with server if it's older than 60 seconds
         clientMaxAge: 0,
-        // Keep Alive tells windows / tabs that are signed in to keep sending
-        // a keep alive request (which extends the current session expiry) to
-        // prevent sessions in open windows from expiring. Value in seconds.
-        //
-        // Note: If a session has expired when keep alive is triggered, all open
-        // windows / tabs will be updated to reflect the user is signed out.
         keepAlive: 0,
       }}
       session={pageProps.session}
