@@ -56,7 +56,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta name="twitter:image" content="https://otakutube.vercel.app/images/icons/icon.jpg" />
       <meta property="og:url" content="https://otakutube.vercel.app" />
       <meta property="og:image" content="https://otakutube.vercel.app/images/icons/icon.jpg" />
-      <script async src="https://arc.io/widget.min.js#1zKySetE"></script>
+      <script async src="https://arc.io/widget.min.js#APQSzg74"></script>
     </Head>
 
     <Provider
