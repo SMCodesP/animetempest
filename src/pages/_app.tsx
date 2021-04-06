@@ -11,6 +11,7 @@ import { ProfileProvider } from '../contexts/ProfileContext'
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
   <>
     <Head>
+      <script async src="https://arc.io/widget.min.js#1zKySetE"></script>
       <meta name="viewport" content="viewport-fit=cover" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
       <link
