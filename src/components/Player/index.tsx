@@ -6,7 +6,7 @@ import React, {
   useCallback,
   useContext,
 } from 'react'
-import debounce from 'lodash.debounce'
+
 import { useDebouncedCallback } from 'use-debounce'
 import { ThemeContext } from 'styled-components'
 
@@ -46,10 +46,11 @@ import InfoVideo from './InfoVideo'
 import CloseVideo from './CloseVideo'
 import Comments from './Comments'
 
-// import useSocket from '../../hooks/useSocket'
+import useSocket from '../../hooks/useSocket'
 import { useSession } from 'next-auth/client'
 
 import PlayerProps from '../../entities/PlayerProps'
+import Progress from '../../entities/Progress'
 
 const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   title = null,
@@ -60,6 +61,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   src = '',
   autoPlay = false,
   videoId = '',
+  animeId = '',
   backButton = () => {},
   onCanPlay = () => {},
   onTimeUpdate = () => {},
@@ -81,7 +83,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
 }) => {
   const theme = useContext(ThemeContext)
-  // const socket = useSocket('https://otakutube.herokuapp.com', [videoId])
+  const socket = useSocket('https://hurkitabot.herokuapp.com', [videoId])
   const [session]: any = useSession()
 
   const videoComponent = useRef<HTMLVideoElement>(null)
@@ -168,15 +170,15 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   }
 
   const saveOnlineProgress = useDebouncedCallback(
-    (_value: number) => {
+    (value: number) => {
       console.log('Saving online progress...')
-      // socket?.emit('progress', {
-      //   userId: session?.userId,
-      //   videoId,
-      //   animeId,
-      //   progress: value,
-      //   completed: duration - value < 180,
-      // } as Progress)
+      socket?.emit('progress', {
+        userId: session?.userId,
+        videoId,
+        animeId,
+        progress: value,
+        completed: duration - value < 180,
+      } as Progress)
     },
     5000,
     { maxWait: 5000 }
@@ -219,9 +221,11 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     videoComponent.current!.currentTime = position
   }
 
-  const play = debounce(() => {
+  const play = useDebouncedCallback(() => {
     videoComponent.current!.paused ? playVideo() : pauseVideo()
-  }, 500)
+  }, 500, {
+    maxWait: 500
+  })
 
   const onEndedFunction = () => {
     if (
@@ -330,7 +334,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     }
   }
 
-  const chooseFullScreen = debounce(() => {
+  const chooseFullScreen = useDebouncedCallback(() => {
     if (
       (document as any).webkitIsFullScreen ||
       (document as any).mozFullScreen ||
@@ -352,7 +356,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     } else if ((playerElement.current as any)!.msRequestFullscreen) {
       ;(playerElement.current as any)!.msRequestFullscreen()
     }
-  }, 500)
+  }, 500, {
+    maxWait: 500
+  })
 
   const controllScreenTimeOut = () => {
     if (!autoControllCloseEnabled) {
