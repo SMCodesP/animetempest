@@ -83,7 +83,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
 }) => {
   const theme = useContext(ThemeContext)
-  const socket = useSocket('https://hurkitabot.herokuapp.com', [])
+  const socket = useSocket('https://hurkitabot-v2.herokuapp.com', [])
   const [session]: any = useSession()
 
   const videoComponent = useRef<HTMLVideoElement>(null)
