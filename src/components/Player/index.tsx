@@ -48,7 +48,6 @@ import Comments from './Comments'
 
 // import useSocket from '../../hooks/useSocket'
 import { useSession } from 'next-auth/client'
-import Progress from '../../entities/Progress'
 
 import PlayerProps from '../../entities/PlayerProps'
 
@@ -61,7 +60,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   src = '',
   autoPlay = false,
   videoId = '',
-  animeId = '',
   backButton = () => {},
   onCanPlay = () => {},
   onTimeUpdate = () => {},
@@ -170,7 +168,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   }
 
   const saveOnlineProgress = useDebouncedCallback(
-    (value) => {
+    (_value: number) => {
       console.log('Saving online progress...')
       // socket?.emit('progress', {
       //   userId: session?.userId,
