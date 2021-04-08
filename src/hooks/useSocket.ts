@@ -6,12 +6,17 @@ export default function useSocket(url: string, dependencies: any[]) {
   const [socket, setSocket] = useState<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null)
 
   useEffect(() => {
-    const socketIo = io(url)
-    setSocket(socketIo)
-    function cleanup() {
-      socketIo.disconnect()
+    setSocket(io(url, {
+      transports: ['websocket'],
+      autoUnref: false,
+      forceNew: true,
+    }))
+    return () => {
+      setSocket(oldState => {
+        oldState?.disconnect()
+        return null
+      })
     }
-    return cleanup
   }, dependencies)
 
   return socket
