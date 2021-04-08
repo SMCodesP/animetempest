@@ -46,7 +46,7 @@ import InfoVideo from './InfoVideo'
 import CloseVideo from './CloseVideo'
 import Comments from './Comments'
 
-import useSocket from '../../hooks/useSocket'
+// import useSocket from '../../hooks/useSocket'
 import { useSession } from 'next-auth/client'
 import Progress from '../../entities/Progress'
 
@@ -83,7 +83,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
 }) => {
   const theme = useContext(ThemeContext)
-  const socket = useSocket('https://otakutube.herokuapp.com', [videoId])
+  // const socket = useSocket('https://otakutube.herokuapp.com', [videoId])
   const [session]: any = useSession()
 
   const videoComponent = useRef<HTMLVideoElement>(null)
@@ -172,13 +172,13 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const saveOnlineProgress = useDebouncedCallback(
     (value) => {
       console.log('Saving online progress...')
-      socket?.emit('progress', {
-        userId: session?.userId,
-        videoId,
-        animeId,
-        progress: value,
-        completed: duration - value < 180,
-      } as Progress)
+      // socket?.emit('progress', {
+      //   userId: session?.userId,
+      //   videoId,
+      //   animeId,
+      //   progress: value,
+      //   completed: duration - value < 180,
+      // } as Progress)
     },
     5000,
     { maxWait: 5000 }
