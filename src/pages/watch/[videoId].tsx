@@ -17,6 +17,7 @@ import { useSession } from 'next-auth/client'
 import Progress from '../../entities/Progress'
 import axios from 'axios'
 import { GetStaticProps, NextPage } from 'next'
+import { PlayerProvider } from '../../contexts/PlayerContext'
 
 const MiniPlayer: React.FC<{
   episode: Episode
@@ -94,69 +95,72 @@ const MiniPlayer: React.FC<{
   }, [episode])
 
   return quality ? (
-    <Container>
-      <Player
-        src={virtualQuality}
-        title={category.category_name}
-        subTitle={episode.title}
-        titleMedia={category.category_name}
-        extraInfoMedia={episode.title}
-        animeId={episode.category_id}
-        onChangeQuality={(
-          qualityId: 'locationhd' | 'locationsd' | 'location'
-        ) => {
-          setIsContinue(null)
-          setQuality(qualityId)
-          setVirtualQuality((state) => episode[qualityId] || state)
-        }}
-        qualities={[
-          episode.locationhd
-            ? {
-                id: 'locationhd',
-                nome: 'FullHD',
-                playing: episode['locationhd'] === virtualQuality,
-              }
-            : null,
-          episode.locationsd
-            ? {
-                id: 'locationsd',
-                nome: 'HD',
-                playing: episode['locationsd'] === virtualQuality,
-              }
-            : null,
-          episode.location
-            ? {
-                id: 'location',
-                nome: 'SD',
-                playing: episode['location'] === virtualQuality,
-              }
-            : null,
-        ].filter((el) => el !== null)}
-        videoId={episode.video_id}
-        backButton={() => router.back()}
-        fullPlayer
-        autoPlay
-        startPosition={startVideoProgress}
-        dataNext={{
-          title: nextEpisode?.title || 'Não existe um próximo vídeo.',
-        }}
-        onNextClick={() => {
-          nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
-        }}
-        reprodutionList={episodes
-          .map((ep: any) => ({
-            nome: ep.title,
-            id: ep.video_id,
-            playing: ep.video_id === episode.video_id,
-          }))
-          .reverse()}
-        overlayEnabled={true}
-        autoControllCloseEnabled
-        primaryColor={theme.tertiary}
-        secundaryColor={theme.text}
-        fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
-      />
-    </Container>
+    <PlayerProvider
+    primaryColor={theme.tertiary}
+    secundaryColor={theme.text}
+    videoId={episode.video_id}
+    animeId={episode.category_id}>
+      <Container>
+        <Player
+          src={virtualQuality}
+          title={category.category_name}
+          subTitle={episode.title}
+          titleMedia={category.category_name}
+          extraInfoMedia={episode.title}
+          animeId={episode.category_id}
+          onChangeQuality={(
+            qualityId: 'locationhd' | 'locationsd' | 'location'
+          ) => {
+            setIsContinue(null)
+            setQuality(qualityId)
+            setVirtualQuality((state) => episode[qualityId] || state)
+          }}
+          qualities={[
+            episode.locationhd
+              ? {
+                  id: 'locationhd',
+                  nome: 'FullHD',
+                  playing: episode['locationhd'] === virtualQuality,
+                }
+              : null,
+            episode.locationsd
+              ? {
+                  id: 'locationsd',
+                  nome: 'HD',
+                  playing: episode['locationsd'] === virtualQuality,
+                }
+              : null,
+            episode.location
+              ? {
+                  id: 'location',
+                  nome: 'SD',
+                  playing: episode['location'] === virtualQuality,
+                }
+              : null,
+          ].filter((el) => el !== null)}
+          backButton={() => router.back()}
+          fullPlayer
+          autoPlay
+          startPosition={startVideoProgress}
+          dataNext={{
+            title: nextEpisode?.title || 'Não existe um próximo vídeo.',
+          }}
+          onNextClick={() => {
+            nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
+          }}
+          reprodutionList={episodes
+            .map((ep: any) => ({
+              nome: ep.title,
+              id: ep.video_id,
+              playing: ep.video_id === episode.video_id,
+            }))
+            .reverse()}
+          overlayEnabled={true}
+          autoControllCloseEnabled
+          fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+        />
+      </Container>
+    </PlayerProvider>
   ) : (
     <div />
   )
@@ -175,23 +179,23 @@ const Watch: NextPage<{
   const [initialProgress, setInitialProgress] = useState<Progress | null>(null)
 
   useEffect(() => {
-      if (session) {
-        ;(async () => {
-          try {
-            const { data } = await axios.get<Progress>(
-              `/api/episode/${episode.video_id}`
-            )
-            setInitialProgress(data)
-            setLoadingProgress(false)
-          } catch (error) {
-            setLoadingProgress(false)
-          }
-        })()
-      } else {
-        if (!loading) {
+    if (session) {
+      ;(async () => {
+        try {
+          const { data } = await axios.get<Progress>(
+            `/api/episode/${episode.video_id}`
+          )
+          setInitialProgress(data)
+          setLoadingProgress(false)
+        } catch (error) {
           setLoadingProgress(false)
         }
+      })()
+    } else {
+      if (!loading) {
+        setLoadingProgress(false)
       }
+    }
   }, [session, loading, episode])
 
   if (router.isFallback || loadingProgress || loading) {
@@ -263,9 +267,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     //   category_id: '8386',
     //   title: 'Kimetsu No Yaiba Episodio 01',
     //   location:
-    //     'https://redirector.googlevideo.com/videoplayback?expire=1617644099&ei=w9lqYOKuApXWzLUPnp6NmAo&ip=149.56.143.221&id=ed8f94a6e0445858&itag=18&source=blogger&mh=2b&mm=31&mn=sn-4g5ednse&ms=au&mv=u&mvi=1&pl=27&susc=bl&mime=video/mp4&vprv=1&dur=1420.109&lmt=1554567259749649&mt=1617614511&sparams=expire,ei,ip,id,itag,source,susc,mime,vprv,dur,lmt&sig=AOq0QJ8wRQIhALYyEJhRlKfHs3M2cQbs7qyj7CUiLqrgcPbQaPL_dWsIAiB5MpZZ4EkOGFxA-Ojkvd7p_VDfZPmJhGzEOGcPwXAlpQ%3D%3D&lsparams=mh,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRQIgCEIPJZobsENURGy3RnEomNi8ifX6SxLLTgdikRbJc7ECIQDg_41tnKa5nN7osJ5cJc98GF0FimNhHreT0tpGENXC5w%3D%3D',
+    //     'https://redirector.googlevideo.com/videoplayback?expire=1617989649&ei=kR9wYIf6GdeP0_wP6qSJsAQ&ip=149.56.143.221&id=ed8f94a6e0445858&itag=18&source=blogger&mh=2b&mm=31&mn=sn-25glene7&ms=au&mv=u&mvi=6&pl=27&susc=bl&mime=video/mp4&vprv=1&dur=1420.109&lmt=1554567259749649&mt=1617960688&sparams=expire,ei,ip,id,itag,source,susc,mime,vprv,dur,lmt&sig=AOq0QJ8wRQIgOTZ5sFjddranshirCxkRgIh0FNABesqsQ6lidJKywiACIQDdiJeIVCoOBJEvU4aIhm8iMCcNBryxuVyQjrHIRKPFgw%3D%3D&lsparams=mh,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRgIhAOfjwHBdG-WIZ-vkRuMZ6vtLxYXPTZEQDe8Ta3NgIWjvAiEA7GqKZC_PyteNZjpVwN6Pn-swlDuyHfsl7ENusc05oQc%3D',
     //   locationsd:
-    //     'https://redirector.googlevideo.com/videoplayback?expire=1617644099&ei=w9lqYOKuApXWzLUPnp6NmAo&ip=149.56.143.221&id=ed8f94a6e0445858&itag=22&source=blogger&mh=2b&mm=31&mn=sn-4g5ednse&ms=au&mv=u&mvi=1&pl=27&susc=bl&mime=video/mp4&vprv=1&dur=1420.109&lmt=1554567277015459&mt=1617614511&sparams=expire,ei,ip,id,itag,source,susc,mime,vprv,dur,lmt&sig=AOq0QJ8wRQIhALZkpO_LTUgpPUkGG13CpxJ1yMAM3xGTV7D6t4qZtJbcAiAf9NShOkxXR02dE8rdDVli5JRl-4t_Wkz_BozA-7Hmyg%3D%3D&lsparams=mh,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRgIhANf_Nbkb0jbxmh5Jh6eTGh0dxNbodB5pMA91FOrucFr0AiEAhQn1S37qRcov0A1VVYNdjb0fConENySe8PttWAQ10N4%3D',
+    //     'https://redirector.googlevideo.com/videoplayback?expire=1617989649&ei=kR9wYIf6GdeP0_wP6qSJsAQ&ip=149.56.143.221&id=ed8f94a6e0445858&itag=22&source=blogger&mh=2b&mm=31&mn=sn-25glene7&ms=au&mv=u&mvi=6&pl=27&susc=bl&mime=video/mp4&vprv=1&dur=1420.109&lmt=1554567277015459&mt=1617960688&sparams=expire,ei,ip,id,itag,source,susc,mime,vprv,dur,lmt&sig=AOq0QJ8wRgIhAOQZcFmWb8o1lwXCiule8HeO4RrJ1UX4EWliydqht7EjAiEAoWNq6Fx1dbmcpTYKOIelghBKvzPLMNozy86Qyy7-Ktg%3D&lsparams=mh,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRAIgX12iX3g_TsshanancfGowqYWXfIN2dcnn19yH0YrzdQCIALF39R5gAqhHfdaOb_rP-YbvEyh70vAIhMbM7-Y90AU',
     //   locationhd: '',
     // }
 

@@ -11,6 +11,7 @@ const InfoVideo: React.FC<{
   title: string | null
   subTitle: string | null
 }> = ({
+  playing,
   primaryColor,
   secundaryColor,
   videoReady,
@@ -22,7 +23,7 @@ const InfoVideo: React.FC<{
     <StandyByInfo
       primaryColor={primaryColor}
       secundaryColor={secundaryColor}
-      show={showInfo && videoReady}
+      show={showInfo && videoReady && !playing}
     >
       {(title || subTitle) && (
         <section className="center">

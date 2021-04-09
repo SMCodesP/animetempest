@@ -17,7 +17,6 @@ export default interface PlayerProps {
   titleMedia: string | null
   fullPlayer: boolean
   autoPlay: boolean
-  videoId: string
   animeId: string
   startPosition: number
   dataNext: any
@@ -25,6 +24,4 @@ export default interface PlayerProps {
   qualities: Array<any>
   overlayEnabled: boolean
   autoControllCloseEnabled: boolean
-  primaryColor: string
-  secundaryColor: string
 }

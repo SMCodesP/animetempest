@@ -46,11 +46,9 @@ import InfoVideo from './InfoVideo'
 import CloseVideo from './CloseVideo'
 import Comments from './Comments'
 
-import useSocket from '../../hooks/useSocket'
-import { useSession } from 'next-auth/client'
-
 import PlayerProps from '../../entities/PlayerProps'
-import Progress from '../../entities/Progress'
+import { usePlayer } from '../../contexts/PlayerContext'
+import formatTime from '../../utils/formatTime'
 
 const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   title = null,
@@ -60,11 +58,8 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   fullPlayer = true,
   src = '',
   autoPlay = false,
-  videoId = '',
-  animeId = '',
   backButton = () => {},
   onCanPlay = () => {},
-  onTimeUpdate = () => {},
   onEnded = () => {},
   onErrorVideo = () => {},
   onNextClick = () => {},
@@ -78,27 +73,31 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   playbackRateEnable = true,
   overlayEnabled = true,
   autoControllCloseEnabled = true,
-  primaryColor = '#03dffc',
-  secundaryColor = '#ffffff',
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
 }) => {
-  const theme = useContext(ThemeContext)
-  const socket = useSocket('https://hurkitabot-v2.herokuapp.com', [videoId])
+  const {
+    volume,
+    volumeChange,
+    primaryColor,
+    secundaryColor,
+    videoId,
+    onTimeUpdate,
+    progress,
+    playing,
+    play,
+    setProgress,
+  } = usePlayer()
 
-  const [session]: any = useSession()
+  const theme = useContext(ThemeContext)
 
   const videoComponent = useRef<HTMLVideoElement>(null)
   const playerElement = useRef(null)
   const listReproduction = useRef<HTMLDivElement>(null)
-  const seekElement = useRef<HTMLInputElement>(null)
-  const progressTime = useRef<HTMLSpanElement>(null)
 
   const [videoReady, setVideoReady] = useState(false)
-  const [playing, setPlaying] = useState(false)
   const [duration, setDuration] = useState(0)
   const [end, setEnd] = useState(false)
   const [controlBackEnd, setControlBackEnd] = useState(false)
-  const [volume, setVolume] = useState(100)
   const [muted, setMuted] = useState(false)
   const [error, setError] = useState('')
   const [waitingBuffer] = useState(false)
@@ -115,6 +114,32 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const [fullscreen, setFullscreen] = useState(false)
   const [, setTimeoutDebounce] = useState<any | null>(null)
 
+
+  const progressChange = {
+    set: useDebouncedCallback((newProgress: number) => {
+      if (videoComponent.current) {
+        play.set(false)
+        const newTime = Math.min(Math.max(newProgress, 0), duration)
+        setProgress(newTime)
+        videoComponent.current.currentTime = newTime
+        play.set(true)
+      }
+    }, 100, {
+      maxWait: 100
+    }),
+    addOrRemove: useDebouncedCallback((newProgress: number) => {
+      if (videoComponent.current) {
+        play.set(false)
+        const newTime = Math.min(Math.max(progress + newProgress, 0), duration)
+        setProgress(newTime)
+        videoComponent.current.currentTime = newTime
+        play.set(true)
+      }
+    }, 100, {
+      maxWait: 100
+    }),
+  }
+
   const playbackRateOptions = [
     '0.25',
     '0.5',
@@ -124,108 +149,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     '1.5',
     '2',
   ]
-
-  const secondsToHms = (d: any) => {
-    d = Number(d)
-    const h = Math.floor(d / 3600)
-    const m = Math.floor((d % 3600) / 60)
-    let s = Math.floor((d % 3600) % 60)
-      .toString()
-      .padStart(2, '0')
-
-    if (h) {
-      return `${h}:${m}:${s}`
-    }
-
-    return `${m}:${s}`
-  }
-
-  const saveVideoProgress = (progress: number) => {
-    const history = localStorage.getItem('history')
-    if (history) {
-      let historyParsed: {
-        video_id: string
-        progress: number
-      }[] = JSON.parse(history)
-      localStorage.setItem(
-        'history',
-        JSON.stringify([
-          ...historyParsed.filter((el) => el.video_id !== videoId),
-          {
-            video_id: videoId,
-            progress,
-          },
-        ])
-      )
-    } else {
-      localStorage.setItem(
-        'history',
-        JSON.stringify([
-          {
-            video_id: videoId,
-            progress,
-          },
-        ])
-      )
-    }
-  }
-
-  const saveOnlineProgress = useDebouncedCallback(
-    (value: number) => {
-      socket?.emit('progress', {
-        userId: session?.userId,
-        videoId,
-        animeId,
-        progress: value,
-        completed: duration - value < 180,
-      } as Progress)
-    },
-    5000,
-    { maxWait: 5000 }
-  )
-
-  const timeCallBack = (e: any) => {
-    setShowInfo(false)
-    setEnd(false)
-
-    if (onTimeUpdate) {
-      onTimeUpdate(e)
-    }
-
-    seekElement.current!.style.background = `linear-gradient(93deg, ${primaryColor} ${
-      (e.target.currentTime * 100 + 2 * (duration / 100)) / duration
-    }%, #fff ${
-      (e.target.currentTime * 100 + 2 * (duration / 100)) / duration
-    }%)`
-    seekElement.current!.value = String(Math.trunc(e.target.currentTime))
-    progressTime.current!.innerText = secondsToHms(
-      Math.trunc(e.target.currentTime)
-    )
-    if (playing) {
-      saveVideoProgress(Math.trunc(e.target.currentTime))
-      if (session) {
-        saveOnlineProgress(Math.trunc(e.target.currentTime))
-      }
-    }
-  }
-
-  const timeUpdate = (e: any) => {
-    e.persist()
-    timeCallBack(e)
-  }
-
-  const goToPosition = (position: number) => {
-    seekElement.current!.style.background = `linear-gradient(93deg, ${primaryColor} ${
-      (position * 100 + 2 * (duration / 100)) / duration
-    }%, #fff ${(position * 100 + 2 * (duration / 100)) / duration}%)`
-    videoComponent.current!.currentTime = position
-  }
-
-  const play = useDebouncedCallback(() => {
-    videoComponent.current!.paused ? playVideo() : pauseVideo()
-  }, 500, {
-    maxWait: 500
-  })
 
   const onEndedFunction = () => {
     if (
@@ -239,7 +162,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
       if (autoPlay) {
         videoComponent.current!.play()
       } else {
-        setPlaying(false)
+        // setPlaying(false)
       }
     } else {
       setEnd(true)
@@ -250,25 +173,10 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     }
   }
 
-  const nextSeconds = (seconds: number) => {
-    goToPosition(videoComponent.current!.currentTime + seconds)
-  }
-
-  const previousSeconds = (seconds: number) => {
-    const current = videoComponent.current!.currentTime
-
-    if (current - seconds <= 0) {
-      videoComponent.current!.currentTime = 0
-      return
-    }
-
-    videoComponent.current!.currentTime -= seconds
-  }
-
   const startVideo = async () => {
     setDuration(videoComponent.current!.duration)
     setVideoReady(true)
-    goToPosition(startPosition)
+    // goToPosition(startPosition)
 
     if (onCanPlay) {
       onCanPlay()
@@ -286,24 +194,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     setMuted(value)
     setShowControlVolume(false)
     videoComponent.current!.muted = value
-  }
-
-  const setVolumeAction = (value: number) => {
-    setVolume(() => {
-      if (value >= 100) {
-        videoComponent.current!.volume = 1
-        return 100
-      } else if (value <= 0) {
-        videoComponent.current!.volume = 0
-        return 0
-      }
-      videoComponent.current!.volume = value / 100
-      return value
-    })
-  }
-
-  const addVolumeAction = (quantity: number) => {
-    setVolumeAction(volume + quantity)
   }
 
   const exitFullScreen = () => {
@@ -334,31 +224,35 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     }
   }
 
-  const chooseFullScreen = useDebouncedCallback(() => {
-    if (
-      (document as any).webkitIsFullScreen ||
-      (document as any).mozFullScreen ||
-      (document as any).msFullscreenElement ||
-      document.fullscreenElement
-    ) {
-      document.exitFullscreen()
-      return
-    }
+  const chooseFullScreen = useDebouncedCallback(
+    () => {
+      if (
+        (document as any).webkitIsFullScreen ||
+        (document as any).mozFullScreen ||
+        (document as any).msFullscreenElement ||
+        document.fullscreenElement
+      ) {
+        document.exitFullscreen()
+        return
+      }
 
-    setShowInfo(true)
+      setShowInfo(true)
 
-    if ((playerElement.current as any)!.requestFullscreen) {
-      ;(playerElement.current as any)!.requestFullscreen()
-    } else if ((playerElement.current as any)!.webkitRequestFullscreen) {
-      ;(playerElement.current as any)!.webkitRequestFullscreen()
-    } else if ((playerElement.current as any)!.mozRequestFullScreen) {
-      ;(playerElement.current as any)!.mozRequestFullScreen()
-    } else if ((playerElement.current as any)!.msRequestFullscreen) {
-      ;(playerElement.current as any)!.msRequestFullscreen()
+      if ((playerElement.current as any)!.requestFullscreen) {
+        ;(playerElement.current as any)!.requestFullscreen()
+      } else if ((playerElement.current as any)!.webkitRequestFullscreen) {
+        ;(playerElement.current as any)!.webkitRequestFullscreen()
+      } else if ((playerElement.current as any)!.mozRequestFullScreen) {
+        ;(playerElement.current as any)!.mozRequestFullScreen()
+      } else if ((playerElement.current as any)!.msRequestFullscreen) {
+        ;(playerElement.current as any)!.msRequestFullscreen()
+      }
+    },
+    500,
+    {
+      maxWait: 500,
     }
-  }, 500, {
-    maxWait: 500
-  })
+  )
 
   const controllScreenTimeOut = () => {
     if (!autoControllCloseEnabled) {
@@ -387,15 +281,15 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const controlKeyBoard: {
     [key: number]: () => void
   } = {
-    76: () => nextSeconds(10),
-    39: () => nextSeconds(5),
-    74: () => previousSeconds(10),
-    37: () => previousSeconds(5),
-    75: () => play(),
-    32: () => play(),
+    76: () => progressChange.addOrRemove(10),
+    39: () => progressChange.addOrRemove(5),
+    74: () => progressChange.addOrRemove(-10),
+    37: () => progressChange.addOrRemove(-5),
+    75: () => play.toggle(),
+    32: () => play.toggle(),
     70: () => chooseFullScreen(),
-    38: () => addVolumeAction(10),
-    40: () => addVolumeAction(-10),
+    38: () => volumeChange.addOrRemove(10),
+    40: () => volumeChange.addOrRemove(-10),
   }
 
   const keyboardInteractionCallback = (e: any) => {
@@ -419,14 +313,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     setPlaybackRate(speed)
   }
 
-  const pauseVideo = () => {
-    setPlaying(false)
-    videoComponent.current?.pause()
-  }
-  const playVideo = () => {
-    setPlaying(true)
-    videoComponent.current?.play()
-  }
+  useEffect(() => {
+    playing ? videoComponent.current?.play() : videoComponent.current?.pause()
+  }, [playing])
 
   useEffect(() => {
     if (showReproductionList) {
@@ -436,7 +325,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
   useEffect(() => {
     if (src) {
-      setPlaying(false)
+      // setPlaying(false)
       setVideoReady(false)
       setError('')
       setShowReproductionList(false)
@@ -465,6 +354,12 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     )
   }, [])
 
+  useEffect(() => {
+    if (videoComponent.current) {
+      videoComponent.current.volume = volume / 100
+    }
+  }, [volume, videoComponent])
+
   return (
     <>
       {isComment && (
@@ -489,9 +384,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
             playing={playing}
             primaryColor={primaryColor}
             secundaryColor={secundaryColor}
-            showInfo={showInfo}
             subTitle={subTitle}
             title={title}
+            showInfo={showInfo}
             videoReady={videoReady}
           />
         )}
@@ -510,9 +405,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
           ref={videoComponent}
           src={src}
           controls={false}
-          onClick={play}
+          onClick={play.toggle}
           onLoadedData={startVideo}
-          onTimeUpdate={timeUpdate}
+          onTimeUpdate={(e: any) => onTimeUpdate(e.target.currentTime)}
           onError={erroVideo}
           onEnded={onEndedFunction}
         />
@@ -537,11 +432,11 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
               playing={playing}
             >
               {playing ? (
-                <div className="pause" onClick={pauseVideo}>
+                <div className="pause" onClick={play.toggle}>
                   <FaPause size={48} color={theme.text} />
                 </div>
               ) : (
-                <div className="play" onClick={playVideo}>
+                <div className="play" onClick={play.toggle}>
                   <FaPlay size={48} color={theme.text} />
                 </div>
               )}
@@ -550,16 +445,23 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
           <div>
             <div className="line-reproduction">
-              <span ref={progressTime}>{secondsToHms(0)}</span>
+              <span>{formatTime(progress)}</span>
               <input
                 type="range"
-                ref={seekElement}
                 className="progress-bar"
+                style={{
+                  background: `linear-gradient(93deg, ${primaryColor} ${
+                    (progress * 100 + 2 * (duration / 100)) / duration
+                  }%, #fff ${
+                    (progress * 100 + 2 * (duration / 100)) / duration
+                  }%)`,
+                }}
+                value={progress}
                 max={duration}
-                onChange={(e) => goToPosition(Number(e.target.value))}
+                onChange={(e) => progressChange.set(Number(e.target.value))}
                 title=""
               />
-              <span>{secondsToHms(duration)}</span>
+              <span>{formatTime(duration)}</span>
             </div>
 
             {videoReady === true && (
@@ -567,18 +469,18 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                 <div className="start">
                   <div className="item-control">
                     {!playing ? (
-                      <FaPlay size={28} onClick={play} />
+                      <FaPlay size={28} onClick={play.toggle} />
                     ) : (
-                      <FaPause size={28} onClick={play} />
+                      <FaPause size={28} onClick={play.toggle} />
                     )}
                   </div>
 
                   <div className="item-control">
-                    <FaUndoAlt size={28} onClick={() => previousSeconds(5)} />
+                    <FaUndoAlt size={28} onClick={() => progressChange.addOrRemove(-5)} />
                   </div>
 
                   <div className="item-control">
-                    <FaRedoAlt size={28} onClick={() => nextSeconds(5)} />
+                    <FaRedoAlt size={28} onClick={() => progressChange.addOrRemove(5)} />
                   </div>
 
                   {muted === false && (
@@ -600,7 +502,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                               step={1}
                               value={volume}
                               onChange={(e) =>
-                                setVolumeAction(Number(e.target.value))
+                                volumeChange.set(Number(e.target.value))
                               }
                               title=""
                             />
@@ -631,7 +533,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                           <FaVolumeMute
                             size={28}
                             onMouseEnter={() => setShowControlVolume(true)}
-                            onClick={() => setVolumeAction(0)}
+                            onClick={() => volumeChange.set(0)}
                           />
                         )
                       )}
