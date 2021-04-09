@@ -14,6 +14,10 @@ export default (req: any, res: any) =>
         clientId: String(process.env.FACEBOOK_CLIENT_ID),
         clientSecret: String(process.env.FACEBOOK_CLIENT_SECRET),
       }),
+      Providers.Google({
+        clientId: String(process.env.GOOGLE_CLIENT_ID),
+        clientSecret: String(process.env.GOOGLE_CLIENT_SECRET)
+      }),
     ],
     adapter: Firebase.Adapter({
       firestoreAdmin: firebaseAdmin().firestore,
