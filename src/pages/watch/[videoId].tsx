@@ -175,24 +175,23 @@ const Watch: NextPage<{
   const [initialProgress, setInitialProgress] = useState<Progress | null>(null)
 
   useEffect(() => {
-    setLoadingProgress(true)
-    if (session) {
-      ;(async () => {
-        try {
-          const { data } = await axios.get<Progress>(
-            `/api/episode/${episode.video_id}`
-          )
-          setInitialProgress(data)
-          setLoadingProgress(false)
-        } catch (error) {
+      if (session) {
+        ;(async () => {
+          try {
+            const { data } = await axios.get<Progress>(
+              `/api/episode/${episode.video_id}`
+            )
+            setInitialProgress(data)
+            setLoadingProgress(false)
+          } catch (error) {
+            setLoadingProgress(false)
+          }
+        })()
+      } else {
+        if (!loading) {
           setLoadingProgress(false)
         }
-      })()
-    } else {
-      if (!loading) {
-        setLoadingProgress(false)
       }
-    }
   }, [session, loading, episode])
 
   if (router.isFallback || loadingProgress || loading) {
@@ -296,7 +295,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     console.error(error)
     return {
       notFound: true,
-      revalidate: 1,
+      revalidate: 300,
     }
   }
 }
