@@ -32,7 +32,7 @@ const MiniPlayer: React.FC<{
   const [virtualQuality, setVirtualQuality] = useState<string>('')
   const [isContinue, setIsContinue] = useState<boolean | null>(false)
   const [startVideoProgress, setStartVideoProgress] = useState(
-    initialProgress !== null ? initialProgress?.progress : 0
+    initialProgress ? initialProgress?.progress : 0
   )
   const router = useRouter()
 
@@ -175,6 +175,7 @@ const Watch: NextPage<{
   const [initialProgress, setInitialProgress] = useState<Progress | null>(null)
 
   useEffect(() => {
+    setLoadingProgress(true)
     if (session) {
       ;(async () => {
         try {

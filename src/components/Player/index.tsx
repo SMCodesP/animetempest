@@ -46,11 +46,11 @@ import InfoVideo from './InfoVideo'
 import CloseVideo from './CloseVideo'
 import Comments from './Comments'
 
-// import useSocket from '../../hooks/useSocket'
+import useSocket from '../../hooks/useSocket'
 import { useSession } from 'next-auth/client'
 
 import PlayerProps from '../../entities/PlayerProps'
-// import Progress from '../../entities/Progress'
+import Progress from '../../entities/Progress'
 
 const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   title = null,
@@ -61,7 +61,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   src = '',
   autoPlay = false,
   videoId = '',
-  // animeId = '',
+  animeId = '',
   backButton = () => {},
   onCanPlay = () => {},
   onTimeUpdate = () => {},
@@ -83,7 +83,8 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
 }) => {
   const theme = useContext(ThemeContext)
-  // const socket = useSocket('https://hurkitabot-v2.herokuapp.com', [])
+  const socket = useSocket('https://hurkitabot-v2.herokuapp.com', [videoId])
+
   const [session]: any = useSession()
 
   const videoComponent = useRef<HTMLVideoElement>(null)
@@ -170,15 +171,14 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   }
 
   const saveOnlineProgress = useDebouncedCallback(
-    (_value: number) => {
-      console.log('Saving online progress...')
-      // socket?.emit('progress', {
-      //   userId: session?.userId,
-      //   videoId,
-      //   animeId,
-      //   progress: value,
-      //   completed: duration - value < 180,
-      // } as Progress)
+    (value: number) => {
+      socket?.emit('progress', {
+        userId: session?.userId,
+        videoId,
+        animeId,
+        progress: value,
+        completed: duration - value < 180,
+      } as Progress)
     },
     5000,
     { maxWait: 5000 }
@@ -399,7 +399,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   }
 
   const keyboardInteractionCallback = (e: any) => {
-    console.log(e)
     if (controlKeyBoard[e.keyCode] && videoComponent.current) {
       hoverScreen()
       controlKeyBoard[e.keyCode]()
