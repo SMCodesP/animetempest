@@ -9,7 +9,6 @@ import api from '../../services/api'
 import { Container } from '../../shared/styles/watch'
 import Category from '../../entities/Category'
 import { ThemeContext } from 'styled-components'
-import Video from '../../entities/Video'
 import Loading from '../../components/Player/Loading'
 
 import Player from '../../components/Player'
@@ -96,10 +95,11 @@ const MiniPlayer: React.FC<{
 
   return quality ? (
     <PlayerProvider
-    primaryColor={theme.tertiary}
-    secundaryColor={theme.text}
-    videoId={episode.video_id}
-    animeId={episode.category_id}>
+      primaryColor={theme.tertiary}
+      secundaryColor={theme.text}
+      videoId={episode.video_id}
+      animeId={episode.category_id}
+    >
       <Container>
         <Player
           src={virtualQuality}
@@ -245,16 +245,8 @@ const Watch: NextPage<{
 }
 
 export const getStaticPaths = async () => {
-  const { data: releases } = await api.get<Video[]>(
-    '/api-animesbr-10.php?latest'
-  )
-
   return {
-    paths: releases.map((release) => ({
-      params: {
-        videoId: release.video_id,
-      },
-    })),
+    paths: [],
     fallback: true,
   }
 }
@@ -262,16 +254,6 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const episode = await api.getEpisode(String(params?.videoId))
-    // const episode = {
-    //   video_id: '428280',
-    //   category_id: '8386',
-    //   title: 'Kimetsu No Yaiba Episodio 01',
-    //   location:
-    //     'https://redirector.googlevideo.com/videoplayback?expire=1617989649&ei=kR9wYIf6GdeP0_wP6qSJsAQ&ip=149.56.143.221&id=ed8f94a6e0445858&itag=18&source=blogger&mh=2b&mm=31&mn=sn-25glene7&ms=au&mv=u&mvi=6&pl=27&susc=bl&mime=video/mp4&vprv=1&dur=1420.109&lmt=1554567259749649&mt=1617960688&sparams=expire,ei,ip,id,itag,source,susc,mime,vprv,dur,lmt&sig=AOq0QJ8wRQIgOTZ5sFjddranshirCxkRgIh0FNABesqsQ6lidJKywiACIQDdiJeIVCoOBJEvU4aIhm8iMCcNBryxuVyQjrHIRKPFgw%3D%3D&lsparams=mh,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRgIhAOfjwHBdG-WIZ-vkRuMZ6vtLxYXPTZEQDe8Ta3NgIWjvAiEA7GqKZC_PyteNZjpVwN6Pn-swlDuyHfsl7ENusc05oQc%3D',
-    //   locationsd:
-    //     'https://redirector.googlevideo.com/videoplayback?expire=1617989649&ei=kR9wYIf6GdeP0_wP6qSJsAQ&ip=149.56.143.221&id=ed8f94a6e0445858&itag=22&source=blogger&mh=2b&mm=31&mn=sn-25glene7&ms=au&mv=u&mvi=6&pl=27&susc=bl&mime=video/mp4&vprv=1&dur=1420.109&lmt=1554567277015459&mt=1617960688&sparams=expire,ei,ip,id,itag,source,susc,mime,vprv,dur,lmt&sig=AOq0QJ8wRgIhAOQZcFmWb8o1lwXCiule8HeO4RrJ1UX4EWliydqht7EjAiEAoWNq6Fx1dbmcpTYKOIelghBKvzPLMNozy86Qyy7-Ktg%3D&lsparams=mh,mm,mn,ms,mv,mvi,pl&lsig=AG3C_xAwRAIgX12iX3g_TsshanancfGowqYWXfIN2dcnn19yH0YrzdQCIALF39R5gAqhHfdaOb_rP-YbvEyh70vAIhMbM7-Y90AU',
-    //   locationhd: '',
-    // }
 
     if (!episode) throw `Episode ${String(params?.videoId)} null.`
     if (!episode.location)
@@ -296,7 +278,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 300,
     }
   } catch (error) {
-    console.error(error)
     return {
       notFound: true,
       revalidate: 300,

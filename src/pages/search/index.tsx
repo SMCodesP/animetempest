@@ -13,8 +13,6 @@ import Wave from 'react-wavify'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import Select from 'react-select'
 
-import { defaultTheme } from 'react-select'
-
 import Category from '../../entities/Category'
 import api from '../../services/api'
 import {
@@ -101,7 +99,9 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
     router.query.query = e.target.value
     router.push(router)
     handleSearch()
-  }, 750)
+  }, 750, {
+    maxWait: 750
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
@@ -109,7 +109,6 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   }
 
   useEffect(() => {
-    console.log(defaultTheme)
     handleSearch()
   }, [])
 
