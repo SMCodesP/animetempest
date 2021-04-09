@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const items = await api.getCategory(String(category))
     return res.json(
       items.filter(
-        (item) => item.category_name.toUpperCase().indexOf(String(query).toUpperCase()) > -1
+        (item) => item.category_name.toUpperCase().indexOf(String(query).toUpperCase()) > -1 && !item.category_name.toLowerCase().includes("animetv")
       )
     )
   }
@@ -19,5 +19,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   if (!animes) return res.json([])
 
-  return res.json(animes)
+  return res.json(animes.filter(anime => !anime.category_name.toLowerCase().includes("animetv")))
 }
