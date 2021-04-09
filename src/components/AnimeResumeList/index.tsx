@@ -30,6 +30,7 @@ const AnimeResumeList: React.FC<{
           slidesToSlide: 1,
         },
       }}
+      deviceType="desktop"
       infinite={true}
       ssr
     >

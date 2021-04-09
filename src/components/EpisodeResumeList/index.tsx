@@ -30,6 +30,7 @@ const EpisodeResumeList: React.FC<{
           slidesToSlide: 1,
         },
       }}
+      deviceType="desktop"
       ssr={true}
       infinite={true}
     >

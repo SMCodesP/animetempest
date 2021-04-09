@@ -254,12 +254,14 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const episode = await api.getEpisode(String(params?.videoId))
-
     if (!episode) throw `Episode ${String(params?.videoId)} null.`
     if (!episode.location)
       throw `Episode location video not found ${String(params?.videoId)}.`
     const episodes = await api.getEpisodesFromAnime(episode.category_id)
     const category = await api.getAnime(episode.category_id)
+    if (category.category_name.toLowerCase().includes("animetv"))
+      throw 'Invalid'
+
     const nextEpisode = await api.nextEpisode(
       episode.video_id,
       episode.category_id

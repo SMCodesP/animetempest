@@ -193,7 +193,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const anime = await api.getAnime(String(params?.id))
-    if (!anime) {
+    if (!anime || anime.category_name.toLowerCase().includes('animetv')) {
       console.log(anime)
       throw new Error('Anime not found')
     }
