@@ -117,7 +117,7 @@ const AnimeHeader: React.FC<{
       {anime && (
         <ContainerAnime>
           <ContainerInfo>
-            <Title>{anime.category_name}</Title>
+            <Title>{anime.category_name.length > 25 ? anime.category_name.substring(0, 25) + '...' : anime.category_name}</Title>
             <div style={{ width: 225 }}>
               <Link href={`/anime/${anime.id}`}>
                 <a>

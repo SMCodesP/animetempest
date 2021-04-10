@@ -122,6 +122,20 @@ export const ContainerMain = styled.div<{
     position: absolute;
     filter: brightness(70%);
   }
+
+  @media(max-width: 1000px) {
+    width: fit-content;
+    height: fit-content;
+    align-self: center;
+    flex: none;
+    position: relative;
+
+    & div {
+      position: relative;
+      width: fit-content;
+      height: fit-content;
+    }
+  }
 `
 
 export const Controlls = styled.div<{
@@ -305,11 +319,16 @@ export const Controlls = styled.div<{
 
   @media(max-width: 1000px) {
     & svg {
-      width: 70%;
+      width: 20px;
+      height: 20px;
     }
 
     .controlls {
       margin: 10px 0;
+
+      .item-control {
+        margin: auto 10px;
+      }
 
       .info-video {
         font-size: 15px;
@@ -317,19 +336,44 @@ export const Controlls = styled.div<{
     }
   }
 
-  @media(max-width: 780px) {
-    & svg {
-      width: 70%;
-    }
-
+  @media(max-width: 660px) {
     .controlls {
-      margin: 10px 0;
+      .info-video {
+        display: none;
+      }
+    }
+  }
+
+  @media(max-width: 490px) {
+    .controlls {
+      margin: 5px 0;
 
       .item-control {
-        margin: auto 5px;
+        margin: auto 10px;
       }
 
       .info-video {
+        display: none;
+      }
+    }
+  }
+
+  @media(max-width: 440px) {
+    & svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .controlls {
+      .item-control {
+        margin: auto 5px;
+      }
+    }
+  }
+
+  @media(max-width: 315px) {
+    .controlls {
+      .time-play {
         display: none;
       }
     }
@@ -465,6 +509,10 @@ export const IconPlayBackRate = styled.div`
     & span {
       font-size: 23px;
     }
+  }
+
+  @media(max-width: 490px) {
+    display: none !important;
   }
 `
 

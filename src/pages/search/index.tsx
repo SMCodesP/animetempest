@@ -266,7 +266,6 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                         <ItemAnime>
                           <Thumbnail
                             src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
-                            width={256}
                           />
                           <ContainerName>
                             <Name>{anime.category_name}</Name>

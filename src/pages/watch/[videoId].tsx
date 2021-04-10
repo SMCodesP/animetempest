@@ -145,7 +145,7 @@ const MiniPlayer: React.FC<{
                   }
                 : null,
             ].filter((el) => el !== null)}
-            backButton={() => router.back()}
+            backButton={() => router.push('/')}
             fullPlayer
             autoPlay
             startPosition={startVideoProgress}
@@ -155,6 +155,7 @@ const MiniPlayer: React.FC<{
             onNextClick={() => {
               nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
             }}
+            onCrossClick={() => router.push('/')}
             reprodutionList={episodes
               .map((ep: any) => ({
                 nome: ep.title,

@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components'
+import Image from 'next/image'
 
 const toUpOpacity = keyframes`
   0% {
@@ -62,6 +63,15 @@ export const Menu = styled.div`
       filter: brightness(50%);
     }
   }
+
+  @media(max-width: 780px) {
+    flex-direction: column;
+    gap: 10px;
+    & > div {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 `
 
 export const Input = styled.input`
@@ -96,9 +106,24 @@ export const ContainerListAnime = styled.ul`
   & a {
     height: fit-content;
   }
+
+  @media(max-width: 990px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media(max-width: 690px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media(max-width: 370px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `
 
-export const Thumbnail = styled.img`
+export const Thumbnail = styled(Image).attrs({
+  width: 350,
+  height: 500
+})`
   min-height: 255px;
   width: 100%;
   background: ${({ theme }) => theme.secundary};
