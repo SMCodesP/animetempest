@@ -405,6 +405,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
           ref={videoComponent}
           src={src}
           controls={false}
+          autoPlay={true}
           onClick={play.toggle}
           onLoadedData={startVideo}
           onTimeUpdate={(e: any) => onTimeUpdate(e.target.currentTime)}

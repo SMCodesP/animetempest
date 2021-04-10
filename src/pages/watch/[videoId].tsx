@@ -11,7 +11,6 @@ import Category from '../../entities/Category'
 import { ThemeContext } from 'styled-components'
 import Loading from '../../components/Player/Loading'
 
-import { useSession } from 'next-auth/client'
 import Progress from '../../entities/Progress'
 import axios from 'axios'
 import { GetStaticProps, NextPage } from 'next'
@@ -183,31 +182,26 @@ const Watch: NextPage<{
 }> = ({ episode, episodes, category, nextEpisode }) => {
   const router = useRouter()
   const theme = useContext(ThemeContext)
-  const [session, loading] = useSession()
   const [loadingProgress, setLoadingProgress] = useState(true)
   const [initialProgress, setInitialProgress] = useState<Progress | null>(null)
 
   useEffect(() => {
-    if (session) {
-      ;(async () => {
-        try {
-          const { data } = await axios.get<Progress>(
-            `/api/episode/${episode.video_id}`
-          )
-          setInitialProgress(data)
-          setLoadingProgress(false)
-        } catch (error) {
-          setLoadingProgress(false)
-        }
-      })()
-    } else {
-      if (!loading) {
+    setInitialProgress(null)
+    setLoadingProgress(true)
+    ;(async () => {
+      try {
+        const { data } = await axios.get<Progress>(
+          `/api/episode/${episode.video_id}`
+        )
+        setInitialProgress(data)
+        setLoadingProgress(false)
+      } catch (error) {
         setLoadingProgress(false)
       }
-    }
-  }, [session, loading, episode])
+    })()
+  }, [episode])
 
-  if (router.isFallback || loadingProgress || loading) {
+  if (router.isFallback || loadingProgress) {
     return <Loading color={theme.tertiary} />
   }
 
