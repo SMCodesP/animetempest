@@ -159,7 +159,7 @@ export const ButtonWatch = styled.button`
 `
 
 export const Thumbnail = styled.img`
-  width: 50%;
+  width: 25vw;
   border-radius: 10px;
   box-shadow: 0 0 4px ${({ theme }) => theme.secundaryText};
   cursor: pointer;
@@ -170,5 +170,13 @@ export const Thumbnail = styled.img`
     filter: brightness(35%);
     box-shadow: 0 0 10px ${({ theme }) => theme.secundaryText};
     transform: scale(1.05);
+  }
+
+  @media(max-width: 750px) {
+    width: 30vw;
+  }
+
+  @media(max-width: 625px) {
+    width: 50vw;
   }
 `
