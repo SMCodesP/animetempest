@@ -53,7 +53,7 @@ const AnimeResume: React.FC<{
       <Image src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
       <ContainerCurtain>
       {(session && !loading) ? <MarkFavorite /> : <span />}
-        <Link href={`/anime/${anime.id}`}>
+        <Link prefetch={false} href={`/anime/${anime.id}`}>
           <a
             style={{
               width: '100%',
@@ -64,7 +64,7 @@ const AnimeResume: React.FC<{
                 padding: '5px 15px',
               }}
             >
-              <Link href={`/anime/${anime.id}`}>
+              <Link prefetch={false} href={`/anime/${anime.id}`}>
                 <a>{anime.category_name}</a>
               </Link>
             </More>

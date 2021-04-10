@@ -261,7 +261,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
               >
                 <ContainerListAnime>
                   {animes.slice(0, 10 * page).map((anime) => (
-                    <Link href={`/anime/${anime.id}`} key={anime.id}>
+                    <Link prefetch={false} href={`/anime/${anime.id}`} key={anime.id}>
                       <a>
                         <ItemAnime>
                           <Thumbnail

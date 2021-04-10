@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { BiPlayCircle } from 'react-icons/bi'
+import ImageNext from 'next/image'
 
 export const ContainerCurtain = styled.div`
   position: absolute;
@@ -46,9 +47,11 @@ export const ContainerAnime = styled.div`
   }
 `
 
-export const Image = styled.img`
+export const Image = styled(ImageNext).attrs({
+  width: 325,
+  height: 450,
+})`
   width: 100%;
-  height: 300px;
   margin: 0;
   user-select: none;
   transition: filter 0.2s, border-bottom-left-radius 0.2s, border-bottom-right-radius 0.2s;

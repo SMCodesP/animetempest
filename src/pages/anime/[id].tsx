@@ -154,7 +154,7 @@ const Anime: NextPage<{
               {(session) ? <MarkFavorite /> : <span />}
             </div>
             <AnimeDescription>{anime.category_description}</AnimeDescription>
-            <Link href={`/watch/${episodes[episodes.length - 1].video_id}`}>
+            <Link prefetch={false} href={`/watch/${episodes[episodes.length - 1].video_id}`}>
               <a style={{ width: 'fit-content' }}>
                 <ButtonWatch>Assistir online</ButtonWatch>
               </a>
@@ -163,7 +163,7 @@ const Anime: NextPage<{
         </ContainerInfoAnime>
         <ContainerListEpisodes>
           {episodes.map((episode) => (
-            <Link href={`/watch/${episode.video_id}`} key={`episode-${episode.video_id}`}>
+            <Link prefetch={false} href={`/watch/${episode.video_id}`} key={`episode-${episode.video_id}`}>
               <a>
                 <ContainerItemEpisode>
                   <EpisodeTitle>{episode.title.replace(anime.category_name, '')}</EpisodeTitle>

@@ -2,21 +2,23 @@ import { useContext, useState, useEffect } from 'react'
 import Head from 'next/head'
 import Error from 'next/error'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 
 import Episode from '../../entities/Episode'
 import api from '../../services/api'
 
-import { Container } from '../../shared/styles/watch'
 import Category from '../../entities/Category'
 import { ThemeContext } from 'styled-components'
 import Loading from '../../components/Player/Loading'
 
-import Player from '../../components/Player'
 import { useSession } from 'next-auth/client'
 import Progress from '../../entities/Progress'
 import axios from 'axios'
 import { GetStaticProps, NextPage } from 'next'
 import { PlayerProvider } from '../../contexts/PlayerContext'
+
+import { Container } from '../../shared/styles/watch'
+const Player = dynamic(() => import('../../components/Player'))
 
 const MiniPlayer: React.FC<{
   episode: Episode
