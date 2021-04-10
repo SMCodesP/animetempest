@@ -102,66 +102,72 @@ const MiniPlayer: React.FC<{
       videoId={episode.video_id}
       animeId={episode.category_id}
     >
-      <Container>
-        <Player
-          src={virtualQuality}
-          title={category.category_name}
-          subTitle={episode.title}
-          titleMedia={category.category_name}
-          extraInfoMedia={episode.title}
-          animeId={episode.category_id}
-          onChangeQuality={(
-            qualityId: 'locationhd' | 'locationsd' | 'location'
-          ) => {
-            setIsContinue(null)
-            setQuality(qualityId)
-            setVirtualQuality((state) => episode[qualityId] || state)
-          }}
-          qualities={[
-            episode.locationhd
-              ? {
-                  id: 'locationhd',
-                  nome: 'FullHD',
-                  playing: episode['locationhd'] === virtualQuality,
-                }
-              : null,
-            episode.locationsd
-              ? {
-                  id: 'locationsd',
-                  nome: 'HD',
-                  playing: episode['locationsd'] === virtualQuality,
-                }
-              : null,
-            episode.location
-              ? {
-                  id: 'location',
-                  nome: 'SD',
-                  playing: episode['location'] === virtualQuality,
-                }
-              : null,
-          ].filter((el) => el !== null)}
-          backButton={() => router.back()}
-          fullPlayer
-          autoPlay
-          startPosition={startVideoProgress}
-          dataNext={{
-            title: nextEpisode?.title || 'Não existe um próximo vídeo.',
-          }}
-          onNextClick={() => {
-            nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
-          }}
-          reprodutionList={episodes
-            .map((ep: any) => ({
-              nome: ep.title,
-              id: ep.video_id,
-              playing: ep.video_id === episode.video_id,
-            }))
-            .reverse()}
-          overlayEnabled={true}
-          autoControllCloseEnabled
-          fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
-        />
-      </Container>
+      <div style={{
+        width: '100%',
+        height: '100vh',
+        display: 'flex'
+      }}>
+        <Container>
+          <Player
+            src={virtualQuality}
+            title={category.category_name}
+            subTitle={episode.title}
+            titleMedia={category.category_name}
+            extraInfoMedia={episode.title}
+            animeId={episode.category_id}
+            onChangeQuality={(
+              qualityId: 'locationhd' | 'locationsd' | 'location'
+            ) => {
+              setIsContinue(null)
+              setQuality(qualityId)
+              setVirtualQuality((state) => episode[qualityId] || state)
+            }}
+            qualities={[
+              episode.locationhd
+                ? {
+                    id: 'locationhd',
+                    nome: 'FullHD',
+                    playing: episode['locationhd'] === virtualQuality,
+                  }
+                : null,
+              episode.locationsd
+                ? {
+                    id: 'locationsd',
+                    nome: 'HD',
+                    playing: episode['locationsd'] === virtualQuality,
+                  }
+                : null,
+              episode.location
+                ? {
+                    id: 'location',
+                    nome: 'SD',
+                    playing: episode['location'] === virtualQuality,
+                  }
+                : null,
+            ].filter((el) => el !== null)}
+            backButton={() => router.back()}
+            fullPlayer
+            autoPlay
+            startPosition={startVideoProgress}
+            dataNext={{
+              title: nextEpisode?.title || 'Não existe um próximo vídeo.',
+            }}
+            onNextClick={() => {
+              nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
+            }}
+            reprodutionList={episodes
+              .map((ep: any) => ({
+                nome: ep.title,
+                id: ep.video_id,
+                playing: ep.video_id === episode.video_id,
+              }))
+              .reverse()}
+            overlayEnabled={true}
+            autoControllCloseEnabled
+            fontFamily="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+          />
+        </Container>
+      </div>
     </PlayerProvider>
   ) : (
     <div />

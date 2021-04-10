@@ -19,14 +19,7 @@ export const StandyByInfo = styled.div<{
 
   section {
     margin: auto 0;
-    padding-top: 100px;
-    padding-left: 100px;
-
-    h3 {
-      color: ${({ theme }) => theme.text};
-      font-size: 1.1em;
-      margin-bottom: 5px;
-    }
+    align-self: center;
 
     h1 {
       font-weight: bold;
@@ -35,18 +28,47 @@ export const StandyByInfo = styled.div<{
       margin: 10px 0;
     }
 
+    h3 {
+      color: ${({ theme }) => theme.text};
+      font-size: 1.1em;
+      margin-bottom: 5px;
+    }
+
     h2 {
       color: ${(props) => props.secundaryColor};
       font-size: 20px;
       margin-top: -5px;
       font-weight: bold;
     }
+
+    @media(max-width: 730px) {
+      h1 {
+        font-size: 2.5em;
+      }
+      h2 {
+        font-size: 17px;
+      }
+      h3 {
+        font-size: 1em;
+      }
+    }
+
+    @media(max-width: 630px) {
+      h1 {
+        font-size: 1.75em;
+      }
+    }
+
+    @media(max-width: 580px) {
+      h1 {
+        font-size: 1.5em;
+      }
+    }
   }
 
   footer {
-    margin-top: auto;
-    margin-bottom: 50px;
-    margin-left: auto;
+    align-self: flex-end;
+    padding: 10px 0;
     text-transform: uppercase;
     color: ${({ theme }) => theme.text};
   }

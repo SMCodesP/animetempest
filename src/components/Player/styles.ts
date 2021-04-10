@@ -37,7 +37,7 @@ export const Container = styled.div<{
   }
 
   width: 100%;
-  height: 100%;
+  max-height: 100vh;
   position: relative;
   background: #000;
   overflow: hidden;
@@ -130,7 +130,6 @@ export const Controlls = styled.div<{
 }>`
   transform: ${(props) => (props.show ? 'scale(1)' : 'scale(1.2)')};
   ${(props) => !props.show && 'cursor: none;'}
-
   position: absolute;
   top: 0;
   width: 100%;
@@ -268,8 +267,6 @@ export const Controlls = styled.div<{
     transition: height 0.2s linear;
     border-radius: 5px;
     cursor: pointer;
-    -webkit-appearance: none;
-    -moz-appearance: none;
 
     &:focus {
       outline: none !important;
@@ -301,24 +298,40 @@ export const Controlls = styled.div<{
       box-sizing: none;
     }
 
-    &::-moz-range-thumb {
-      -webkit-appearance: none;
-      border: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: ${(props) => props.primaryColor};
-      cursor: pointer;
-
-      outline: none !important;
-      border-color: transparent;
-      border: 0 !important;
-      box-shadow: none !important;
-      box-sizing: none;
-    }
-
     &:hover {
       height: 6px;
+    }
+  }
+
+  @media(max-width: 1000px) {
+    & svg {
+      width: 70%;
+    }
+
+    .controlls {
+      margin: 10px 0;
+
+      .info-video {
+        font-size: 15px;
+      }
+    }
+  }
+
+  @media(max-width: 780px) {
+    & svg {
+      width: 70%;
+    }
+
+    .controlls {
+      margin: 10px 0;
+
+      .item-control {
+        margin: auto 5px;
+      }
+
+      .info-video {
+        display: none;
+      }
     }
   }
 `
@@ -444,6 +457,13 @@ export const IconPlayBackRate = styled.div`
     &:hover {
       opacity: 1;
       transform: scale(1.2);
+    }
+  }
+
+
+  @media(max-width: 1000px) {
+    & span {
+      font-size: 23px;
     }
   }
 `
