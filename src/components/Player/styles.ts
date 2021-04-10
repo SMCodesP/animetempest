@@ -37,7 +37,7 @@ export const Container = styled.div<{
   }
 
   width: 100%;
-  height: 100%;
+  max-height: 100vh;
   position: relative;
   background: #000;
   overflow: hidden;
@@ -122,6 +122,20 @@ export const ContainerMain = styled.div<{
     position: absolute;
     filter: brightness(70%);
   }
+
+  @media(max-width: 1000px) {
+    width: fit-content;
+    height: fit-content;
+    align-self: center;
+    flex: none;
+    position: relative;
+
+    & div {
+      position: relative;
+      width: fit-content;
+      height: fit-content;
+    }
+  }
 `
 
 export const Controlls = styled.div<{
@@ -130,7 +144,6 @@ export const Controlls = styled.div<{
 }>`
   transform: ${(props) => (props.show ? 'scale(1)' : 'scale(1.2)')};
   ${(props) => !props.show && 'cursor: none;'}
-
   position: absolute;
   top: 0;
   width: 100%;
@@ -268,8 +281,6 @@ export const Controlls = styled.div<{
     transition: height 0.2s linear;
     border-radius: 5px;
     cursor: pointer;
-    -webkit-appearance: none;
-    -moz-appearance: none;
 
     &:focus {
       outline: none !important;
@@ -301,24 +312,70 @@ export const Controlls = styled.div<{
       box-sizing: none;
     }
 
-    &::-moz-range-thumb {
-      -webkit-appearance: none;
-      border: none;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: ${(props) => props.primaryColor};
-      cursor: pointer;
-
-      outline: none !important;
-      border-color: transparent;
-      border: 0 !important;
-      box-shadow: none !important;
-      box-sizing: none;
-    }
-
     &:hover {
       height: 6px;
+    }
+  }
+
+  @media(max-width: 1000px) {
+    & svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .controlls {
+      margin: 10px 0;
+
+      .item-control {
+        margin: auto 10px;
+      }
+
+      .info-video {
+        font-size: 15px;
+      }
+    }
+  }
+
+  @media(max-width: 660px) {
+    .controlls {
+      .info-video {
+        display: none;
+      }
+    }
+  }
+
+  @media(max-width: 490px) {
+    .controlls {
+      margin: 5px 0;
+
+      .item-control {
+        margin: auto 10px;
+      }
+
+      .info-video {
+        display: none;
+      }
+    }
+  }
+
+  @media(max-width: 440px) {
+    & svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .controlls {
+      .item-control {
+        margin: auto 5px;
+      }
+    }
+  }
+
+  @media(max-width: 315px) {
+    .controlls {
+      .time-play {
+        display: none;
+      }
     }
   }
 `
@@ -445,6 +502,17 @@ export const IconPlayBackRate = styled.div`
       opacity: 1;
       transform: scale(1.2);
     }
+  }
+
+
+  @media(max-width: 1000px) {
+    & span {
+      font-size: 23px;
+    }
+  }
+
+  @media(max-width: 490px) {
+    display: none !important;
   }
 `
 

@@ -475,11 +475,11 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                     )}
                   </div>
 
-                  <div className="item-control">
+                  <div className="item-control time-play">
                     <FaUndoAlt size={28} onClick={() => progressChange.addOrRemove(-5)} />
                   </div>
 
-                  <div className="item-control">
+                  <div className="item-control time-play">
                     <FaRedoAlt size={28} onClick={() => progressChange.addOrRemove(5)} />
                   </div>
 

@@ -1,15 +1,17 @@
 import styled from 'styled-components';
 
 export const ContainerProvider = styled.div`
-  padding: 5px 0;
   display: grid;
-  width: 70%;
+  width: 100%;
   align-self: center;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
+  gap: 10px;
+  padding: 10px;
 
   & div button {
+    width: 100%;
     background: ${({ theme }) => theme.background};
-    padding: 10px 15px;
+    padding: 10px 0;
     border-radius: 5px;
     border: 1px solid ${({ theme }) => theme.text};
     color: ${({ theme }) => theme.text};

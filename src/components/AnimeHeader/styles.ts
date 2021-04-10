@@ -3,7 +3,7 @@ import NextImage from 'next/image'
 
 export const Container = styled.div`
   width: 100%;
-  height: 70vh;
+  min-height: 70vh;
   background: ${({ theme }) => theme.background};
   position: relative;
 `
@@ -94,18 +94,40 @@ export const Input = styled.input`
 export const ContainerAnime = styled.div`
   display: flex;
   justify-content: space-between;
-  position: absolute;
-  z-index: 2;
+  position: relative;
+  z-index: 999;
   padding: 5px 17.5% 75px 10%;
   width: 100%;
-  height: 60vh;
+  min-height: 60vh;
+
+  @media(max-width: 1000px) {
+    justify-content: center;
+    padding: 0;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 15px;
+  }
 `
 
-export const ContainerInfo = styled.div``
+export const ContainerInfo = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  @media(max-width: 1000px) {
+    justify-content: center;
+    align-items: center;
+  }
+`
 
 export const Title = styled.h1`
   font-size: 38px;
   padding-right: 25%;
+
+  @media(max-width: 1000px) {
+    padding: 0 25%;
+    text-align: center;
+  }
 `
 
 export const ButtonWatch = styled.button`
@@ -130,9 +152,14 @@ export const ButtonWatch = styled.button`
   &:hover {
     filter: brightness(60%);
   }
+
+  @media(max-width: 1000px) {
+    margin: 10px 0;
+  }
 `
 
 export const Thumbnail = styled.img`
+  width: 50%;
   border-radius: 10px;
   box-shadow: 0 0 4px ${({ theme }) => theme.secundaryText};
   cursor: pointer;

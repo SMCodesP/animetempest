@@ -1,6 +1,8 @@
 import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import Router from 'next/router'
+
 import { useContext } from 'react'
 import { FaHome } from 'react-icons/fa'
 import { ThemeContext } from 'styled-components'
@@ -29,6 +31,12 @@ const Profile: NextPage = () => {
   const theme = useContext(ThemeContext)
   const [session, loading] = useSession()
   const { favorites } = useProfile()
+
+  if (!session && !loading) {
+    Router.push({
+      pathname: '/api/auth/signin',
+    })
+  }
 
   return (
     <>
@@ -68,28 +76,19 @@ const Profile: NextPage = () => {
           </Header>
           <ProfileComponent>
             <HeadProfile>
-              {loading ? (
+              {loading || !session ? (
                 <Skeleton width={92} height={92} circle={true} />
               ) : (
                 <img src={String(session?.user.image || '')} alt="Seu avatar" />
               )}
               <div>
-                <Name>{loading ? <Skeleton width={148} /> : session?.user.name}</Name>
+                <Name>{loading || !session ? <Skeleton width={148} /> : session?.user.name}</Name>
                 <Description>
-                  {loading ? (
+                  {loading || !session ? (
                     <Skeleton width={100} />
                   ) : (
                     <>
                       <b>Favoritos »</b> {favorites.length}
-                    </>
-                  )}
-                </Description>
-                <Description>
-                  {loading ? (
-                    <Skeleton width={112} />
-                  ) : (
-                    <>
-                      <b>Completos »</b> 0
                     </>
                   )}
                 </Description>
