@@ -17,7 +17,7 @@ const AnimeResume: React.FC<{
         <Image src={`https://cdn.appanimeplus.tk/img/${episode.category_image}`} />
         <ContainerCurtain>
           <span />
-          <Link href={`/watch/${episode.video_id}`}>
+          <Link prefetch={false} href={`/watch/${episode.video_id}`}>
             <a
               style={{
                 alignSelf: 'center',
@@ -31,7 +31,7 @@ const AnimeResume: React.FC<{
               padding: '5px 15px',
             }}
           >
-            <Link href={`/anime/${episode.category_id}`}>
+            <Link prefetch={false} href={`/anime/${episode.category_id}`}>
               <a>{episode.title}</a>
             </Link>
           </More>

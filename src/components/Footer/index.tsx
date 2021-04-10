@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 import {
   Container,
   Author,
@@ -36,11 +34,9 @@ const Footer: React.FC = () => {
           <span>Não hospedamos nenhum vídeo em nossos servidores, apenas os indexamos.</span>
         </FooterContainer>
         <SocialNetworking>
-          <Link href="https://discord.gg/SDYmjZG89B">
-            <a>
-              <Discord title="Link para nosso discord" />
-            </a>
-          </Link>
+          <a about="_blank" href="https://discord.gg/SDYmjZG89B">
+            <Discord title="Link para nosso discord" />
+          </a>
         </SocialNetworking>
       </Container>
     </>

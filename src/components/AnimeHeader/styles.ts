@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import NextImage from 'next/image'
 
 export const Container = styled.div`
   width: 100%;
@@ -55,7 +56,10 @@ export const ContainerInput = styled.form`
   justify-content: flex-end;
 `
 
-export const Icon = styled.img`
+export const Icon = styled(NextImage).attrs({
+  width: 48,
+  height: 48
+})`
   width: 48px;
   border-radius: 24px;
   position: relative;
@@ -132,9 +136,11 @@ export const Thumbnail = styled.img`
   border-radius: 10px;
   box-shadow: 0 0 4px ${({ theme }) => theme.secundaryText};
   cursor: pointer;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: border-radius 0.4s, filter 0.4s, transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
 
   &:hover {
+    border-radius: 20px;
+    filter: brightness(35%);
     box-shadow: 0 0 10px ${({ theme }) => theme.secundaryText};
     transform: scale(1.05);
   }
