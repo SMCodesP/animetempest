@@ -32,7 +32,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
         rel="stylesheet"
       />
       <meta charSet="utf-8" />
-      <link rel="icon" href="/images/icons/icon.jpg" />
+      <link rel="icon" href="/images/icons/icon.png" />
       <meta name="googlebot" content="all" />
       <meta name="author" content="Samuel Pereira da Silva" />
       <meta name="keywords" content="Animes, mangas" />
@@ -40,7 +40,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta name="robots" content="index" />
       <meta name="og:site_name" content="OtakuTube" />
       <meta property="og:type" content="website" />
-      <meta property="og:image" content="/images/icons/icon.jpg" />
+      <meta property="og:image" content="/images/icons/icon.png" />
       <meta name="theme-color" content="#282a36" />
       <meta name="apple-mobile-web-app-status-bar-style" content="#282a36" />
       <meta name="msapplication-navbutton-color" content="#282a36" />
@@ -50,12 +50,12 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta name="application-name" content="OtakuTube" />
       <meta name="apple-mobile-web-app-title" content="OtakuTube" />
       <meta name="msapplication-starturl" content="/" />
-      <link rel="canonical" href="https://otakutube.vercel.app" />
+      <link rel="canonical" href="https://otakutube.tk" />
       <meta name="twitter:card" content="summary" />
-      <meta name="twitter:url" content="https://otakutube.vercel.app" />
-      <meta name="twitter:image" content="https://otakutube.vercel.app/images/icons/icon.jpg" />
-      <meta property="og:url" content="https://otakutube.vercel.app" />
-      <meta property="og:image" content="https://otakutube.vercel.app/images/icons/icon.jpg" />
+      <meta name="twitter:url" content="https://otakutube.tk" />
+      <meta name="twitter:image" content="/images/icons/icon.png" />
+      <meta property="og:url" content="https://otakutube.tk" />
+      <meta property="og:image" content="/images/icons/icon.png" />
       <script async src="https://arc.io/widget.min.js#APQSzg74"></script>
     </Head>
 

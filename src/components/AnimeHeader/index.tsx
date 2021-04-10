@@ -90,7 +90,7 @@ const AnimeHeader: React.FC<{
         </Wave>
       </HeaderWave>
       <Menu>
-        <Icon src="/images/icons/icon.jpg" />
+        <Icon src="/images/icons/icon.png" />
         <div style={{
           display: 'flex',
           gap: 15
