@@ -41,19 +41,33 @@ export const ContainerInfoAnime = styled.div`
     box-shadow: 2px 2px 15px ${({ theme }) => theme.secundaryText};
     transform: scale(1.075);
   }
+
+  @media(max-width: 750px) {
+    flex-direction: column;
+    align-items: center;
+  }
+`
+
+export const ContainerAnimeImage = styled.div`
+  height: fit-content;
+  width: fit-content;
 `
 
 export const AnimeImage = styled(Image)`
   border-radius: 15px;
   width: 268px;
-  height: fit-content;
 `
 
 export const AnimeInfo = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  margin-top: 25px;
   padding: 5px 25px;
+
+  @media(max-width: 750px) {
+    align-items: center;
+  }
 `
 
 export const AnimeTitle = styled.h1``
@@ -90,6 +104,22 @@ export const ContainerListEpisodes = styled.div`
   grid-template-columns: repeat(5, 1fr);
   gap: 15px;
   padding: 35px 20px;
+
+  @media(max-width: 1000px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @media(max-width: 850px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media(max-width: 750px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media(max-width: 440px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `
 
 export const EpisodeTitle = styled.span`
