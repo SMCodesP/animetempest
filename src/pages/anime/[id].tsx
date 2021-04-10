@@ -21,6 +21,7 @@ import {
   ContainerItemEpisode,
   EpisodeTitle,
   EpisodeImage,
+  ContainerAnimeImage,
 } from '../../shared/styles/anime'
 import { useContext, useState } from 'react'
 import { ThemeContext } from 'styled-components'
@@ -130,18 +131,13 @@ const Anime: NextPage<{
           <UserMenu />
         </div>
         <ContainerInfoAnime>
-          <div
-            style={{
-              height: 'fit-content',
-              width: '100%',
-            }}
-          >
+          <ContainerAnimeImage>
             <AnimeImage
               src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
               width={268}
               height={348}
             />
-          </div>
+          </ContainerAnimeImage>
           <AnimeInfo>
             <div
               style={{
@@ -170,7 +166,7 @@ const Anime: NextPage<{
                   <EpisodeImage
                     src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
                     width={170}
-                    height={280}
+                    height={290}
                   />
                 </ContainerItemEpisode>
               </a>
