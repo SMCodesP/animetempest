@@ -22,7 +22,15 @@ export const Container = styled.footer`
   left: 0;
   bottom: 0;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+
+  @media(max-width: 1000px) {
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 15px;
+    height: fit-content;
+    padding: 5px 0;
+  }
 `
 
 export const Author = styled.p`
@@ -48,17 +56,24 @@ export const FooterContainer = styled.div`
     font-size: 15px;
     color: ${({ theme }) => theme.tertiary};
   }
+
+  @media(max-width: 1000px) {
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+  }
 `
 
 export const SocialNetworking = styled.div`
-  flex: 1;
   padding: 15px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  @media (max-width: 680px) {
-    padding: 15px 15px 10px 15px;
+
+  @media(max-width: 1000px) {
+    width: fit-content;
+    padding: 0;
   }
 `
 
@@ -67,6 +82,14 @@ export const ProjectThis = styled(SocialNetworking)`
   left: 0;
   padding: 0;
   bottom: 0;
+
+  @media(max-width: 1000px) {
+    padding-top: 5px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    box-shadow: 0px -5px 8px -8px #000000;
+  }
 `
 
 export const Discord = styled(FaDiscord).attrs(() => ({
