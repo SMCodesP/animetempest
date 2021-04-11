@@ -10,7 +10,7 @@ export default interface PlayerProps {
   onTimeUpdate?: (...args: any) => void
   onEnded?: (...args: any) => void
   onErrorVideo?: (...args: any) => void
-  onNextClick?: (...args: any) => void
+  onNextClick?: string | null
   onClickItemListReproduction?: (...args: any) => void
   onCrossClick?: (...args: any) => void
   onChangeQuality?: (...args: any) => void

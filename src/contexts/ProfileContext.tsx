@@ -20,7 +20,6 @@ const ProfileProvider: React.FC = ({ children }) => {
       ;(async () => {
         try {
           const { data } = await axios.get('/api/favorites')
-          console.log(data)
           setFavorites(data)
         } catch (error) {
           console.error(error)

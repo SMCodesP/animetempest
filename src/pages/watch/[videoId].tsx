@@ -39,6 +39,14 @@ const MiniPlayer: React.FC<{
   const router = useRouter()
 
   useEffect(() => {
+    if (initialProgress) {
+      setStartVideoProgress(initialProgress.progress || 0)
+    } else {
+      setStartVideoProgress(0)
+    }
+  }, [initialProgress, loadingProgress])
+
+  useEffect(() => {
     if (quality) {
       localStorage.setItem('default_quality', quality)
     }
@@ -153,9 +161,7 @@ const MiniPlayer: React.FC<{
             dataNext={{
               title: nextEpisode?.title || 'Não existe um próximo vídeo.',
             }}
-            onNextClick={() => {
-              nextEpisode && router.push(`/watch/${nextEpisode?.video_id}`)
-            }}
+            onNextClick={nextEpisode ? `/watch/${nextEpisode?.video_id}` : null}
             onCrossClick={() => router.push('/')}
             reprodutionList={episodes
               .map((ep: any) => ({

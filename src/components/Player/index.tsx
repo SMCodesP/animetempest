@@ -62,7 +62,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   onCanPlay = () => {},
   onEnded = () => {},
   onErrorVideo = () => {},
-  onNextClick = () => {},
+  onNextClick = "",
   onClickItemListReproduction = () => {},
   onCrossClick = () => {},
   onChangeQuality = () => {},
@@ -101,7 +101,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const [controlBackEnd, setControlBackEnd] = useState(false)
   const [muted, setMuted] = useState(false)
   const [error, setError] = useState('')
-  const [waitingBuffer] = useState(false)
   const [showControls, setShowControls] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
   const [isComment, setIsComment] = useState(false)
@@ -114,7 +113,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const [showReproductionList, setShowReproductionList] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
   const [, setTimeoutDebounce] = useState<any | null>(null)
-
 
   const progressChange = {
     set: useDebouncedCallback((newProgress: number) => {
@@ -177,7 +175,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const startVideo = async () => {
     setDuration(videoComponent.current!.duration)
     setVideoReady(true)
-    // goToPosition(startPosition)
+
+    play.set(true)
+      // goToPosition(startPosition)
 
     if (onCanPlay) {
       onCanPlay()
@@ -211,14 +211,14 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
       setShowInfo(true)
 
-      if ((document as any)!.requestFullscreen) {
-        ;(document as any)!.requestFullscreen()
-      } else if ((document as any)!.webkitRequestFullscreen) {
-        ;(document as any)!.webkitRequestFullscreen()
-      } else if ((document as any)!.mozRequestFullScreen) {
-        ;(document as any)!.mozRequestFullScreen()
-      } else if ((document as any)!.msRequestFullscreen) {
-        ;(document as any)!.msRequestFullscreen()
+      if ((playerElement.current as any)!.requestFullscreen) {
+        ;(playerElement.current as any)!.requestFullscreen()
+      } else if ((playerElement.current as any)!.webkitRequestFullscreen) {
+        ;(playerElement.current as any)!.webkitRequestFullscreen()
+      } else if ((playerElement.current as any)!.mozRequestFullScreen) {
+        ;(playerElement.current as any)!.mozRequestFullScreen()
+      } else if ((playerElement.current as any)!.msRequestFullscreen) {
+        ;(playerElement.current as any)!.msRequestFullscreen()
       }
     },
     500,
@@ -287,7 +287,13 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   }
 
   useEffect(() => {
-    playing ? videoComponent.current?.play() : videoComponent.current?.pause()
+    ;(async () => {
+      try {
+        playing ? await videoComponent.current?.play() : videoComponent.current?.pause()
+      } catch (error) {
+        play.toggle()
+      }
+    })()
   }, [playing])
 
   useEffect(() => {
@@ -298,16 +304,20 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
   useEffect(() => {
     if (src) {
-      // setPlaying(false)
+      play.set(false)
       setVideoReady(false)
       setError('')
       setShowReproductionList(false)
       setShowDataNext(false)
-      if (videoComponent && videoComponent.current) {
-        videoComponent.current.currentTime = startPosition
-      }
     }
   }, [src])
+
+  useEffect(() => {
+    play.set(true)
+    if (videoComponent && videoComponent.current) {
+      videoComponent.current.currentTime = startPosition
+    }
+  }, [startPosition])
 
   useEffect(() => {
     setIsComment(false)
@@ -347,8 +357,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
         onKeyDown={keyboardInteractionCallback}
         tabIndex={0}
       >
-        {(!videoReady ||
-          (waitingBuffer && playing) || loading) &&
+        {(!videoReady || loading) &&
           !error &&
           !end && <Loading color={primaryColor} />}
 
@@ -378,7 +387,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
           ref={videoComponent}
           src={src}
           controls={false}
-          autoPlay={true}
           onClick={play.toggle}
           onLoadedData={startVideo}
           onTimeUpdate={(e: any) => onTimeUpdate(e.target.currentTime)}
@@ -387,7 +395,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
         />
 
         <Controlls
-          show={showControls === true && videoReady === true && !error}
+          show={showControls && videoReady && !error}
           primaryColor={primaryColor}
         >
           {backButton && (
@@ -585,22 +593,29 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                         <ItemNext>
                           <div>
                             <div className="title">Próximo Episódio</div>
-                            <div className="item" onClick={onNextClick}>
-                              <div className="bold">{dataNext.title}</div>
-                              {dataNext.description && (
-                                <div>{dataNext.description}</div>
-                              )}
-                            </div>
+                            <Link href={onNextClick}>
+                              <a>
+                                <div className="item">
+                                  <div className="bold">{dataNext.title}</div>
+                                  {dataNext.description && (
+                                    <div>{dataNext.description}</div>
+                                  )}
+                                </div>
+                              </a>
+                            </Link>
                           </div>
                           <div className="box-connector" />
                         </ItemNext>
                       )}
 
-                      <FaStepForward
-                        size={28}
-                        onClick={onNextClick}
-                        onMouseEnter={() => setShowDataNext(true)}
-                      />
+                      <Link href={onNextClick}>
+                        <a>
+                          <FaStepForward
+                            size={28}
+                            onMouseEnter={() => setShowDataNext(true)}
+                          />
+                        </a>
+                      </Link>
                     </div>
                   )}
 
