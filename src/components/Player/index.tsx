@@ -74,6 +74,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   overlayEnabled = true,
   autoControllCloseEnabled = true,
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
+  loading = false
 }) => {
   const {
     volume,
@@ -195,35 +196,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     setShowControlVolume(false)
     videoComponent.current!.muted = value
   }
-
-  const exitFullScreen = () => {
-    if (
-      (document as any).webkitIsFullScreen ||
-      (document as any).mozFullScreen ||
-      (document as any).msFullscreenElement ||
-      document.fullscreenElement
-    ) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen()
-      } else if ((document as any).msExitFullscreen) {
-        ;(document as any).msExitFullscreen()
-      } else if ((document as any).mozCancelFullScreen) {
-        ;(document as any).mozCancelFullScreen()
-      } else {
-        ;(document as any).webkitExitFullscreen()
-      }
-    }
-  }
-
-  const enterFullScreen = () => {
-    setShowInfo(true)
-    if ((playerElement.current as any)!.requestFullscreen) {
-      ;(playerElement.current as any)!.requestFullscreen()
-    } else if ((playerElement.current as any)!.webkitRequestFullscreen) {
-      ;(playerElement.current as any)!.webkitRequestFullscreen()
-    }
-  }
-
+  
   const chooseFullScreen = useDebouncedCallback(
     () => {
       if (
@@ -238,14 +211,14 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
       setShowInfo(true)
 
-      if ((playerElement.current as any)!.requestFullscreen) {
-        ;(playerElement.current as any)!.requestFullscreen()
-      } else if ((playerElement.current as any)!.webkitRequestFullscreen) {
-        ;(playerElement.current as any)!.webkitRequestFullscreen()
-      } else if ((playerElement.current as any)!.mozRequestFullScreen) {
-        ;(playerElement.current as any)!.mozRequestFullScreen()
-      } else if ((playerElement.current as any)!.msRequestFullscreen) {
-        ;(playerElement.current as any)!.msRequestFullscreen()
+      if ((document as any)!.requestFullscreen) {
+        ;(document as any)!.requestFullscreen()
+      } else if ((document as any)!.webkitRequestFullscreen) {
+        ;(document as any)!.webkitRequestFullscreen()
+      } else if ((document as any)!.mozRequestFullScreen) {
+        ;(document as any)!.mozRequestFullScreen()
+      } else if ((document as any)!.msRequestFullscreen) {
+        ;(document as any)!.msRequestFullscreen()
       }
     },
     500,
@@ -374,8 +347,8 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
         onKeyDown={keyboardInteractionCallback}
         tabIndex={0}
       >
-        {(videoReady === false ||
-          (waitingBuffer === true && playing === true)) &&
+        {(!videoReady ||
+          (waitingBuffer && playing) || loading) &&
           !error &&
           !end && <Loading color={primaryColor} />}
 
@@ -426,7 +399,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
             </div>
           )}
 
-          {videoReady && !error && !showInfo && (
+          {videoReady && !error && !showInfo && !loading && (
             <ContainerMain
               show={showControls}
               onDoubleClick={chooseFullScreen}
@@ -757,10 +730,10 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
                   <div className="item-control">
                     {fullscreen === false && (
-                      <FaExpand size={28} onClick={enterFullScreen} />
+                      <FaExpand size={28} onClick={chooseFullScreen} />
                     )}
                     {fullscreen === true && (
-                      <FaCompress size={28} onClick={exitFullScreen} />
+                      <FaCompress size={28} onClick={chooseFullScreen} />
                     )}
                   </div>
                 </div>

@@ -24,4 +24,5 @@ export default interface PlayerProps {
   qualities: Array<any>
   overlayEnabled: boolean
   autoControllCloseEnabled: boolean
+  loading?: boolean
 }

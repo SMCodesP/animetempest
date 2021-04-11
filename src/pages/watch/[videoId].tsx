@@ -25,7 +25,8 @@ const MiniPlayer: React.FC<{
   category: Category
   initialProgress: Progress | null
   nextEpisode: Episode | null
-}> = ({ episode, category, episodes, initialProgress, nextEpisode }) => {
+  loadingProgress: boolean
+}> = ({ episode, category, episodes, loadingProgress, initialProgress, nextEpisode }) => {
   const theme = useContext(ThemeContext)
   const [quality, setQuality] = useState<
     'locationhd' | 'locationsd' | 'location' | ''
@@ -108,6 +109,7 @@ const MiniPlayer: React.FC<{
       }}>
         <Container>
           <Player
+            loading={loadingProgress}
             src={virtualQuality}
             title={category.category_name}
             subTitle={episode.title}
@@ -125,7 +127,7 @@ const MiniPlayer: React.FC<{
               episode.locationhd
                 ? {
                     id: 'locationhd',
-                    nome: 'FullHD',
+                    nome: 'Full HD',
                     playing: episode['locationhd'] === virtualQuality,
                   }
                 : null,
@@ -201,7 +203,7 @@ const Watch: NextPage<{
     })()
   }, [episode])
 
-  if (router.isFallback || loadingProgress) {
+  if (router.isFallback) {
     return <Loading color={theme.tertiary} />
   }
 
@@ -242,6 +244,7 @@ const Watch: NextPage<{
         episodes={episodes}
         initialProgress={initialProgress}
         category={category}
+        loadingProgress={loadingProgress}
       />
     </>
   )
