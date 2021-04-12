@@ -6,6 +6,7 @@ export const ContainerUser = styled.a`
   height: 38px;
   border-radius: 50%;
   background: ${({ theme }) => theme.background};
+  box-shadow: 0 0 3px ${({ theme }) => theme.secundaryBackground};
   z-index: 99;
   display: flex;
   justify-content: center;

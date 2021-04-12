@@ -34,11 +34,13 @@ import UserMenu from '../../components/UserMenu'
 import { useProfile } from '../../contexts/ProfileContext'
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
 import { useSession } from 'next-auth/client'
+import AnimeResumeList from '../../components/AnimeResumeList'
 
 const Anime: NextPage<{
   anime: Category
   episodes: Episode[]
-}> = ({ anime, episodes }) => {
+  animesRecommended: Category[]
+}> = ({ anime, episodes, animesRecommended }) => {
   const theme = useContext(ThemeContext)
   const router = useRouter()
   const [session] = useSession()
@@ -173,6 +175,12 @@ const Anime: NextPage<{
             </Link>
           ))}
         </ContainerListEpisodes>
+        <h2 style={{
+          fontSize: 32,
+          marginTop: 15,
+          fontWeight: 'bold'
+        }}>Recomendados</h2>
+        <AnimeResumeList animes={animesRecommended} />
       </Container>
       <Footer />
     </>
@@ -198,11 +206,17 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       console.log(episodes)
       throw new Error('Episodes not found')
     }
+    let animesRecommended: Category[] | null = null
+
+    if (anime.category_genres) {
+      animesRecommended = await api.getCategory(anime.category_genres.split(',')[0].trim())
+    }
 
     return {
       props: {
         anime,
         episodes,
+        animesRecommended: animesRecommended?.sort((a, b) => Number(b.id) - Number(a.id)).slice(0, 20) || []
       },
       revalidate: 300,
     }

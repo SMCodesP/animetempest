@@ -1,6 +1,4 @@
 import React from 'react'
-import Anime from '../../entities/Anime'
-import Video from '../../entities/Video'
 
 import AnimeResume from '../AnimeResume'
 
@@ -8,8 +6,10 @@ import Carousel from 'react-multi-carousel'
 
 import 'react-multi-carousel/lib/styles.css'
 
+import Category from '../../entities/Category'
+
 const AnimeResumeList: React.FC<{
-  animes: Anime[] | Video[]
+  animes: Category[]
 }> = ({ animes }) => {
   return (
     <Carousel
@@ -31,11 +31,11 @@ const AnimeResumeList: React.FC<{
         },
       }}
       deviceType="desktop"
-      infinite={true}
-      ssr
+      infinite={false}
+      ssr={true}
     >
-      {(animes as any).map((anime: any) => (
-        <AnimeResume anime={anime} key={`image-${anime.id || anime.video_id}`} />
+      {animes.map((anime) => (
+        <AnimeResume anime={anime} key={`image-${anime.id}`} />
       ))}
     </Carousel>
   )

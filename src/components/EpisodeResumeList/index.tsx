@@ -32,7 +32,7 @@ const EpisodeResumeList: React.FC<{
       }}
       deviceType="desktop"
       ssr={true}
-      infinite={true}
+      infinite={false}
     >
       {episodes.map((episode) => (
         <EpisodeResume episode={episode} key={`image-${episode.video_id}`} />

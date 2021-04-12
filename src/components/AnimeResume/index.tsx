@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { useContext, useState } from 'react'
-import Anime from '../../entities/Anime'
 
 import { ThemeContext } from 'styled-components'
 
@@ -10,8 +9,10 @@ import { useProfile } from '../../contexts/ProfileContext'
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
 import { useSession } from 'next-auth/client'
 
+import Category from '../../entities/Category'
+
 const AnimeResume: React.FC<{
-  anime: Anime
+  anime: Category
 }> = ({ anime }) => {
   const theme = useContext(ThemeContext)
   const { toggleFavorite, isFavorite } = useProfile()
