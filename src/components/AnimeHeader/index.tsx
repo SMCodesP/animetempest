@@ -129,7 +129,11 @@ const AnimeHeader: React.FC<{
               </Link>
             </div>
           </ContainerInfo>
-          <Thumbnail src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
+          <Link href={`/anime/${anime.id}`}>
+            <a>
+              <Thumbnail src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
+            </a>
+          </Link>
         </ContainerAnime>
       )}
     </Container>

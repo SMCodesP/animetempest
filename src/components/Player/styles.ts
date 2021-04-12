@@ -138,11 +138,11 @@ export const ContainerMain = styled.div<{
   }
 `
 
+// transform: ${(props) => (props.show ? 'scale(1)' : 'scale(1.2)')};
 export const Controlls = styled.div<{
   show: boolean
   primaryColor: string
 }>`
-  transform: ${(props) => (props.show ? 'scale(1)' : 'scale(1.2)')};
   ${(props) => !props.show && 'cursor: none;'}
   position: absolute;
   top: 0;
@@ -152,7 +152,8 @@ export const Controlls = styled.div<{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.2s ease-out;
+  transition: all .5s;
+  opacity: ${(props) => (props.show ? 1 : 0)};
 
   padding: 10px;
   color: ${({ theme }) => theme.text};
@@ -169,6 +170,7 @@ export const Controlls = styled.div<{
   );
 
   & * {
+    transition: opacity .5s;
     opacity: ${(props) => (props.show ? 1 : 0)};
   }
 
@@ -560,30 +562,25 @@ export const ItemPlaybackRate = styled(ItemControllBar)`
   }
 `
 
-export const ItemNext = styled(ItemControllBar)`
+export const ItemNextOrPrevious = styled(ItemControllBar)`
   & > div:first-child {
     background: ${({ theme }) => theme.secundaryBackground};
     display: flex;
     flex-direction: column;
-    border-radius: 5px;
-
-    .title {
-      font-size: 18px;
-      font-weight: bold;
-      padding: 10px;
-      margin: 0;
-    }
+    border-radius: 10px;
 
     .item {
+      border-radius: 10px;
       background: ${({ theme }) => theme.background};
       display: flex;
       flex-direction: column;
       font-size: 14px;
       padding: 10px;
       cursor: pointer;
-      transition: all 0.2s ease-out;
+      transition: border-radius .2s, background .2s;
 
       &:hover {
+        border-radius: 5px;
         background: ${({ theme }) => theme.secundaryBackground};
       }
     }

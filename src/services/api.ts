@@ -48,6 +48,12 @@ export default {
     )
     return data && data[0]
   },
+  previousEpisode: async (episode_id: string, anime_id: string) => {
+    const { data } = await api.get<Episode[] | null>(
+      `/api-animesbr-10.php?episodios=${episode_id}&catid=${anime_id}&previous`
+    )
+    return data && data[0]
+  },
   searchAnime: async (query: string, category?: string) => {
     const { data } = await axios.get<Category[]>(
       `/api/search?query=${query}${category ? `&category=${category}` : ''}`

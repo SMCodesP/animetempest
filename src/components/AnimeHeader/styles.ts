@@ -159,7 +159,7 @@ export const ButtonWatch = styled.button`
 `
 
 export const Thumbnail = styled.img`
-  width: 25vw;
+  width: 17.5vw;
   border-radius: 10px;
   box-shadow: 0 0 4px ${({ theme }) => theme.secundaryText};
   cursor: pointer;

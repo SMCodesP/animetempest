@@ -10,7 +10,6 @@ export default interface PlayerProps {
   onTimeUpdate?: (...args: any) => void
   onEnded?: (...args: any) => void
   onErrorVideo?: (...args: any) => void
-  onNextClick?: string | null
   onClickItemListReproduction?: (...args: any) => void
   onCrossClick?: (...args: any) => void
   onChangeQuality?: (...args: any) => void
@@ -19,7 +18,16 @@ export default interface PlayerProps {
   autoPlay: boolean
   animeId: string
   startPosition: number
-  dataNext: any
+  dataNext?: {
+    title: string
+    uri: string
+    description?: string
+  } | null
+  dataPrevious?: {
+    title: string
+    uri: string
+    description?: string
+  } | null
   reprodutionList: Array<any>
   qualities: Array<any>
   overlayEnabled: boolean

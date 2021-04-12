@@ -20,6 +20,7 @@ import {
   FaVolumeMute,
   FaArrowLeft,
   FaExpand,
+  FaStepBackward,
   FaStepForward,
   FaCog,
   FaClone,
@@ -35,7 +36,7 @@ import {
   VolumeControll,
   ItemPlaybackRate,
   IconPlayBackRate,
-  ItemNext,
+  ItemNextOrPrevious,
   ItemListReproduction,
   ItemListQuality,
   ContainerMain,
@@ -62,12 +63,12 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   onCanPlay = () => {},
   onEnded = () => {},
   onErrorVideo = () => {},
-  onNextClick = "",
   onClickItemListReproduction = () => {},
   onCrossClick = () => {},
   onChangeQuality = () => {},
   startPosition = 0,
-  dataNext = {},
+  dataNext,
+  dataPrevious,
   reprodutionList = [],
   qualities = [],
   playbackRateEnable = true,
@@ -109,34 +110,32 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const [showControlVolume, setShowControlVolume] = useState(false)
   const [showQuality, setShowQuality] = useState(false)
   const [showDataNext, setShowDataNext] = useState(false)
+  const [showDataPrevious, setShowDataPrevious] = useState(false)
   const [showPlaybackRate, setShowPlaybackRate] = useState(false)
   const [showReproductionList, setShowReproductionList] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
   const [, setTimeoutDebounce] = useState<any | null>(null)
 
   const progressChange = {
-    set: useDebouncedCallback((newProgress: number) => {
-      if (videoComponent.current) {
-        play.set(false)
-        const newTime = Math.min(Math.max(newProgress, 0), duration)
-        setProgress(newTime)
-        videoComponent.current.currentTime = newTime
-        play.set(true)
-      }
-    }, 100, {
-      maxWait: 100
-    }),
-    addOrRemove: useDebouncedCallback((newProgress: number) => {
-      if (videoComponent.current) {
-        play.set(false)
-        const newTime = Math.min(Math.max(progress + newProgress, 0), duration)
-        setProgress(newTime)
-        videoComponent.current.currentTime = newTime
-        play.set(true)
-      }
-    }, 100, {
-      maxWait: 100
-    }),
+    set: (newProgress: number) => {
+      setProgress(() => {
+        if (videoComponent.current) {
+          const newTime = Math.min(Math.max(newProgress, 0), duration)
+          videoComponent.current.currentTime = newTime
+          return videoComponent.current.currentTime
+        }
+        return 0
+      })
+    },
+    addOrRemove: (newProgress: number) => {
+      setProgress(() => {
+        if (videoComponent.current) {
+          videoComponent.current.currentTime += newProgress
+          return videoComponent.current.currentTime
+        }
+        return 0
+      })
+    },
   }
 
   const playbackRateOptions = [
@@ -584,16 +583,49 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                     </div>
                   )}
 
-                  {onNextClick && (
+                  {dataPrevious && (
+                    <div
+                      className="item-control"
+                      onMouseLeave={() => setShowDataPrevious(false)}
+                    >
+                      {showDataPrevious && dataPrevious.title && (
+                        <ItemNextOrPrevious>
+                          <div>
+                            <Link href={dataPrevious.uri}>
+                              <a>
+                                <div className="item">
+                                  <div className="bold">{dataPrevious.title}</div>
+                                  {dataPrevious.description && (
+                                    <div>{dataPrevious.description}</div>
+                                  )}
+                                </div>
+                              </a>
+                            </Link>
+                          </div>
+                          <div className="box-connector" />
+                        </ItemNextOrPrevious>
+                      )}
+
+                      <Link href={dataPrevious.uri}>
+                        <a>
+                          <FaStepBackward
+                            size={28}
+                            onMouseEnter={() => setShowDataPrevious(true)}
+                          />
+                        </a>
+                      </Link>
+                    </div>
+                  )}
+
+                  {dataNext && (
                     <div
                       className="item-control"
                       onMouseLeave={() => setShowDataNext(false)}
                     >
-                      {showDataNext === true && dataNext.title && (
-                        <ItemNext>
+                      {showDataNext && dataNext.title && (
+                        <ItemNextOrPrevious>
                           <div>
-                            <div className="title">Próximo Episódio</div>
-                            <Link href={onNextClick}>
+                            <Link href={dataNext.uri}>
                               <a>
                                 <div className="item">
                                   <div className="bold">{dataNext.title}</div>
@@ -605,10 +637,10 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                             </Link>
                           </div>
                           <div className="box-connector" />
-                        </ItemNext>
+                        </ItemNextOrPrevious>
                       )}
 
-                      <Link href={onNextClick}>
+                      <Link href={dataNext.uri}>
                         <a>
                           <FaStepForward
                             size={28}

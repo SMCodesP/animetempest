@@ -25,8 +25,9 @@ const MiniPlayer: React.FC<{
   category: Category
   initialProgress: Progress | null
   nextEpisode: Episode | null
+  previousEpisode: Episode | null
   loadingProgress: boolean
-}> = ({ episode, category, episodes, loadingProgress, initialProgress, nextEpisode }) => {
+}> = ({ episode, category, episodes, loadingProgress, initialProgress, nextEpisode, previousEpisode }) => {
   const theme = useContext(ThemeContext)
   const [quality, setQuality] = useState<
     'locationhd' | 'locationsd' | 'location' | ''
@@ -135,7 +136,7 @@ const MiniPlayer: React.FC<{
               episode.locationhd
                 ? {
                     id: 'locationhd',
-                    nome: 'Full HD',
+                    nome: 'FULL HD',
                     playing: episode['locationhd'] === virtualQuality,
                   }
                 : null,
@@ -158,10 +159,14 @@ const MiniPlayer: React.FC<{
             fullPlayer
             autoPlay
             startPosition={startVideoProgress}
-            dataNext={{
-              title: nextEpisode?.title || 'Não existe um próximo vídeo.',
+            dataNext={nextEpisode && {
+              title: nextEpisode.title,
+              uri: `/watch/${nextEpisode.video_id}`
             }}
-            onNextClick={nextEpisode ? `/watch/${nextEpisode?.video_id}` : null}
+            dataPrevious={previousEpisode && {
+              title: previousEpisode.title,
+              uri: `/watch/${previousEpisode.video_id}`
+            }}
             onCrossClick={() => router.push('/')}
             reprodutionList={episodes
               .map((ep: any) => ({
@@ -187,7 +192,8 @@ const Watch: NextPage<{
   episodes: Episode[]
   category: Category
   nextEpisode: Episode | null
-}> = ({ episode, episodes, category, nextEpisode }) => {
+  previousEpisode: Episode | null
+}> = ({ episode, episodes, category, nextEpisode, previousEpisode }) => {
   const router = useRouter()
   const theme = useContext(ThemeContext)
   const [loadingProgress, setLoadingProgress] = useState(true)
@@ -246,11 +252,12 @@ const Watch: NextPage<{
       </Head>
       <MiniPlayer
         episode={episode}
-        nextEpisode={nextEpisode}
         episodes={episodes}
         initialProgress={initialProgress}
         category={category}
         loadingProgress={loadingProgress}
+        nextEpisode={nextEpisode}
+        previousEpisode={previousEpisode}
       />
     </>
   )
@@ -278,6 +285,10 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       episode.video_id,
       episode.category_id
     )
+    const previousEpisode = await api.previousEpisode(
+      episode.video_id,
+      episode.category_id
+    )
 
     if (!category || !episodes)
       throw `Category and episodes of ${params?.videoId} not found.`
@@ -288,6 +299,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         category,
         episodes,
         nextEpisode,
+        previousEpisode
       },
       revalidate: 300,
     }
