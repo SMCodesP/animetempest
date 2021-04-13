@@ -158,3 +158,29 @@ export const Limit = styled.p`
   text-align: end;
   transition: 0.5s color;
 `
+
+export const InputDisabled = styled.div`
+  background: ${({ theme }) => theme.background};
+  border: 0;
+  width: 100%;
+  padding: 15px 10px 40px 10px;
+  color: ${({ theme }) => theme.text};
+  font-size: 16px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  outline: 0;
+  resize: none;
+  position: relative;
+  color: ${({ theme }) => darken(0.25, theme.text)};
+
+  & a {
+    color: ${({ theme }) => theme.secundaryText};
+    font-weight: bold;
+    filter: brightness(150%);
+    transition: filter 0.2s;
+  }
+
+  & a:hover {
+    filter: brightness(200%);
+  }
+`

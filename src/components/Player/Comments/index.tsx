@@ -22,10 +22,12 @@ import {
   Error as ErrorComponent,
   ContainerCommentDetail,
   Limit,
+  InputDisabled,
 } from './styles'
 import axios from 'axios'
-import { useSession } from 'next-auth/client'
+import { signIn, useSession } from 'next-auth/client'
 import Markdown from '../../Markdown'
+import Link from 'next/link'
 
 // Regex Verify HH:MM:SS: /^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/
 
@@ -138,10 +140,10 @@ const Comments: React.FC<{
             </CommentsEmpty>
           )}
         </ContainerCommentBody>
-        {session && (
-          <ContainerInput>
-            <ContainerCommentDetail>
-              {!!error && <ErrorComponent>{error}</ErrorComponent>}
+        <ContainerInput>
+          <ContainerCommentDetail>
+            {!!error && <ErrorComponent>{error}</ErrorComponent>}
+            {session ? (
               <Limit
                 style={{
                   color:
@@ -154,7 +156,11 @@ const Comments: React.FC<{
               >
                 {comment.length}/512
               </Limit>
-            </ContainerCommentDetail>
+            ) : (
+              <span />
+            )}
+          </ContainerCommentDetail>
+          {session ? (
             <InputComment
               name="comment"
               placeholder={
@@ -173,8 +179,23 @@ const Comments: React.FC<{
               onSubmit={handleSubmit}
               onKeyDown={handleKeydown}
             ></InputComment>
-          </ContainerInput>
-        )}
+          ) : (
+            <InputDisabled>
+              Você não pode comentar sem estar logado, clique{' '}
+              <Link href="/api/auth/signin">
+                <a
+                  onClick={(e) => {
+                    e.preventDefault()
+                    signIn()
+                  }}
+                >
+                  aqui
+                </a>
+              </Link>{' '}
+              para logar
+            </InputDisabled>
+          )}
+        </ContainerInput>
       </Container>
     </div>
   )
