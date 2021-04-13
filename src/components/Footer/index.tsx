@@ -18,9 +18,7 @@ const Footer: React.FC = () => {
             style={{
               alignSelf: 'flex-end',
             }}
-          >
-            Desenvolvido por <a href="https://smcodes.tk">SMCodes</a>
-          </Author>
+          />
         </ProjectThis>
         <FooterContainer>
           <Author
