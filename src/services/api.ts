@@ -20,7 +20,6 @@ export default {
         }
       }
     )
-    console.log(data)
     return data
   },
   getEpisode: async (episode: string) => {
