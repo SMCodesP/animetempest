@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
 import { Provider } from 'next-auth/client'
+import NextNProgress from 'nextjs-progressbar';
 
 import { GlobalStyle } from '../shared/styles/global'
 
@@ -59,6 +60,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta property="og:image" content="/images/icons/icon.png" />
     </Head>
 
+    <NextNProgress height={2} color="#988BC7" />
     <Provider
       options={{
         clientMaxAge: 0,
