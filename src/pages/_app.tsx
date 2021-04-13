@@ -11,6 +11,7 @@ import { ProfileProvider } from '../contexts/ProfileContext'
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
   <>
     <Head>
+      <script async src="https://arc.io/widget.min.js#APQSzg74"></script>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
       <link
@@ -56,7 +57,6 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta name="twitter:image" content="/images/icons/icon.png" />
       <meta property="og:url" content="https://otakutube.tk" />
       <meta property="og:image" content="/images/icons/icon.png" />
-      <script async src="https://arc.io/widget.min.js#APQSzg74"></script>
     </Head>
 
     <Provider

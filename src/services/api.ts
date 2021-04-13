@@ -13,7 +13,12 @@ export default {
   ...api,
   getCategory: async (category: string) => {
     const { data } = await api.get<Category[]>(
-      `/api-animesbr-10.php?categoria=${category}`
+      `/api-animesbr-10.php`,
+      {
+        params: {
+          categoria: category
+        }
+      }
     )
     return data
   },
