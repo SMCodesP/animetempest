@@ -21,11 +21,11 @@
   "homepage": "https://github.com/SMCodesP/otakutube#readme",
   "dependencies": {
     "axios": "^0.21.1",
+    "date-fns": "^2.21.0",
     "firebase": "^8.3.2",
     "firebase-admin": "^9.5.0",
     "framer-motion": "^4.0.3",
     "lodash.debounce": "^4.0.8",
-    "luxon": "^1.26.0",
     "next": "^10.0.9",
     "next-auth": "^3.13.3",
     "next-connect": "^0.10.1",

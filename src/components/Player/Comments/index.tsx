@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
 
 import { ThemeContext } from 'styled-components'
-import { DateTime } from 'luxon'
+
+import { formatRelative } from 'date-fns'
 
 import { FiX } from 'react-icons/fi'
 
@@ -28,6 +29,7 @@ import axios from 'axios'
 import { signIn, useSession } from 'next-auth/client'
 import Markdown from '../../Markdown'
 import Link from 'next/link'
+import locale from '../../../utils/locale'
 
 // Regex Verify HH:MM:SS: /^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/
 
@@ -124,8 +126,12 @@ const Comments: React.FC<{
                     >
                       <Name>{comment.author.name}</Name>
                       <DateComponent>
-                        {DateTime.fromMillis(comment.timestamp).toFormat(
-                          'HH:mm - dd/mm/yy'
+                        {formatRelative(
+                          new Date(comment.timestamp),
+                          new Date(),
+                          {
+                            locale
+                          }
                         )}
                       </DateComponent>
                     </div>
