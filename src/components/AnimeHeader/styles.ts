@@ -134,7 +134,7 @@ export const ButtonWatch = styled.button`
   margin: 25px 30px;
   padding: 10px 0;
   width: 100%;
-  background: ${({ theme }) => theme.tertiary};
+  background: ${({ theme }) => theme.secundary};
   border: 0;
   border-radius: 7.5px;
   cursor: pointer;
@@ -142,7 +142,7 @@ export const ButtonWatch = styled.button`
   justify-content: center;
   align-items: center;
   gap: 10px;
-  color: ${({ theme }) => theme.text};
+  color: ${({ theme }) => theme.number};
   font-weight: bold;
   font-size: 18px;
   outline: none;

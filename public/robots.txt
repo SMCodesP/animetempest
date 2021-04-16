@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://animetempest.net
+Host: https://www.animetempest.net
 
 # Sitemaps
-Sitemap: https://animetempest.net/sitemap.xml
+Sitemap: https://www.animetempest.net/sitemap.xml

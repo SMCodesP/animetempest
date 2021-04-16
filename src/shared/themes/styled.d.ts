@@ -15,6 +15,8 @@ declare module 'styled-components' {
     fifthText: string
     inverseText: string
 
+    number: string
+
     light: string
   }
 }
