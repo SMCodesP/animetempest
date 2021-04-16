@@ -72,7 +72,7 @@ export const AnimeInfo = styled.div`
 
 export const AnimeTitle = styled.h1``
 
-export const AnimeDescription = styled.p`
+export const AnimeDescription = styled.div`
   text-indent: 1em;
   font-size: 17px;
   padding: 5px 15px;
@@ -166,4 +166,17 @@ export const ContainerItemEpisode = styled.div`
   &:hover ${EpisodeImage} {
     filter: brightness(50%) blur(3px);
   }
+`
+
+export const SearchInput = styled.input`
+  margin-left: 20px;
+  margin-top: 35px;
+  background: ${({theme}) => theme.secundaryBackground};
+  border-radius: 8px 20px;
+  border: 0;
+  border-bottom: 2px solid ${({theme}) => theme.tertiary};
+  padding: 10px 45px 10px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  color: ${({theme}) => theme.number};
 `
