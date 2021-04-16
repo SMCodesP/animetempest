@@ -1,4 +1,4 @@
 module.exports = {
-  siteUrl: 'https://animetempest.net',
+  siteUrl: 'https://www.animetempest.net',
   generateRobotsTxt: true
 }
