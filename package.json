@@ -4,9 +4,10 @@
   "description": "",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "build": "next build",
+    "postbuild": "next-sitemap"
   },
   "repository": {
     "type": "git",
@@ -64,6 +65,7 @@
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "next-sitemap": "^1.6.25"
   }
 }
