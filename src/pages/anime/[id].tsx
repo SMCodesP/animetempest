@@ -4,8 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { useContext, useEffect, useState } from 'react'
-import { IoIosArrowRoundBack } from 'react-icons/io'
-import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
+import { FaHome, FaBookmark, FaRegBookmark } from 'react-icons/fa'
 
 import { ThemeContext } from 'styled-components'
 
@@ -167,10 +166,14 @@ const Anime: NextPage<{
             justifyContent: 'space-between',
           }}
         >
-          <Back onClick={handleBack}>
-            <IoIosArrowRoundBack size={46} color={theme.tertiary} />
-            Voltar
-          </Back>
+          <Link href="/" prefetch={true}>
+            <a>
+              <Back onClick={handleBack}>
+                <FaHome size={46} color={theme.tertiary} />
+                Página Inicial
+              </Back>
+            </a>
+          </Link>
           <UserMenu />
         </div>
         <ContainerInfoAnime>
