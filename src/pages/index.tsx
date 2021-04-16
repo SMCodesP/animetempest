@@ -1,6 +1,6 @@
 import { NextPage } from 'next'
+import dynamic from 'next/dynamic'
 
-import AnimeResumeList from '../components/AnimeResumeList'
 import Video from '../entities/Video'
 
 import api from '../services/api'
@@ -9,10 +9,12 @@ import { Container } from '../shared/styles/home'
 import AnimeHeader from '../components/AnimeHeader'
 import Category from '../entities/Category'
 import Footer from '../components/Footer'
-import EpisodeResumeList from '../components/EpisodeResumeList'
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import axios from 'axios'
+
+const AnimeResumeList = dynamic(() => import('../components/AnimeResumeList'))
+const EpisodeResumeList = dynamic(() => import('../components/EpisodeResumeList'))
 
 const Home: NextPage<{
   animesLatest: Video[]
@@ -86,7 +88,15 @@ const Home: NextPage<{
             >
               Lançamentos
             </h1>
-            <EpisodeResumeList episodes={animesLatest} />
+            {animesLatest.length > 0 ? (
+              <EpisodeResumeList episodes={animesLatest} />
+            ) : (
+              <h2 
+                style={{
+                  margin: '-5px 25px',
+                }}
+              >Nenhum anime em lançamento encontrado</h2>
+            )}
           </div>
           <div
             style={{
@@ -100,7 +110,15 @@ const Home: NextPage<{
             >
               Populares
             </h1>
-            <AnimeResumeList animes={animesPopular} />
+            {animesPopular.length > 0 ? (
+              <AnimeResumeList animes={animesPopular} />
+            ) : (
+              <h2 
+                style={{
+                  margin: '-5px 25px',
+                }}
+              >Nenhum anime popular encontrado</h2>
+            )}
           </div>
         </Container>
       </div>

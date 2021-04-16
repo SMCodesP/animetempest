@@ -9,6 +9,8 @@ import { GlobalStyle } from '../shared/styles/global'
 import themes from '../shared/themes'
 import { ProfileProvider } from '../contexts/ProfileContext'
 
+import 'react-multi-carousel/lib/styles.css'
+
 const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
   <>
     <Head>

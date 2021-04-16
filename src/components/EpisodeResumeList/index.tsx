@@ -5,8 +5,6 @@ import EpisodeResume from '../EpisodeResume'
 
 import Carousel from 'react-multi-carousel'
 
-import 'react-multi-carousel/lib/styles.css'
-
 const EpisodeResumeList: React.FC<{
   episodes: Video[]
 }> = ({ episodes }) => {
