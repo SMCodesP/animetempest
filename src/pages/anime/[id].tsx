@@ -166,10 +166,10 @@ const Anime: NextPage<{
             justifyContent: 'space-between',
           }}
         >
-          <Link href="/" prefetch={true}>
+          <Link href="/">
             <a>
               <Back onClick={handleBack}>
-                <FaHome size={46} color={theme.tertiary} />
+                <FaHome size={28} color={theme.tertiary} />
                 Página Inicial
               </Back>
             </a>
