@@ -27,7 +27,7 @@ const Footer: React.FC = () => {
               margin: 0,
             }}
           >
-            Feito com <span>❤️</span> por OtakuTube
+            Feito com <span>❤️</span> por AnimeTempest
           </Author>
           <span>Não hospedamos nenhum vídeo em nossos servidores, apenas os indexamos.</span>
         </FooterContainer>

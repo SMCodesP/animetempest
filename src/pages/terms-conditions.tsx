@@ -27,23 +27,23 @@ const TermsConditions: NextPage<{
   return (
     <>
       <Head>
-        <title>Termos de Uso - OtakuTube</title>
+        <title>Termos de Uso - AnimeTempest</title>
         <meta
           property="og:title"
-          content="Termos de Uso - OtakuTube"
+          content="Termos de Uso - AnimeTempest"
           key="title"
         />
-        <meta name="twitter:title" content="Termos de Uso - OtakuTube" />
-        <meta name="description" content={`Temos e condições da OtakuTube.`} />
+        <meta name="twitter:title" content="Termos de Uso - AnimeTempest" />
+        <meta name="description" content={`Temos e condições da AnimeTempest.`} />
         <meta
           property="og:description"
-          content={`Temos e condições da OtakuTube.`}
+          content={`Temos e condições da AnimeTempest.`}
         />
-        <meta name="description" content={`Temos e condições da OtakuTube.`} />
-        <meta name="Description" content={`Temos e condições da OtakuTube.`} />
+        <meta name="description" content={`Temos e condições da AnimeTempest.`} />
+        <meta name="Description" content={`Temos e condições da AnimeTempest.`} />
         <meta
           name="twitter:description"
-          content={`Temos e condições da OtakuTube.`}
+          content={`Temos e condições da AnimeTempest.`}
         />
       </Head>
 

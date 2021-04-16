@@ -119,9 +119,9 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   return (
     <>
       <Head>
-        <title>Pesquise por um anime - OtakuTube</title>
-        <meta property="og:title" content={`Pesquise por um anime - OtakuTube`} key="title" />
-        <meta name="twitter:title" content={`Pesquise por um anime - OtakuTube`} />
+        <title>Pesquise por um anime - AnimeTempest</title>
+        <meta property="og:title" content={`Pesquise por um anime - AnimeTempest`} key="title" />
+        <meta name="twitter:title" content={`Pesquise por um anime - AnimeTempest`} />
         <meta
           name="description"
           content={`Ache os melhores animes categorizados e classificados.`}

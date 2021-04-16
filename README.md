@@ -11,12 +11,12 @@
   </p>
 </div>
 
-# OtakuTube
+# AnimeTempest
 
 <div align="center">
 
 [![Discord Group](https://shields.io/discord/803654181839700038?style=for-the-badge&logo=discord&color=67E480)](https://discord.gg/s9jKHJwxqH)
-[![Github status](https://shields.io/github/last-commit/SMCodesP/otakutube?style=for-the-badge&logo=github&color=24292e)](https://github.com/SMCodesP/otakutube)
+[![Github status](https://shields.io/github/last-commit/SMCodesP/animetempest?style=for-the-badge&logo=github&color=24292e)](https://github.com/SMCodesP/animetempest)
 ![Status website](https://shields.io/uptimerobot/ratio/m787671147-8868d3c940ecb9962ee47482?style=for-the-badge&label=UPTIME%2030)
 
 </div>
@@ -39,7 +39,7 @@ Esse projeto é um website simples usando React com NextJS para asssitir animes 
 1. **Clone esse repositório**
 
 ```bash
-git clone https://github.com/SMCodesP/otakutube
+git clone https://github.com/SMCodesP/animetempest
 ```
 
 2. **Configure variáveis ambientes**

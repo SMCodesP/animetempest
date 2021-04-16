@@ -27,23 +27,23 @@ const TermsConditions: NextPage<{
   return (
     <>
       <Head>
-        <title>Política de Privacidade - OtakuTube</title>
+        <title>Política de Privacidade - AnimeTempest</title>
         <meta
           property="og:title"
-          content="Política de Privacidade - OtakuTube"
+          content="Política de Privacidade - AnimeTempest"
           key="title"
         />
-        <meta name="twitter:title" content="Política de Privacidade - OtakuTube" />
-        <meta name="description" content={`Política de privacidade da OtakuTube.`} />
+        <meta name="twitter:title" content="Política de Privacidade - AnimeTempest" />
+        <meta name="description" content={`Política de privacidade da AnimeTempest.`} />
         <meta
           property="og:description"
-          content={`Política de privacidade da OtakuTube.`}
+          content={`Política de privacidade da AnimeTempest.`}
         />
-        <meta name="description" content={`Política de privacidade da OtakuTube.`} />
-        <meta name="Description" content={`Política de privacidade da OtakuTube.`} />
+        <meta name="description" content={`Política de privacidade da AnimeTempest.`} />
+        <meta name="Description" content={`Política de privacidade da AnimeTempest.`} />
         <meta
           name="twitter:description"
-          content={`Política de privacidade da OtakuTube.`}
+          content={`Política de privacidade da AnimeTempest.`}
         />
       </Head>
 

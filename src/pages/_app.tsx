@@ -40,7 +40,7 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <meta name="keywords" content="Animes, mangas" />
       <meta name="copyright" content="© 2020 Samuel Pereira da Silva" />
       <meta name="robots" content="index" />
-      <meta name="og:site_name" content="OtakuTube" />
+      <meta name="og:site_name" content="AnimeTempest" />
       <meta property="og:type" content="website" />
       <meta property="og:image" content="/images/icons/icon.png" />
       <meta name="theme-color" content="#282a36" />
@@ -49,14 +49,14 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
       <link rel="manifest" href="/manifest.json" />
       <meta name="mobile-web-app-capable" content="yes" />
       <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="application-name" content="OtakuTube" />
-      <meta name="apple-mobile-web-app-title" content="OtakuTube" />
+      <meta name="application-name" content="AnimeTempest" />
+      <meta name="apple-mobile-web-app-title" content="AnimeTempest" />
       <meta name="msapplication-starturl" content="/" />
-      <link rel="canonical" href="https://otakutube.tk" />
+      <link rel="canonical" href="https://www.animetempest.net" />
       <meta name="twitter:card" content="summary" />
-      <meta name="twitter:url" content="https://otakutube.tk" />
+      <meta name="twitter:url" content="https://www.animetempest.net" />
       <meta name="twitter:image" content="/images/icons/icon.png" />
-      <meta property="og:url" content="https://otakutube.tk" />
+      <meta property="og:url" content="https://www.animetempest.net" />
       <meta property="og:image" content="/images/icons/icon.png" />
     </Head>
 

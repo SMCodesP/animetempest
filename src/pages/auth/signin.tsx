@@ -27,9 +27,9 @@ const SignIn: NextPage<{
   return (
     <>
       <Head>
-        <title>Acessar - OtakuTube</title>
-        <meta property="og:title" content="Acessar - OtakuTube" key="title" />
-        <meta name="twitter:title" content="Acessar - OtakuTube" />
+        <title>Acessar - AnimeTempest</title>
+        <meta property="og:title" content="Acessar - AnimeTempest" key="title" />
+        <meta name="twitter:title" content="Acessar - AnimeTempest" />
         <meta
           name="description"
           content={`Acesse nossa plataforma usando sua conta liberando novos recursos.`}

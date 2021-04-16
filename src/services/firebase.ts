@@ -7,10 +7,10 @@ interface FirebaseResult {
 
 const config = {
   apiKey: 'AIzaSyBUiuYZ12cKQ2pBO0a2BXeb9m-paWLKoyY',
-  authDomain: 'otakutube-4b28f.firebaseapp.com',
-  databaseURL: 'https://otakutube-4b28f-default-rtdb.firebaseio.com',
-  projectId: 'otakutube-4b28f',
-  storageBucket: 'otakutube-4b28f.appspot.com',
+  authDomain: 'animetempest-4b28f.firebaseapp.com',
+  databaseURL: 'https://animetempest-4b28f-default-rtdb.firebaseio.com',
+  projectId: 'animetempest-4b28f',
+  storageBucket: 'animetempest-4b28f.appspot.com',
   messagingSenderId: '1007341081560',
   appId: '1:1007341081560:web:12a165058855b192ce58ad',
   measurementId: 'G-E4DQTTL97J',

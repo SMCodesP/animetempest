@@ -57,9 +57,9 @@ const Home: NextPage<{
   return (
     <>
       <Head>
-        <title>Início - OtakuTube</title>
-        <meta property="og:title" content="Início - OtakuTube" key="title" />
-        <meta name="twitter:title" content="Início - OtakuTube" />
+        <title>Início - AnimeTempest</title>
+        <meta property="og:title" content="Início - AnimeTempest" key="title" />
+        <meta name="twitter:title" content="Início - AnimeTempest" />
         <meta
           name="description"
           content={`Venha aproveitar nosso serviço para assistir os melhores animes em HD e SD gratuitamente, legendados ou dublados.`}

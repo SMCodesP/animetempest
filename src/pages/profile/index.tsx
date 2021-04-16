@@ -41,9 +41,9 @@ const Profile: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Seu perfil - OtakuTube</title>
-        <meta property="og:title" content="Seu perfil - OtakuTube" key="title" />
-        <meta name="twitter:title" content="Seu perfil - OtakuTube" />
+        <title>Seu perfil - AnimeTempest</title>
+        <meta property="og:title" content="Seu perfil - AnimeTempest" key="title" />
+        <meta name="twitter:title" content="Seu perfil - AnimeTempest" />
         <meta
           name="description"
           content={`Visualize seus animes favoritos e acompanhe de onde você parou de assistir.`}

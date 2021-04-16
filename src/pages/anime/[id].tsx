@@ -81,9 +81,9 @@ const Anime: NextPage<{
   return (
     <>
       <Head>
-        <title>{anime.category_name} - OtakuTube</title>
-        <meta property="og:title" content={`${anime.category_name} - OtakuTube`} key="title" />
-        <meta name="twitter:title" content={`${anime.category_name} - OtakuTube`} />
+        <title>{anime.category_name} - AnimeTempest</title>
+        <meta property="og:title" content={`${anime.category_name} - AnimeTempest`} key="title" />
+        <meta name="twitter:title" content={`${anime.category_name} - AnimeTempest`} />
         <meta
           name="description"
           content={`Venha assistir agora ${

@@ -1,5 +1,5 @@
 {
-  "name": "otakutube",
+  "name": "animetempest",
   "version": "1.0.0",
   "description": "",
   "scripts": {
@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SMCodesP/otakutube.git"
+    "url": "git+https://github.com/SMCodesP/animetempest.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SMCodesP/otakutube/issues"
+    "url": "https://github.com/SMCodesP/animetempest/issues"
   },
-  "homepage": "https://github.com/SMCodesP/otakutube#readme",
+  "homepage": "https://github.com/SMCodesP/animetempest#readme",
   "dependencies": {
     "axios": "^0.21.1",
     "date-fns": "^2.21.0",
