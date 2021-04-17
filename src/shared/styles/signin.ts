@@ -1,12 +1,18 @@
 import styled from 'styled-components';
 
 export const ContainerProvider = styled.div`
-  display: grid;
   width: 100%;
-  align-self: center;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 300px));
-  gap: 10px;
   padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-self: center;
+  justify-content: center;
+  gap: 10px;
+
+  & div {
+    width: 100%;
+    max-width: 300px;
+  }
 
   & div button {
     width: 100%;
