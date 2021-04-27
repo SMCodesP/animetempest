@@ -46,7 +46,6 @@ const Comments: React.FC<{
   const [comment, setComment] = useState('')
   const [commenting, setCommenting] = useState(false)
   const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true)
 
   const listComments = useRef<HTMLDivElement>(null)
 
@@ -57,7 +56,6 @@ const Comments: React.FC<{
         list.push(snap.val())
       })
       setComments(list)
-      setLoading(false)
     })
   }, [])
 
@@ -142,7 +140,7 @@ const Comments: React.FC<{
             </ContainerListComments>
           ) : (
             <CommentsEmpty>
-              {loading ? 'Crregando...' : 'Nenhum comentário feito'}
+              Nenhum comentário feito
             </CommentsEmpty>
           )}
         </ContainerCommentBody>
