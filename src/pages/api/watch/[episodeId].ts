@@ -9,11 +9,9 @@ const handler = nc<NextApiRequest, NextApiResponse>().get(async (req, res) => {
 
 		const episode = await api.getEpisode(String(episodeId))
 
-		setTimeout(() => {
-			res.json(episode)
-		}, 25000)
+		return res.json(episode)
 	} catch (error) {
-		res.status(400).send(error.message)
+		return res.status(400).send(error.message)
 	}
 })
 
