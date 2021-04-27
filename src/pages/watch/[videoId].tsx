@@ -188,16 +188,17 @@ const MiniPlayer: React.FC<{
 }
 
 const Watch: NextPage<{
-  episode: Episode
+  episodeInitial: Episode
   episodes: Episode[]
   category: Category
   nextEpisode: Episode | null
   previousEpisode: Episode | null
-}> = ({ episode, episodes, category, nextEpisode, previousEpisode }) => {
+}> = ({ episodeInitial, episodes, category, nextEpisode, previousEpisode }) => {
   const router = useRouter()
   const theme = useContext(ThemeContext)
   const [loadingProgress, setLoadingProgress] = useState(true)
   const [initialProgress, setInitialProgress] = useState<Progress | null>(null)
+  const [episode, setEpisode] = useState<Episode | null>(null)
 
   useEffect(() => {
     setInitialProgress(null)
@@ -205,53 +206,61 @@ const Watch: NextPage<{
     ;(async () => {
       try {
         const { data } = await axios.get<Progress>(
-          `/api/episode/${episode.video_id}`
+          `/api/episode/${episodeInitial.video_id}`
         )
         setInitialProgress(data)
+      } catch (error) {
+        console.error(error)
+      }
+      try {
+        const { data: episodeData } = await axios.get<Episode>(
+          `/api/watch/${episodeInitial.video_id}`
+        )
+        setEpisode(episodeData)
         setLoadingProgress(false)
       } catch (error) {
         setLoadingProgress(false)
       }
     })()
-  }, [episode])
+  }, [episodeInitial])
 
   if (router.isFallback) {
     return <Loading color={theme.tertiary} />
   }
 
-  if (!episode) {
+  if (!episodeInitial && (!episode && !loadingProgress)) {
     return <Error statusCode={404} />
   }
 
   return (
     <>
       <Head>
-        <title>{episode.title}</title>
-        <meta property="og:title" content={episode.title} key="title" />
-        <meta name="twitter:title" content={episode.title} />
+        <title>{episodeInitial.title}</title>
+        <meta property="og:title" content={episodeInitial.title} key="title" />
+        <meta name="twitter:title" content={episodeInitial.title} />
         <meta
           name="description"
-          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+          content={`Melhor site para você assistir seus animes, assista agora ${episodeInitial.title} sem anúncios legendado e hd.`}
         />
         <meta
           property="og:description"
-          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+          content={`Melhor site para você assistir seus animes, assista agora ${episodeInitial.title} sem anúncios legendado e hd.`}
         />
         <meta
           name="description"
-          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+          content={`Melhor site para você assistir seus animes, assista agora ${episodeInitial.title} sem anúncios legendado e hd.`}
         />
         <meta
           name="Description"
-          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+          content={`Melhor site para você assistir seus animes, assista agora ${episodeInitial.title} sem anúncios legendado e hd.`}
         />
         <meta
           name="twitter:description"
-          content={`Melhor site para você assistir seus animes, assista agora ${episode.title} sem anúncios legendado e hd.`}
+          content={`Melhor site para você assistir seus animes, assista agora ${episodeInitial.title} sem anúncios legendado e hd.`}
         />
       </Head>
       <MiniPlayer
-        episode={episode}
+        episode={episode || episodeInitial}
         episodes={episodes}
         initialProgress={initialProgress}
         category={category}
@@ -272,22 +281,22 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
-    const episode = await api.getEpisode(String(params?.videoId))
-    if (!episode) throw `Episode ${String(params?.videoId)} null.`
-    if (!episode.location)
+    const episodeInitial = await api.getEpisode(String(params?.videoId))
+    if (!episodeInitial) throw `Episode ${String(params?.videoId)} null.`
+    if (!episodeInitial.location)
       throw `Episode location video not found ${String(params?.videoId)}.`
-    const episodes = await api.getEpisodesFromAnime(episode.category_id)
-    const category = await api.getAnime(episode.category_id)
+    const episodes = await api.getEpisodesFromAnime(episodeInitial.category_id)
+    const category = await api.getAnime(episodeInitial.category_id)
     if (category.category_name.toLowerCase().includes("animetv"))
       throw 'Invalid'
 
     const nextEpisode = await api.nextEpisode(
-      episode.video_id,
-      episode.category_id
+      episodeInitial.video_id,
+      episodeInitial.category_id
     )
     const previousEpisode = await api.previousEpisode(
-      episode.video_id,
-      episode.category_id
+      episodeInitial.video_id,
+      episodeInitial.category_id
     )
 
     if (!category || !episodes)
@@ -295,7 +304,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     return {
       props: {
-        episode,
+        episodeInitial,
         category,
         episodes,
         nextEpisode,

@@ -38,7 +38,7 @@ const PlayerProvider: React.FC<{
   videoId: string
   animeId: string
 }> = ({ children, primaryColor = '#03dffc', secundaryColor = '#ffffff', videoId, animeId }) => {
-  const socket = useSocket('https://hurkitabot-v2.herokuapp.com', [videoId])
+  const socket = useSocket('https://hurkita-bot-v3.herokuapp.com', [videoId])
   const [session]: any = useSession()
 
   const [volume, setVolume] = useState(100)
