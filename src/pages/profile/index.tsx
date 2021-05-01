@@ -146,7 +146,7 @@ export async function getStaticProps() {
     props: {
       animes,
     },
-    revalidate: 300,
+    revalidate: 60,
   }
 }
 

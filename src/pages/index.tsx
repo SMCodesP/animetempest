@@ -91,7 +91,7 @@ const Home: NextPage<{
             {animesLatest.length > 0 ? (
               <EpisodeResumeList episodes={animesLatest} />
             ) : (
-              <h2 
+              <h2
                 style={{
                   margin: '-5px 25px',
                 }}
@@ -113,7 +113,7 @@ const Home: NextPage<{
             {animesPopular.length > 0 ? (
               <AnimeResumeList animes={animesPopular} />
             ) : (
-              <h2 
+              <h2
                 style={{
                   margin: '-5px 25px',
                 }}
@@ -141,7 +141,7 @@ export async function getStaticProps() {
       animesPopular,
       animePopular: animesPopular[Math.floor(Math.random() * animesPopular.length)]
     },
-    revalidate: 300,
+    revalidate: 60,
   }
 }
 

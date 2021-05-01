@@ -228,7 +228,7 @@ const Watch: NextPage<{
     return <Loading color={theme.tertiary} />
   }
 
-  if (!episodeInitial && (!episode && !loadingProgress)) {
+  if (!episodeInitial) {
     return <Error statusCode={404} />
   }
 
@@ -310,12 +310,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         nextEpisode,
         previousEpisode
       },
-      revalidate: 300,
+      revalidate: 60,
     }
   } catch (error) {
     return {
       notFound: true,
-      revalidate: 300,
+      revalidate: 60,
     }
   }
 }

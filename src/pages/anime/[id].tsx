@@ -305,13 +305,13 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
             ?.sort((a, b) => Number(b.id) - Number(a.id))
             .slice(0, 20) || [],
       },
-      revalidate: 300,
+      revalidate: 60,
     }
   } catch (error) {
     console.error(error)
     return {
       notFound: true,
-      revalidate: 300,
+      revalidate: 60,
     }
   }
 }
