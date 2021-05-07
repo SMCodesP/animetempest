@@ -8,11 +8,11 @@ export const ContainerCurtain = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0;
   transition: opacity 0.2s;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  opacity: 1;
 
   & svg:hover {
     cursor: pointer;
@@ -32,18 +32,12 @@ export const ContainerAnime = styled.div`
   position: relative;
   margin: 0;
 
-  &:hover img {
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    filter: brightness(35%);
-  }
-
-  &:hover ${ContainerCurtain} {
-    opacity: 1;
-  }
-
   & * {
     user-select: none;
+  }
+
+  &:hover img {
+    filter: brightness(25%);
   }
 `
 
@@ -54,15 +48,17 @@ export const Image = styled(ImageNext).attrs({
   width: 100%;
   margin: 0;
   user-select: none;
-  transition: filter 0.2s, border-bottom-left-radius 0.2s, border-bottom-right-radius 0.2s;
-  filter: brightness(85%);
+  transition: filter 0.2s;
+  filter: brightness(50%);
 `
 
 export const More = styled.div`
   width: 100%;
   padding: 15px 5px;
-  background: ${({ theme }) => theme.secundary};
-  opacity: 0.65;
+  opacity: 0.90;
+  font-weight: 600;
+  position: absolute;
+  bottom: 8px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   transition: opacity 0.2s;

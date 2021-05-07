@@ -51,27 +51,21 @@ const AnimeResume: React.FC<{
 
   return (
     <ContainerAnime>
-      <Image src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
-      <ContainerCurtain>
-      {(session && !loading) ? <MarkFavorite /> : <span />}
-        <Link prefetch={false} href={`/anime/${anime.id}`}>
-          <a
-            style={{
-              width: '100%',
-            }}
-          >
-            <More
-              style={{
-                padding: '5px 15px',
-              }}
-            >
-              <Link prefetch={false} href={`/anime/${anime.id}`}>
-                <a>{anime.category_name}</a>
-              </Link>
-            </More>
-          </a>
-        </Link>
-      </ContainerCurtain>
+      <Link href={`/anime/${anime.id}`}>
+        <a>
+          <Image
+            src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
+          />
+        </a>
+      </Link>
+      <MarkFavorite />
+      <More
+        style={{
+          padding: '5px 15px',
+        }}
+      >
+        {anime.category_name}
+      </More>
     </ContainerAnime>
   )
 }

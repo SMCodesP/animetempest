@@ -32,3 +32,14 @@ export const ButtonLeft = styled(Button)`
 export const ButtonRight = styled(Button)`
   right: calc(4% + 1px);
 `
+
+export const Container = styled.div`
+  & li {
+    width: 250px !important;
+    transition: width .2s;
+  }
+
+  & li:hover {
+    width: 275px !important;
+  }
+`

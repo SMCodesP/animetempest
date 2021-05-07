@@ -4,7 +4,7 @@ import { HiChevronLeft, HiChevronRight } from 'react-icons/hi'
 import Carousel from 'react-multi-carousel'
 
 import 'react-multi-carousel/lib/styles.css'
-import { ButtonLeft, ButtonRight } from './styles'
+import { Container, ButtonLeft, ButtonRight } from './styles'
 
 const CustomRight: React.FC<any> = ({ onClick }) => {
   return (
@@ -23,6 +23,7 @@ const CustomLeft: React.FC<any> = ({ onClick }) => {
 
 const MyCarousel: React.FC = ({ children }) => {
   return (
+    <Container>
     <Carousel
       swipeable
       responsive={{
@@ -50,6 +51,7 @@ const MyCarousel: React.FC = ({ children }) => {
     >
       {children}
     </Carousel>
+    </Container>
   )
 }
 

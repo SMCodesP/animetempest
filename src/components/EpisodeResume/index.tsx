@@ -3,7 +3,13 @@ import { useContext } from 'react'
 
 import { ThemeContext } from 'styled-components'
 
-import { ContainerAnime, IconPlay, ContainerCurtain, Image, More } from './styles'
+import {
+  ContainerAnime,
+  IconPlay,
+  ContainerCurtain,
+  Image,
+  More,
+} from './styles'
 import Video from '../../entities/Video'
 
 const AnimeResume: React.FC<{
@@ -12,32 +18,22 @@ const AnimeResume: React.FC<{
   const theme = useContext(ThemeContext)
 
   return (
-    <>
-      <ContainerAnime>
-        <Image src={`https://cdn.appanimeplus.tk/img/${episode.category_image}`} />
-        <ContainerCurtain>
-          <span />
-          <Link prefetch={false} href={`/watch/${episode.video_id}`}>
-            <a
-              style={{
-                alignSelf: 'center',
-              }}
-            >
-              <IconPlay size={42} color={theme.text} />
-            </a>
-          </Link>
+    <Link prefetch={false} href={`/watch/${episode.video_id}`}>
+      <a>
+        <ContainerAnime>
+          <Image
+            src={`https://cdn.appanimeplus.tk/img/${episode.category_image}`}
+          />
           <More
             style={{
               padding: '5px 15px',
             }}
           >
-            <Link prefetch={false} href={`/anime/${episode.category_id}`}>
-              <a>{episode.title}</a>
-            </Link>
+            {episode.title}
           </More>
-        </ContainerCurtain>
-      </ContainerAnime>
-    </>
+        </ContainerAnime>
+      </a>
+    </Link>
   )
 }
 
