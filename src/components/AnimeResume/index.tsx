@@ -3,7 +3,7 @@ import { useContext, useState } from 'react'
 
 import { ThemeContext } from 'styled-components'
 
-import { ContainerAnime, ContainerCurtain, Image, More } from './styles'
+import { ContainerAnime, Image, More } from './styles'
 
 import { useProfile } from '../../contexts/ProfileContext'
 import { FaBookmark, FaRegBookmark } from 'react-icons/fa'
@@ -58,7 +58,7 @@ const AnimeResume: React.FC<{
           />
         </a>
       </Link>
-      <MarkFavorite />
+      {(session && !loading) && <MarkFavorite />}
       <More
         style={{
           padding: '5px 15px',

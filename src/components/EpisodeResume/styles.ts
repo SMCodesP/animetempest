@@ -1,32 +1,5 @@
 import styled from 'styled-components'
-import { BiPlayCircle } from 'react-icons/bi'
 import ImageNext from 'next/image'
-
-export const ContainerCurtain = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: opacity 0.2s;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  opacity: 1;
-
-  & svg:hover {
-    cursor: pointer;
-  }
-`
-
-export const IconPlay = styled(BiPlayCircle)`
-  transition: filter 0.2s;
-  filter: brightness(80%);
-
-  &:hover {
-    filter: brightness(150%);
-  }
-`
 
 export const ContainerAnime = styled.div`
   position: relative;
