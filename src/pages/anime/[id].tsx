@@ -69,10 +69,6 @@ const Anime: NextPage<{
     )
   }, [query])
 
-  const handleBack = () => {
-    router.back()
-  }
-
   if (router.isFallback) {
     return <Loading color={theme.tertiary} />
   }
@@ -168,7 +164,7 @@ const Anime: NextPage<{
         >
           <Link href="/">
             <a>
-              <Back onClick={handleBack}>
+              <Back>
                 <FaHome size={28} color={theme.tertiary} />
                 Página Inicial
               </Back>
