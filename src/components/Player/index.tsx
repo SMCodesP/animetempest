@@ -14,10 +14,6 @@ import {
   FaUndoAlt,
   FaPlay,
   FaPause,
-  FaVolumeUp,
-  FaVolumeDown,
-  FaVolumeOff,
-  FaVolumeMute,
   FaArrowLeft,
   FaExpand,
   FaStepBackward,
@@ -107,7 +103,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const [isComment, setIsComment] = useState(false)
   const [playbackRate, setPlaybackRate] = useState<string | number>(1)
 
-  const [showControlVolume, setShowControlVolume] = useState(false)
   const [showQuality, setShowQuality] = useState(false)
   const [showDataNext, setShowDataNext] = useState(false)
   const [showDataPrevious, setShowDataPrevious] = useState(false)

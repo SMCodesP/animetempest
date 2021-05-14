@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import Episode from '../../entities/Episode'
 import api from '../../services/api'
 
-import Category from '../../entities/Category'
 import { ThemeContext } from 'styled-components'
 import Loading from '../../components/Player/Loading'
 
@@ -62,7 +61,7 @@ const MiniPlayer: React.FC<{
             subTitle={''}
             titleMedia={'Você está assistindo'}
             extraInfoMedia={episode?.title}
-            onChangeQuality={() => {}}
+            onChangeQuality={(id: 'location' | 'locationsd' | 'locationhd') => episode && setQuality(episode[id])}
             qualities={[
               episode?.locationhd
                 ? {
