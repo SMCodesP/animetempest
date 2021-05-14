@@ -17,7 +17,7 @@
 
 [![Discord Group](https://shields.io/discord/803654181839700038?style=for-the-badge&logo=discord&color=67E480)](https://discord.gg/s9jKHJwxqH)
 [![Github status](https://shields.io/github/last-commit/SMCodesP/animetempest?style=for-the-badge&logo=github&color=24292e)](https://github.com/SMCodesP/animetempest)
-![Status website](https://shields.io/uptimerobot/ratio/m787671147-8868d3c940ecb9962ee47482?style=for-the-badge&label=UPTIME%2030)
+![Status website](https://shields.io/uptimerobot/ratio/m788136933-a1e7a27585f1fc18930f9b1d?style=for-the-badge&label=UPTIME%2030)
 
 </div>
 
