@@ -14,6 +14,10 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  & h1 {
+    text-align: center;
+  }
 `
 
 const noise_text = keyframes`
@@ -39,7 +43,11 @@ const noise_text = keyframes`
 
 export const TextError = styled.div`
 	color: ${({theme}) => theme.text};
-	font-size: 100px;
+	font-size: 7.5em;
+  font-weight: 900;
+  text-align: center;
+  font-family: 'Passion One', 'Roboto';
+  letter-spacing: 10px;
 	position: relative;
 	margin: 0 auto;
 
