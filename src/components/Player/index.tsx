@@ -33,7 +33,6 @@ import { FiCheck } from 'react-icons/fi'
 import {
   Container,
   Controlls,
-  VolumeControll,
   ItemPlaybackRate,
   IconPlayBackRate,
   ItemNextOrPrevious,
@@ -50,6 +49,7 @@ import Comments from './Comments'
 import PlayerProps from '../../entities/PlayerProps'
 import { usePlayer } from '../../contexts/PlayerContext'
 import formatTime from '../../utils/formatTime'
+import VolumeController from './VolumeController'
 
 const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   title = null,
@@ -75,10 +75,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   overlayEnabled = true,
   autoControllCloseEnabled = true,
   fontFamily = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif",
-  loading = false
+  loading = false,
 }) => {
   const {
-    volume,
     volumeChange,
     primaryColor,
     secundaryColor,
@@ -87,6 +86,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     progress,
     playing,
     play,
+    setVolume,
     setProgress,
   } = usePlayer()
 
@@ -100,7 +100,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const [duration, setDuration] = useState(0)
   const [end, setEnd] = useState(false)
   const [controlBackEnd, setControlBackEnd] = useState(false)
-  const [muted, setMuted] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
   const [error, setError] = useState('')
   const [showControls, setShowControls] = useState(false)
   const [showInfo, setShowInfo] = useState(false)
@@ -176,7 +176,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     setVideoReady(true)
 
     play.set(true)
-      // goToPosition(startPosition)
+    // goToPosition(startPosition)
 
     if (onCanPlay) {
       onCanPlay()
@@ -190,12 +190,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     setError('Ocorreu um erro ao tentar reproduzir este vídeo')
   }
 
-  const setMuttedAction = (value: boolean) => {
-    setMuted(value)
-    setShowControlVolume(false)
-    videoComponent.current!.muted = value
-  }
-  
   const chooseFullScreen = useDebouncedCallback(
     () => {
       if (
@@ -246,7 +240,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
       if (oldTimeout !== null) {
         clearTimeout(oldTimeout)
       }
-      return setTimeout(controllScreenTimeOut, 5000)
+      return setTimeout(controllScreenTimeOut, 500000)
     })
   }, [])
 
@@ -288,7 +282,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   useEffect(() => {
     ;(async () => {
       try {
-        playing ? await videoComponent.current?.play() : videoComponent.current?.pause()
+        playing
+          ? await videoComponent.current?.play()
+          : videoComponent.current?.pause()
       } catch (error) {
         play.toggle()
       }
@@ -336,15 +332,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     )
   }, [])
 
-  useEffect(() => {
-    if (videoComponent.current) {
-      videoComponent.current.volume = volume / 100
-    }
-  }, [volume, videoComponent])
-
   return (
     <>
-      {isComment && (
+      {isComment && videoId && (
         <Comments videoId={videoId} close={() => setIsComment(false)} />
       )}
       <Container
@@ -356,9 +346,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
         onKeyDown={keyboardInteractionCallback}
         tabIndex={0}
       >
-        {(!videoReady || loading) &&
-          !error &&
-          !end && <Loading color={primaryColor} />}
+        {(!videoReady || loading) && !error && !end && (
+          <Loading color={primaryColor} />
+        )}
 
         {overlayEnabled && (
           <InfoVideo
@@ -387,10 +377,12 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
           src={src}
           controls={false}
           onClick={play.toggle}
+          onVolumeChange={(event: any) => setVolume(event.target.volume * 100)}
           onLoadedData={startVideo}
           onTimeUpdate={(e: any) => onTimeUpdate(e.target.currentTime)}
           onError={erroVideo}
           onEnded={onEndedFunction}
+          muted={isMuted}
         />
 
         <Controlls
@@ -457,78 +449,26 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                   </div>
 
                   <div className="item-control time-play">
-                    <FaUndoAlt size={28} onClick={() => progressChange.addOrRemove(-5)} />
+                    <FaUndoAlt
+                      size={28}
+                      onClick={() => progressChange.addOrRemove(-5)}
+                    />
                   </div>
 
                   <div className="item-control time-play">
-                    <FaRedoAlt size={28} onClick={() => progressChange.addOrRemove(5)} />
+                    <FaRedoAlt
+                      size={28}
+                      onClick={() => progressChange.addOrRemove(5)}
+                    />
                   </div>
 
-                  {muted === false && (
-                    <VolumeControll
-                      onMouseLeave={() => setShowControlVolume(false)}
-                      className="item-control"
-                      primaryColor={primaryColor}
-                      percentVolume={volume}
-                    >
-                      {showControlVolume && (
-                        <div className="volumn-controll">
-                          <div className="box-connector" />
-                          <div className="box">
-                            <input
-                              type="range"
-                              min={0}
-                              className="volumn-input"
-                              max={100}
-                              step={1}
-                              value={volume}
-                              onChange={(e) =>
-                                volumeChange.set(Number(e.target.value))
-                              }
-                              title=""
-                            />
-                          </div>
-                        </div>
-                      )}
-
-                      {volume >= 60 ? (
-                        <FaVolumeUp
-                          size={28}
-                          onMouseEnter={() => setShowControlVolume(true)}
-                          onClick={() => setMuttedAction(true)}
-                        />
-                      ) : volume >= 10 ? (
-                        <FaVolumeDown
-                          size={28}
-                          onMouseEnter={() => setShowControlVolume(true)}
-                          onClick={() => setMuttedAction(true)}
-                        />
-                      ) : volume < 10 && volume > 0 ? (
-                        <FaVolumeOff
-                          size={28}
-                          onMouseEnter={() => setShowControlVolume(true)}
-                          onClick={() => setMuttedAction(true)}
-                        />
-                      ) : (
-                        volume <= 0 && (
-                          <FaVolumeMute
-                            size={28}
-                            onMouseEnter={() => setShowControlVolume(true)}
-                            onClick={() => volumeChange.set(0)}
-                          />
-                        )
-                      )}
-                    </VolumeControll>
-                  )}
-
-                  {muted && (
-                    <div className="item-control">
-                      <FaVolumeMute
-                        size={28}
-                        onClick={() => setMuttedAction(false)}
-                      />
-                    </div>
-                  )}
+                  <VolumeController
+                    setIsMuted={setIsMuted}
+                    isMuted={isMuted}
+                    primaryColor={primaryColor}
+                    videoComponent={videoComponent}
+                    className="item-control"
+                  />
 
                   <div className="item-control info-video">
                     <span className="info-first">{titleMedia}</span>
@@ -594,7 +534,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                             <Link href={dataPrevious.uri}>
                               <a>
                                 <div className="item">
-                                  <div className="bold">{dataPrevious.title}</div>
+                                  <div className="bold">
+                                    {dataPrevious.title}
+                                  </div>
                                   {dataPrevious.description && (
                                     <div>{dataPrevious.description}</div>
                                   )}

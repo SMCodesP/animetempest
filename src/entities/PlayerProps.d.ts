@@ -16,7 +16,6 @@ export default interface PlayerProps {
   titleMedia: string | null
   fullPlayer: boolean
   autoPlay: boolean
-  animeId: string
   startPosition: number
   dataNext?: {
     title: string

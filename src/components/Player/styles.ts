@@ -411,67 +411,6 @@ export const Loading = styled.div`
   }
 `
 
-export const VolumeControll = styled.div<{
-  primaryColor: string
-  percentVolume: number
-}>`
-  .volumn-controll {
-    bottom: 70px;
-    left: -50px;
-    position: absolute;
-    transform: rotate(-90deg);
-
-    .box {
-      background: ${({ theme }) => theme.background};
-      padding: 10px 18px;
-      border-radius: 5px;
-    }
-
-    .box-connector {
-      width: 20px;
-    }
-
-    input {
-      border: none;
-      appearance: none;
-      height: 5px;
-      border-radius: 5px;
-      background: #999;
-      background: linear-gradient(
-        93deg,
-        ${(props) => props.primaryColor} ${(props) => props.percentVolume}%,
-        #fff ${(props) => props.percentVolume}%
-      );
-      width: 70px;
-
-      &:focus {
-        outline: none !important;
-      }
-
-      &::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        border: none;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: ${(props) => props.primaryColor};
-        cursor: pointer;
-      }
-
-      &::-moz-range-thumb {
-        outline: none !important;
-        -webkit-appearance: none;
-        border: none;
-        width: 18px;
-        height: 18px;
-        border-radius: 50%;
-        background: ${(props) => props.primaryColor};
-        cursor: pointer;
-      }
-    }
-  }
-`
-
 const ItemControllBar = styled.div`
   bottom: 20px;
   right: -20px;

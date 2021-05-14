@@ -6,7 +6,7 @@ import {
   useContext,
   useState,
 } from 'react'
-import { useDebouncedCallback } from 'use-debounce'
+import { useDebounce, useDebouncedCallback } from 'use-debounce'
 import Progress from '../entities/Progress'
 import useSocket from '../hooks/useSocket'
 
@@ -17,13 +17,15 @@ type PlayerType = {
   primaryColor: string
   secundaryColor: string
   progress: number
-  videoId: string
+  volumeIndicator: number
+  videoId?: string
   onTimeUpdate: (time: number) => void
   volumeChange: {
     set: (newVolume: number) => void
     addOrRemove: (newVolume: number) => void
   }
   setProgress: Dispatch<SetStateAction<number>>
+  setVolume: Dispatch<SetStateAction<number>>
   play: {
     toggle: () => void
     set: (state: boolean) => void
@@ -35,11 +37,20 @@ const PlayerContext = createContext<PlayerType>({} as PlayerType)
 const PlayerProvider: React.FC<{
   primaryColor: string
   secundaryColor: string
-  videoId: string
-  animeId: string
-}> = ({ children, primaryColor = '#03dffc', secundaryColor = '#ffffff', videoId, animeId }) => {
-  const socket = useSocket('https://hurkita-bot-v3.herokuapp.com', [videoId])
+  videoId?: string
+  animeId?: string
+}> = ({
+  children,
+  primaryColor = '#03dffc',
+  secundaryColor = '#ffffff',
+  videoId,
+  animeId,
+}) => {
   const [session]: any = useSession()
+  const socket = useSocket('https://hurkita-bot-v3.herokuapp.com', session, [
+    session,
+    videoId,
+  ])
 
   const [volume, setVolume] = useState(100)
   const [fullscreen] = useState(false)
@@ -47,8 +58,10 @@ const PlayerProvider: React.FC<{
   const [progress, setProgress] = useState(0)
   const [duration] = useState(0)
 
+  const [volumeIndicator] = useDebounce(volume, 5000)
+
   const volumeChange: PlayerType['volumeChange'] = {
-    set: (newVolume) => setVolume(Math.min(Math.max(newVolume, 0), 100)),
+    set: (newVolume) => setVolume(newVolume),
     addOrRemove: (newVolume) => {
       setVolume((oldState) => {
         return Math.min(Math.max(oldState + newVolume, 0), 100)
@@ -88,28 +101,34 @@ const PlayerProvider: React.FC<{
     { maxWait: 5000 }
   )
 
-  const onTimeUpdate: PlayerType["onTimeUpdate"] = useDebouncedCallback((time) => {
-    setProgress(Math.trunc(time))
-    if (playing) {
-      saveVideoProgress(Math.trunc(time))
-      if (session) {
-        saveOnlineProgress(Math.trunc(time))
+  const onTimeUpdate: PlayerType['onTimeUpdate'] = useDebouncedCallback(
+    (time) => {
+      setProgress(Math.trunc(time))
+      if (playing) {
+        saveVideoProgress(Math.trunc(time))
+        if (session) {
+          saveOnlineProgress(Math.trunc(time))
+        }
       }
-    }
-  }, 1000, { maxWait: 1000 })
+    },
+    1000,
+    { maxWait: 1000 }
+  )
 
   const play = {
     toggle: () => {
-      setPlaying(state => !state)
+      setPlaying((state) => !state)
     },
     set: (state: boolean) => {
       setPlaying(state)
-    }
+    },
   }
 
   return (
     <PlayerContext.Provider
       value={{
+        setVolume,
+        volumeIndicator,
         videoId,
         progress,
         onTimeUpdate,
