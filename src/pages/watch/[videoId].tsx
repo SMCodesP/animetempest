@@ -33,6 +33,7 @@ const MiniPlayer: React.FC<{
   nextEpisode,
   previousEpisode,
 }) => {
+  const router = useRouter()
   const theme = useContext(ThemeContext)
 
   const [quality, setQuality] = useState(
@@ -89,8 +90,8 @@ const MiniPlayer: React.FC<{
                   }
                 : null,
             ].filter((el) => el !== null)}
-            backButton={() => {}}
-            onCrossClick={() => {}}
+            backButton={() => router.push('/')}
+            onCrossClick={() => router.push('/')}
             startPosition={initialProgress?.progress || 0}
             dataNext={
               nextEpisode && {
