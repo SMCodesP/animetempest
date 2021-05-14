@@ -39,6 +39,10 @@ const MiniPlayer: React.FC<{
     episode?.locationhd || episode?.locationsd || episode?.location
   )
 
+  useEffect(() => {
+    setQuality(episode?.locationhd || episode?.locationsd || episode?.location)
+  }, [episode])
+
   return (
     <PlayerProvider
       primaryColor={theme.tertiary}
