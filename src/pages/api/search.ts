@@ -11,7 +11,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       const items = await api.getCategory(String(category))
       return res.json(
         items.filter(
-          (item) => item.category_name.toUpperCase().indexOf(String(query).toUpperCase()) > -1 && !item.category_name.toLowerCase().includes("animetv")
+          (item) =>
+            item.category_name
+              .toUpperCase()
+              .indexOf(String(query).toUpperCase()) > -1 &&
+            !item.category_name.toLowerCase().includes('animetv')
         )
       )
     }
@@ -20,11 +24,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (!animes) return res.json([])
 
-    return res.json(animes.filter(anime => !anime.category_name.toLowerCase().includes("animetv"))) 
+    return res.json(
+      animes.filter(
+        (anime) => !anime.category_name.toLowerCase().includes('animetv')
+      )
+    )
   } catch (err) {
     console.error(err)
     return res.status(400).json({
-      message: 'Houve um erro'
+      message: 'Houve um erro',
     })
   }
 }
