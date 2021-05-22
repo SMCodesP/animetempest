@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { ThemeProvider } from 'styled-components'
 import { Provider } from 'next-auth/client'
-import NextNProgress from 'nextjs-progressbar';
+import NextNProgress from 'nextjs-progressbar'
 
 import { GlobalStyle } from '../shared/styles/global'
 
@@ -13,23 +13,18 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => (
   <>
     <Head>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
       <link
-        rel="preload"
-        as="style"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap"
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossOrigin="true"
       />
       <link
         rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&family=Roboto:wght@400;700;900&display=swap"
         as="style"
-        href="https://fonts.googleapis.com/css?family=Passion%20One&display=swap"
       />
       <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap"
-      />
-      <link
-        href="https://fonts.googleapis.com/css?family=Passion%20One&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Passion+One:wght@400;700;900&family=Roboto:wght@400;700;900&display=swap"
         rel="stylesheet"
       />
       <meta charSet="utf-8" />
