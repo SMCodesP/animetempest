@@ -32,7 +32,28 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (!animes) {
       const searched = await api.directSearchAnime(query)
-      res.json(searched)
+      if (!requesting && !animes) {
+        requesting = true
+        animes = await Promise.all(
+          (
+            await api.directSearchAnime('')
+          ).map(async (category) => {
+            try {
+              await timeout(500)
+              const { data: anime } = await axios.get(
+                `https://api.jikan.moe/v3/search/anime?limit=1&q=${category.category_name}`
+              )
+              return {
+                ...category,
+                image_alt: anime.results[0]!.image_url,
+              }
+            } catch {
+              return category
+            }
+          })
+        )
+      }
+      return res.json(searched)
     } else {
       const searched = animes.filter(
         (anime) =>
@@ -40,29 +61,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           anime.category_name.toLowerCase().includes(String(query).toLowerCase())
       )
       return res.json(searched)
-    }
-
-    if (!requesting && !animes) {
-      requesting = true
-      animes = await Promise.all(
-        (
-          await api.directSearchAnime('')
-        ).map(async (category) => {
-          try {
-            console.log(category.category_name)
-            await timeout(500)
-            const { data: anime } = await axios.get(
-              `https://api.jikan.moe/v3/search/anime?limit=1&q=${category.category_name}`
-            )
-            return {
-              ...category,
-              image_alt: anime.results[0]!.image_url,
-            }
-          } catch {
-            return category
-          }
-        })
-      )
     }
   } catch (err) {
     console.error(err)
