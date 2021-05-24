@@ -256,12 +256,12 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                     </div>
                   </LoadingComponent>
                 }
-                dataLength={animes.slice(0, 10 * page).length}
+                dataLength={animes.slice(0, 30 * page).length}
                 next={() => setPage((state) => state + 1)}
-                hasMore={10 * page < animes.length}
+                hasMore={30 * page < animes.length}
               >
                 <ContainerListAnime>
-                  {animes.slice(0, 10 * page).map((anime) => (
+                  {animes.slice(0, 30 * page).map((anime) => (
                     <Link prefetch={false} href={`/anime/${anime.id}`} key={anime.id}>
                       <a>
                         <ItemAnime>
