@@ -235,7 +235,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
       if (oldTimeout !== null) {
         clearTimeout(oldTimeout)
       }
-      return setTimeout(controllScreenTimeOut, 500000)
+      return setTimeout(controllScreenTimeOut, 2500)
     })
   }, [])
 
