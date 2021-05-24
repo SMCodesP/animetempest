@@ -119,6 +119,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   return (
     <>
       <Head>
+        <link rel="preconnect" href="https://hurkita-bot-v3.herokuapp.com">
         <title>Pesquise por um anime - AnimeTempest</title>
         <meta property="og:title" content={`Pesquise por um anime - AnimeTempest`} key="title" />
         <meta name="twitter:title" content={`Pesquise por um anime - AnimeTempest`} />
