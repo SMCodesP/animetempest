@@ -61,13 +61,7 @@ export default {
   },
   searchAnime: async (query: string, category?: string) => {
     const { data } = await axios.get<Category[]>(
-      `/api/search?query=${query}${category ? `&category=${category}` : ''}`
-    )
-    return data
-  },
-  directSearchAnime: async (query: any) => {
-    const { data } = await api.get<Category[]>(
-      `https://appanimeplus.tk/api-animesbr-10.php?search=${query || ''}`
+      `https://hurkita-bot-v3.herokuapp.com/api/search?query=${query}${category ? `&category=${category}` : ''}`
     )
     return data
   },
