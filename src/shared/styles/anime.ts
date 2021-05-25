@@ -33,13 +33,13 @@ export const ContainerInfoAnime = styled.div`
   & > div:first-child {
     flex: 0 0 268px;
     border-radius: 15px;
-    box-shadow: 2px 2px 8px ${({ theme }) => theme.secundaryText};
+    box-shadow: 1px 1px 2px ${({ theme }) => theme.secundaryText};
     transition: box-shadow 0.3s, filter 0.3s, transform 0.3s;
   }
 
   & > div:first-child:hover {
-    box-shadow: 2px 2px 15px ${({ theme }) => theme.secundaryText};
-    transform: scale(1.075);
+    box-shadow: 2px 2px 8px ${({ theme }) => theme.secundaryText};
+    transform: scale(1.050);
   }
 
   @media(max-width: 750px) {

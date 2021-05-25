@@ -95,13 +95,17 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
     setLoading(false)
   }
 
-  const handleChangeCallback = useDebouncedCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    router.query.query = e.target.value
-    router.push(router)
-    handleSearch()
-  }, 750, {
-    maxWait: 750
-  })
+  const handleChangeCallback = useDebouncedCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      router.query.query = e.target.value
+      router.push(router)
+      handleSearch()
+    },
+    750,
+    {
+      maxWait: 750,
+    }
+  )
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
@@ -121,8 +125,15 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
       <Head>
         <link rel="preconnect" href="https://hurkita-bot-v3.herokuapp.com" />
         <title>Pesquise por um anime - AnimeTempest</title>
-        <meta property="og:title" content={`Pesquise por um anime - AnimeTempest`} key="title" />
-        <meta name="twitter:title" content={`Pesquise por um anime - AnimeTempest`} />
+        <meta
+          property="og:title"
+          content={`Pesquise por um anime - AnimeTempest`}
+          key="title"
+        />
+        <meta
+          name="twitter:title"
+          content={`Pesquise por um anime - AnimeTempest`}
+        />
         <meta
           name="description"
           content={`Ache os melhores animes categorizados e classificados.`}
@@ -198,7 +209,9 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                         placeholder="Selecione uma categoria"
                         options={categories}
                         value={categorySelected}
-                        onChange={(e) => setCategorySelected((state) => e || state)}
+                        onChange={(e) =>
+                          setCategorySelected((state) => e || state)
+                        }
                         theme={{
                           borderRadius: 5,
                           spacing: {
@@ -262,11 +275,19 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
               >
                 <ContainerListAnime>
                   {animes.slice(0, 30 * page).map((anime) => (
-                    <Link prefetch={false} href={`/anime/${anime.id}`} key={anime.id}>
+                    <Link
+                      prefetch={false}
+                      href={`/anime/${anime.id}`}
+                      key={anime.id}
+                    >
                       <a>
                         <ItemAnime>
                           <Thumbnail
-                            src={anime.image_alt || `https://cdn.appanimeplus.tk/img/${anime.category_image}`}
+                            src={
+                              anime.anilist
+                                ? anime.anilist?.coverImage.extraLarge
+                                : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
+                            }
                           />
                           <ContainerName>
                             <Name>{anime.category_name}</Name>

@@ -175,9 +175,13 @@ const Anime: NextPage<{
         <ContainerInfoAnime>
           <ContainerAnimeImage>
             <AnimeImage
-              src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
-              width={268}
-              height={348}
+              src={
+                anime.anilist
+                  ? anime.anilist?.coverImage.extraLarge
+                  : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
+              }
+              width={270}
+              height={380}
             />
           </ContainerAnimeImage>
           <AnimeInfo>
@@ -239,9 +243,13 @@ const Anime: NextPage<{
                       {episode.title.replace(anime.category_name, '')}
                     </EpisodeTitle>
                     <EpisodeImage
-                      src={`https://cdn.appanimeplus.tk/img/${anime.category_image}`}
+                      src={
+                        anime.anilist
+                          ? anime.anilist?.coverImage.extraLarge
+                          : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
+                      }
                       width={170}
-                      height={290}
+                      height={335}
                     />
                   </ContainerItemEpisode>
                 </a>
@@ -288,7 +296,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
     if (anime.category_genres) {
       animesRecommended = await api.getCategory(
-        anime.category_genres.split(',')[0].trim()
+        (anime.anilist) ? anime.anilist.genres[0] : anime.category_genres.split(',')[0].trim()
       )
     }
 
