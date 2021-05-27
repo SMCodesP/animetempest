@@ -1,30 +1,20 @@
 export default interface Category {
-  id: string
+  id: number
   category_name: string
   category_image: string
-  category_description?: string
-  category_genres?: string
-  ano?: string
-  count?: string
-  off?: string
-  anilist?: {
-    id: number
-    title: {
-      romaji: string | null
-      english: string | null
-      native: string | null
-      userPreferred: string | null
-    }
-    type: string
-    format: string
-    genres: string[]
-    bannerImage: string | null
-    coverImage: {
-      extraLarge: string
-      large: string
-      medium: string
-      color: string
-    }
-  }
+  anilist_id?: number
+  title_romaji?: string
+  title_english?: string
+  title_native?: string
+  title_userPreferred?: string
+  sinopse: string
+  type?: string
+  format?: string
+  genres: string[]
+  bannerImage?: string
+  coverImage_extraLarge?: string
+  coverImage_large?: string
+  coverImage_medium?: string
+  coverImage_color?: string
   error: boolean
 }

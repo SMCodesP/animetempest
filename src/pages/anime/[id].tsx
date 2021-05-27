@@ -124,31 +124,31 @@ const Anime: NextPage<{
           name="description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.category_description?.substring(0, 110)}...`}
+          }. ${anime.sinopse?.substring(0, 110)}...`}
         />
         <meta
           property="og:description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.category_description?.substring(0, 110)}...`}
+          }. ${anime.sinopse?.substring(0, 110)}...`}
         />
         <meta
           name="description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.category_description?.substring(0, 110)}...`}
+          }. ${anime.sinopse?.substring(0, 110)}...`}
         />
         <meta
           name="Description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.category_description?.substring(0, 110)}...`}
+          }. ${anime.sinopse?.substring(0, 110)}...`}
         />
         <meta
           name="twitter:description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.category_description?.substring(0, 110)}...`}
+          }. ${anime.sinopse?.substring(0, 110)}...`}
         />
       </Head>
       <Container
@@ -176,8 +176,8 @@ const Anime: NextPage<{
           <ContainerAnimeImage>
             <AnimeImage
               src={
-                anime.anilist
-                  ? anime.anilist?.coverImage.extraLarge
+                anime.coverImage_extraLarge
+                  ? anime.coverImage_extraLarge
                   : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
               }
               width={270}
@@ -198,7 +198,7 @@ const Anime: NextPage<{
             <AnimeDescription
               dangerouslySetInnerHTML={{
                 __html:
-                  anime.category_description || 'Nenhuma descrição disponível.',
+                  anime.sinopse || 'Nenhuma descrição disponível.',
               }}
             />
             <Link prefetch={false} href={`/watch/${episodes[0].video_id}`}>
@@ -244,8 +244,8 @@ const Anime: NextPage<{
                     </EpisodeTitle>
                     <EpisodeImage
                       src={
-                        anime.anilist
-                          ? anime.anilist?.coverImage.extraLarge
+                        anime.coverImage_extraLarge
+                          ? anime.coverImage_extraLarge
                           : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
                       }
                       width={170}
@@ -294,9 +294,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     }
     let animesRecommended: Category[] | null = null
 
-    if (anime.category_genres) {
+    if (anime.genres) {
       animesRecommended = await api.getCategory(
-        (anime.anilist) ? anime.anilist.genres[0] : anime.category_genres.split(',')[0].trim()
+        anime.genres[0]
       )
     }
 

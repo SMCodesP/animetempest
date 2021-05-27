@@ -5,8 +5,8 @@ import type { IAnime } from '../entities/IModels'
 
 type ProfileType = {
   favorites: IAnime[]
-  toggleFavorite(animeId: string): void
-  isFavorite(animeId: string): boolean
+  toggleFavorite(animeId: string | number): void
+  isFavorite(animeId: string | number): boolean
 }
 
 const ProfileContext = createContext<ProfileType>({} as ProfileType)
@@ -29,14 +29,14 @@ const ProfileProvider: React.FC = ({ children }) => {
   }, [session, loading])
 
   const isFavorite: ProfileType['isFavorite'] = useCallback(
-    (animeId: string) => {
+    (animeId: string | number) => {
       return favorites.find((favorite) => favorite.animeId === animeId) !== undefined
     },
     [favorites]
   )
 
   const toggleFavorite: ProfileType['toggleFavorite'] = useCallback(
-    async (animeId: string) => {
+    async (animeId: string | number) => {
       const favorite = favorites.find((favorite) => favorite.animeId === animeId) === undefined
       const { data } = await axios.post<IAnime>('/api/favorites', {
         animeId,

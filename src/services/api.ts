@@ -35,21 +35,15 @@ export default {
 
     return data[0]
   },
-  getEpisodesFromAnime: async (anime_id: string) => {
+  getEpisodesFromAnime: async (anime_id: string | number) => {
     const { data } = await api.get<Episode[]>(
       `/api-animesbr-10.php?cat_id=${anime_id}`
     )
     return data
   },
   getAnime: async (anime_id: string) => {
-    const { data } = await api.get<Category[]>(
-      `/api-animesbr-10.php?info=${anime_id}`
-    )
     const { data: anime } = await axios.get<Category>(`https://hurkita-bot-v3.herokuapp.com/api/anime/${anime_id}`)
-    return {
-      ...data[0],
-      ...anime
-    }
+    return anime
   },
   nextEpisode: async (episode_id: string, anime_id: string) => {
     const { data } = await api.get<Episode[] | null>(
@@ -63,10 +57,29 @@ export default {
     )
     return data && data[0]
   },
-  searchAnime: async (query: string, category?: string) => {
-    const { data: { results } } = await axios.get<{results: Category[]}>(
-      `https://hurkita-bot-v3.herokuapp.com/api/animes?query=${query}${category ? `&category=${category}` : ''}`
+  searchAnime: async (query: string, {
+    category,
+    page,
+    limit,
+  }: {
+    category?: string
+    page?: number
+    limit?: number
+  }) => {
+    try {
+    const { data: results } = await axios.get<Category[]>(
+      `https://hurkita-bot-v3.herokuapp.com/api/animes?query=${query}`, {
+        params: {
+          page,
+          limit,
+          category,
+        }
+      }
     )
     return results
+    }catch (error) {
+      console.log(error)
+      return []
+    }
   },
 }

@@ -80,6 +80,26 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
   const [loading, setLoading] = useState(false)
   const [page, setPage] = useState(1)
   const [categorySelected, setCategorySelected] = useState(categories[0])
+  const [hasMore, setHasMore] = useState(false)
+
+  const nextPage = async () => {
+    setPage(state => state + 1)
+    let animesList: any[]
+    if (categorySelected.value === 'all') {
+      animesList = await api.searchAnime(String(query), {
+        page: page + 1
+      })
+    } else {
+      animesList = await api.searchAnime(String(query), {
+        category: categorySelected.value,
+        page: page + 1
+      })
+    }
+    console.log(animesList)
+    if (animesList.length === 0)
+      return setHasMore(false)
+    setAnimes(state => [...state, ...animesList])
+  }
 
   const handleSearch = async () => {
     setLoading(true)
@@ -87,12 +107,15 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
     setPage(1)
     let animesList
     if (categorySelected.value === 'all') {
-      animesList = await api.searchAnime(String(query))
+      animesList = await api.searchAnime(String(query), {})
     } else {
-      animesList = await api.searchAnime(String(query), categorySelected.value)
+      animesList = await api.searchAnime(String(query), {
+        category: categorySelected.value
+      })
     }
     setAnimes(animesList)
     setLoading(false)
+    setHasMore(true)
   }
 
   const handleChangeCallback = useDebouncedCallback(
@@ -269,12 +292,12 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                     </div>
                   </LoadingComponent>
                 }
-                dataLength={animes.slice(0, 30 * page).length}
-                next={() => setPage((state) => state + 1)}
-                hasMore={30 * page < animes.length}
+                dataLength={animes.length}
+                next={nextPage}
+                hasMore={hasMore}
               >
                 <ContainerListAnime>
-                  {animes.slice(0, 30 * page).map((anime) => (
+                  {animes.map((anime) => (
                     <Link
                       prefetch={false}
                       href={`/anime/${anime.id}`}
@@ -284,8 +307,8 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
                         <ItemAnime>
                           <Thumbnail
                             src={
-                              anime.anilist
-                                ? anime.anilist?.coverImage.extraLarge
+                              anime.coverImage_extraLarge
+                                ? anime.coverImage_extraLarge
                                 : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
                             }
                           />
