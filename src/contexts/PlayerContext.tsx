@@ -47,7 +47,7 @@ const PlayerProvider: React.FC<{
   animeId,
 }) => {
   const [session]: any = useSession()
-  const socket = useSocket('https://hurkita-bot-v3.herokuapp.com', session, [
+  const socket = useSocket('http://localhost:3333', session, [
     session,
     videoId,
   ])
