@@ -57,26 +57,28 @@ export default {
     )
     return data && data[0]
   },
-  searchAnime: async (query: string, {
-    category,
-    page,
-    limit,
-  }: {
-    category?: string
-    page?: number
-    limit?: number
-  }) => {
+  searchAnime: async (
+    query: string, {
+      category,
+      page,
+      limit,
+    }: {
+      category?: string
+      page?: number
+      limit?: number
+    }
+  ) => {
     try {
-    const { data: results } = await axios.get<Category[]>(
-      `https://hurkita-bot-v3.herokuapp.com/api/animes?query=${query}`, {
-        params: {
-          page,
-          limit,
-          category,
+      const { data: results } = await axios.get<Category[]>(
+        `https://hurkita-bot-v3.herokuapp.com/api/animes?query=${query}`, {
+          params: {
+            page,
+            limit,
+            category,
+          }
         }
-      }
-    )
-    return results
+      )
+      return results
     }catch (error) {
       console.log(error)
       return []
