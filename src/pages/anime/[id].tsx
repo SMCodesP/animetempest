@@ -1,4 +1,4 @@
-import { NextPage, GetStaticProps } from 'next'
+import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -43,6 +43,7 @@ import UserMenu from '../../components/UserMenu'
 import { useProfile } from '../../contexts/ProfileContext'
 import AnimeResumeList from '../../components/AnimeResumeList'
 import { LoadingComponent } from '../../shared/styles/search'
+import getAllStaticData from '../../utils/getAllStaticData'
 
 const Anime: React.FC<{
   anime: Category
@@ -195,11 +196,13 @@ const Anime: React.FC<{
                 __html: anime.sinopse || 'Nenhuma descrição disponível.',
               }}
             />
-            <Link prefetch={false} href={`/watch/${episodes[0].video_id}`}>
-              <a style={{ width: 'fit-content' }}>
-                <ButtonWatch>Assistir online</ButtonWatch>
-              </a>
-            </Link>
+            {episodes && episodes.length !== 0 && (
+              <Link prefetch={false} href={`/watch/${episodes[0]?.video_id}`}>
+                <a style={{ width: 'fit-content' }}>
+                  <ButtonWatch>Assistir online</ButtonWatch>
+                </a>
+              </Link>
+            )}
           </AnimeInfo>
         </ContainerInfoAnime>
         <SearchInput
@@ -210,47 +213,49 @@ const Anime: React.FC<{
             handleQuery(e.target.value)
           }}
         />
-        <InfiniteScroll
-          loader={
-            <LoadingComponent color={theme.tertiary}>
-              <div>
-                <div />
-                <div />
-                <div />
-              </div>
-            </LoadingComponent>
-          }
-          dataLength={episodesDisplay.slice(0, 15 * page).length}
-          next={() => setPage((state) => state + 1)}
-          hasMore={15 * page < episodesDisplay.length}
-        >
-          <ContainerListEpisodes>
-            {episodesDisplay.slice(0, 15 * page).map((episode) => (
-              <Link
-                prefetch={false}
-                href={`/watch/${episode.video_id}`}
-                key={`episode-${episode.video_id}`}
-              >
-                <a>
-                  <ContainerItemEpisode>
-                    <EpisodeTitle>
-                      {episode.title.replace(anime.category_name, '')}
-                    </EpisodeTitle>
-                    <EpisodeImage
-                      src={
-                        anime.coverImage_extraLarge
-                          ? anime.coverImage_extraLarge
-                          : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
-                      }
-                      width={170}
-                      height={335}
-                    />
-                  </ContainerItemEpisode>
-                </a>
-              </Link>
-            ))}
-          </ContainerListEpisodes>
-        </InfiniteScroll>
+        {episodesDisplay && (
+          <InfiniteScroll
+            loader={
+              <LoadingComponent color={theme.tertiary}>
+                <div>
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </LoadingComponent>
+            }
+            dataLength={episodesDisplay.slice(0, 15 * page).length}
+            next={() => setPage((state) => state + 1)}
+            hasMore={15 * page < episodesDisplay.length}
+          >
+            <ContainerListEpisodes>
+              {episodesDisplay.slice(0, 15 * page).map((episode) => (
+                <Link
+                  prefetch={false}
+                  href={`/watch/${episode.video_id}`}
+                  key={`episode-${episode.video_id}`}
+                >
+                  <a>
+                    <ContainerItemEpisode>
+                      <EpisodeTitle>
+                        {episode.title.replace(anime.category_name, '')}
+                      </EpisodeTitle>
+                      <EpisodeImage
+                        src={
+                          anime.coverImage_extraLarge
+                            ? anime.coverImage_extraLarge
+                            : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
+                        }
+                        width={170}
+                        height={335}
+                      />
+                    </ContainerItemEpisode>
+                  </a>
+                </Link>
+              ))}
+            </ContainerListEpisodes>
+          </InfiniteScroll>
+        )}
         <h2
           style={{
             fontSize: 32,
@@ -268,65 +273,105 @@ const Anime: React.FC<{
 }
 
 const AnimePage: NextPage<{
-  anime: Category
+  data: Category
   episodes: Episode[]
   animesRecommended: Category[]
-}> = ({ anime, episodes, animesRecommended }) => {
+}> = ({ data: anime, episodes = [], animesRecommended = [] }) => {
   const theme = useTheme()
   const router = useRouter()
 
-  return router.isFallback ? (
+  return (router.isFallback && !anime) ? (
     <Loading color={theme.tertiary} />
   ) : (
     <Anime
       anime={anime}
-      episodes={episodes}
-      animesRecommended={animesRecommended}
+      episodes={episodes || []}
+      animesRecommended={animesRecommended || []}
     />
   )
 }
 
-export const getStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: true,
-  }
-}
+const pageData = getAllStaticData({
+  getData: async () => {
+    const animes = await api.getAnimes({
+      key: process.env.API_KEY,
+      limit: 5000
+    })
+    return await Promise.all(animes.map(async (anime) => ({
+      ...anime,
+      animesRecommended: await api.getCategory(anime.genres[0])
+    })))
+  },
+  getStaticPropsWithData: async (ctx: any, id: string) => {
+    try {
+      const episodes = await api.getEpisodesFromAnime(id);
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  try {
-    const anime = await api.getAnime(String(params?.id))
-    if (!anime || anime.category_name.toLowerCase().includes('animetv')) {
-      console.log(anime)
-      throw new Error('Anime not found')
+      return {
+        props: {
+          ...ctx.data,
+          episodes
+        },
+        revalidate: 300
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        props: {
+          ...ctx.data,
+          episodes: [],
+        },
+        revalidate: 300
+      }
     }
-    const episodes = await api.getEpisodesFromAnime(anime.id)
-    if (!episodes) {
-      console.log(episodes)
-      throw new Error('Episodes not found')
-    }
-    let animesRecommended: Category[] | null = null
+  },
+  name: 'id',
+  fallback: true
+})
 
-    if (anime.genres) {
-      animesRecommended = await api.getCategory(anime.genres[0])
-    }
+export const getStaticPaths = pageData.getStaticPaths(require("fs"))
+export const getStaticProps = pageData.getStaticProps(require("fs"))
 
-    return {
-      props: {
-        anime,
-        episodes: episodes.reverse(),
-        animesRecommended:
-          animesRecommended || [],
-      },
-      revalidate: 60,
-    }
-  } catch (error) {
-    console.error(error)
-    return {
-      notFound: true,
-      revalidate: 60,
-    }
-  }
-}
+// export const getStaticPaths = async () => {
+//   return {
+//     paths: [],
+//     fallback: true,
+//   }
+// }
+
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   try {
+//     const anime = await api.getAnime(String(params?.id))
+//     if (!anime || anime.category_name.toLowerCase().includes('animetv')) {
+//       console.log(anime)
+//       throw new Error('Anime not found')
+//     }
+//     const episodes = await api.getEpisodesFromAnime(anime.id)
+//     if (!episodes) {
+//       console.log(episodes)
+//       throw new Error('Episodes not found')
+//     }
+//     let animesRecommended: Category[] | null = null
+
+//     if (anime.genres) {
+//       animesRecommended = await api.getCategory(anime.genres[0])
+//     }
+
+//     return {
+//       props: {
+//         anime,
+//         episodes: episodes.reverse(),
+//         animesRecommended:
+//           animesRecommended || [],
+//       },
+//       revalidate: 60,
+//     }
+//   } catch (error) {
+//     console.error(error)
+//     return {
+//       notFound: true,
+//       revalidate: 60,
+//     }
+//   }
+// }
 
 export default AnimePage

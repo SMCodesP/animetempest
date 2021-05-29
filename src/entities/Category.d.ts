@@ -1,3 +1,5 @@
+import Episode from "./Episode";
+
 export default interface Category {
   id: number
   category_name: string
@@ -16,5 +18,7 @@ export default interface Category {
   coverImage_large?: string
   coverImage_medium?: string
   coverImage_color?: string
+  episodes?: Episode[]
+  animesRecommended?: Category[]
   error: boolean
 }

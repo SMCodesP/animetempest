@@ -16,7 +16,8 @@ export default {
       `https://hurkita-bot-v3.herokuapp.com/api/animes`,
       {
         params: {
-          category
+          category,
+          limit: 10
         }
       }
     )
@@ -62,6 +63,36 @@ export default {
       `/api-animesbr-10.php?episodios=${episode_id}&catid=${anime_id}&previous`
     )
     return data && data[0]
+  },
+  getAnimes: async (
+    {
+      category,
+      page,
+      limit,
+      key
+    }: {
+      category?: string
+      key?: string
+      page?: number
+      limit?: number
+    }
+  ) => {
+    try {
+      const { data: results } = await axios.get<Category[]>(
+        `https://hurkita-bot-v3.herokuapp.com/api/animes`, {
+          params: {
+            page,
+            limit,
+            category,
+            key
+          }
+        }
+      )
+      return results
+    } catch (error) {
+      console.log(error)
+      return []
+    }
   },
   searchAnime: async (
     query: string, {
