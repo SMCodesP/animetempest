@@ -300,14 +300,25 @@ const pageData = getAllStaticData({
     return animes
   },
   getStaticPropsWithData: async (ctx: any, id: string) => {
-    const episodes = await api.getEpisodesFromAnime(id);
+    try {
+      const episodes = await api.getEpisodesFromAnime(id);
 
-    return {
-      props: {
-        ...ctx.data,
-        episodes
-      },
-      revalidate: 300
+      return {
+        props: {
+          ...ctx.data,
+          episodes
+        },
+        revalidate: 300
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        props: {
+          ...ctx.data,
+          episodes,
+        },
+        revalidate: 300
+      }
     }
   },
   name: 'id',
