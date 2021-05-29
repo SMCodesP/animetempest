@@ -74,11 +74,9 @@ export default function getAllStaticData<
   ) => async (ctx) => {
     const result = await fs.promises.readFile(".cache", "utf8")
     const slug = ctx.params?.[name as any] as string
-    // const slug = (_slug as any).flat().join("/") as any
     const parsedResult = JSON.parse(result) as D[]
 
     const data = (parsedResult as any).find((element: Category) => String(element.id) === slug) as D
-    console.log(slug, data)
     return getStaticPropsWithData({ ...ctx, data: {data} }, slug)
   }
 
