@@ -16,7 +16,8 @@ export default {
       `https://hurkita-bot-v3.herokuapp.com/api/animes`,
       {
         params: {
-          category
+          category,
+          limit: 10
         }
       }
     )

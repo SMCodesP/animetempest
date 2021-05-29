@@ -297,7 +297,10 @@ const pageData = getAllStaticData({
       key: process.env.API_KEY,
       limit: 5000
     })
-    return animes
+    return await Promise.all(animes.map(async (anime) => ({
+      ...anime,
+      animesRecommended: await api.getCategory(anime.genres[0])
+    })))
   },
   getStaticPropsWithData: async (ctx: any, id: string) => {
     try {
