@@ -63,6 +63,33 @@ export default {
     )
     return data && data[0]
   },
+  getAnimes: async (
+    {
+      category,
+      page,
+      limit,
+    }: {
+      category?: string
+      page?: number
+      limit?: number
+    }
+  ) => {
+    try {
+      const { data: results } = await axios.get<Category[]>(
+        `https://hurkita-bot-v3.herokuapp.com/api/animes`, {
+          params: {
+            page,
+            limit,
+            category,
+          }
+        }
+      )
+      return results
+    } catch (error) {
+      console.log(error)
+      return []
+    }
+  },
   searchAnime: async (
     query: string, {
       category,

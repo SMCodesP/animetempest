@@ -1,4 +1,4 @@
-import { NextPage, GetStaticProps } from 'next'
+import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -43,6 +43,7 @@ import UserMenu from '../../components/UserMenu'
 import { useProfile } from '../../contexts/ProfileContext'
 import AnimeResumeList from '../../components/AnimeResumeList'
 import { LoadingComponent } from '../../shared/styles/search'
+import getAllStaticData from '../../utils/getAllStaticData'
 
 const Anime: React.FC<{
   anime: Category
@@ -195,11 +196,13 @@ const Anime: React.FC<{
                 __html: anime.sinopse || 'Nenhuma descrição disponível.',
               }}
             />
-            <Link prefetch={false} href={`/watch/${episodes[0].video_id}`}>
-              <a style={{ width: 'fit-content' }}>
-                <ButtonWatch>Assistir online</ButtonWatch>
-              </a>
-            </Link>
+            {episodes.length !== 0 && (
+              <Link prefetch={false} href={`/watch/${episodes[0]?.video_id}`}>
+                <a style={{ width: 'fit-content' }}>
+                  <ButtonWatch>Assistir online</ButtonWatch>
+                </a>
+              </Link>
+            )}
           </AnimeInfo>
         </ContainerInfoAnime>
         <SearchInput
@@ -268,10 +271,10 @@ const Anime: React.FC<{
 }
 
 const AnimePage: NextPage<{
-  anime: Category
+  data: Category
   episodes: Episode[]
   animesRecommended: Category[]
-}> = ({ anime, episodes, animesRecommended }) => {
+}> = ({ data: anime, episodes = [], animesRecommended = [] }) => {
   const theme = useTheme()
   const router = useRouter()
 
@@ -286,47 +289,69 @@ const AnimePage: NextPage<{
   )
 }
 
-export const getStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: true,
-  }
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  try {
-    const anime = await api.getAnime(String(params?.id))
-    if (!anime || anime.category_name.toLowerCase().includes('animetv')) {
-      console.log(anime)
-      throw new Error('Anime not found')
-    }
-    const episodes = await api.getEpisodesFromAnime(anime.id)
-    if (!episodes) {
-      console.log(episodes)
-      throw new Error('Episodes not found')
-    }
-    let animesRecommended: Category[] | null = null
-
-    if (anime.genres) {
-      animesRecommended = await api.getCategory(anime.genres[0])
-    }
-
+const pageData = getAllStaticData({
+  getData: async () => {
+    const animes = await api.getAnimes({})
+    const animesPopular = await api.getPopular()
+    return [...animes, ...animesPopular]
+  },
+  getStaticPropsWithData: async (ctx: any, id: string) => {
+    const episodes = await api.getEpisodesFromAnime(id)
     return {
       props: {
-        anime,
-        episodes: episodes.reverse(),
-        animesRecommended:
-          animesRecommended || [],
+        ...ctx.data,
+        episodes
       },
-      revalidate: 60,
     }
-  } catch (error) {
-    console.error(error)
-    return {
-      notFound: true,
-      revalidate: 60,
-    }
-  }
-}
+  },
+  name: 'id',
+  fallback: true
+})
+
+export const getStaticPaths = pageData.getStaticPaths(require("fs"))
+export const getStaticProps = pageData.getStaticProps(require("fs"))
+
+// export const getStaticPaths = async () => {
+//   return {
+//     paths: [],
+//     fallback: true,
+//   }
+// }
+
+// export const getStaticProps: GetStaticProps = async ({ params }) => {
+//   try {
+//     const anime = await api.getAnime(String(params?.id))
+//     if (!anime || anime.category_name.toLowerCase().includes('animetv')) {
+//       console.log(anime)
+//       throw new Error('Anime not found')
+//     }
+//     const episodes = await api.getEpisodesFromAnime(anime.id)
+//     if (!episodes) {
+//       console.log(episodes)
+//       throw new Error('Episodes not found')
+//     }
+//     let animesRecommended: Category[] | null = null
+
+//     if (anime.genres) {
+//       animesRecommended = await api.getCategory(anime.genres[0])
+//     }
+
+//     return {
+//       props: {
+//         anime,
+//         episodes: episodes.reverse(),
+//         animesRecommended:
+//           animesRecommended || [],
+//       },
+//       revalidate: 60,
+//     }
+//   } catch (error) {
+//     console.error(error)
+//     return {
+//       notFound: true,
+//       revalidate: 60,
+//     }
+//   }
+// }
 
 export default AnimePage
