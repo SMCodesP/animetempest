@@ -213,47 +213,49 @@ const Anime: React.FC<{
             handleQuery(e.target.value)
           }}
         />
-        <InfiniteScroll
-          loader={
-            <LoadingComponent color={theme.tertiary}>
-              <div>
-                <div />
-                <div />
-                <div />
-              </div>
-            </LoadingComponent>
-          }
-          dataLength={episodesDisplay.slice(0, 15 * page).length}
-          next={() => setPage((state) => state + 1)}
-          hasMore={15 * page < episodesDisplay.length}
-        >
-          <ContainerListEpisodes>
-            {episodesDisplay.slice(0, 15 * page).map((episode) => (
-              <Link
-                prefetch={false}
-                href={`/watch/${episode.video_id}`}
-                key={`episode-${episode.video_id}`}
-              >
-                <a>
-                  <ContainerItemEpisode>
-                    <EpisodeTitle>
-                      {episode.title.replace(anime.category_name, '')}
-                    </EpisodeTitle>
-                    <EpisodeImage
-                      src={
-                        anime.coverImage_extraLarge
-                          ? anime.coverImage_extraLarge
-                          : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
-                      }
-                      width={170}
-                      height={335}
-                    />
-                  </ContainerItemEpisode>
-                </a>
-              </Link>
-            ))}
-          </ContainerListEpisodes>
-        </InfiniteScroll>
+        {episodesDisplay && (
+          <InfiniteScroll
+            loader={
+              <LoadingComponent color={theme.tertiary}>
+                <div>
+                  <div />
+                  <div />
+                  <div />
+                </div>
+              </LoadingComponent>
+            }
+            dataLength={episodesDisplay.slice(0, 15 * page).length}
+            next={() => setPage((state) => state + 1)}
+            hasMore={15 * page < episodesDisplay.length}
+          >
+            <ContainerListEpisodes>
+              {episodesDisplay.slice(0, 15 * page).map((episode) => (
+                <Link
+                  prefetch={false}
+                  href={`/watch/${episode.video_id}`}
+                  key={`episode-${episode.video_id}`}
+                >
+                  <a>
+                    <ContainerItemEpisode>
+                      <EpisodeTitle>
+                        {episode.title.replace(anime.category_name, '')}
+                      </EpisodeTitle>
+                      <EpisodeImage
+                        src={
+                          anime.coverImage_extraLarge
+                            ? anime.coverImage_extraLarge
+                            : `https://cdn.appanimeplus.tk/img/${anime.category_image}`
+                        }
+                        width={170}
+                        height={335}
+                      />
+                    </ContainerItemEpisode>
+                  </a>
+                </Link>
+              ))}
+            </ContainerListEpisodes>
+          </InfiniteScroll>
+        )}
         <h2
           style={{
             fontSize: 32,
