@@ -306,7 +306,7 @@ const pageData = getAllStaticData({
           episodes
         };
       } catch (error) {
-        console.log(errror)
+        console.log(error)
         return null
       }
     }))
