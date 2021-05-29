@@ -3,10 +3,10 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FaHome, FaBookmark, FaRegBookmark } from 'react-icons/fa'
 
-import { ThemeContext } from 'styled-components'
+import { useTheme } from 'styled-components'
 
 import { useSession } from 'next-auth/client'
 
@@ -44,13 +44,12 @@ import { useProfile } from '../../contexts/ProfileContext'
 import AnimeResumeList from '../../components/AnimeResumeList'
 import { LoadingComponent } from '../../shared/styles/search'
 
-const Anime: NextPage<{
+const Anime: React.FC<{
   anime: Category
   episodes: Episode[]
   animesRecommended: Category[]
 }> = ({ anime, episodes, animesRecommended }) => {
-  const theme = useContext(ThemeContext)
-  const router = useRouter()
+  const theme = useTheme()
   const [session] = useSession()
   const { toggleFavorite, isFavorite } = useProfile()
 
@@ -68,10 +67,6 @@ const Anime: NextPage<{
       )
     )
   }, [query])
-
-  if (router.isFallback) {
-    return <Loading color={theme.tertiary} />
-  }
 
   const handleQuery = useDebouncedCallback(
     (str: string) => {
@@ -197,8 +192,7 @@ const Anime: NextPage<{
             </div>
             <AnimeDescription
               dangerouslySetInnerHTML={{
-                __html:
-                  anime.sinopse || 'Nenhuma descrição disponível.',
+                __html: anime.sinopse || 'Nenhuma descrição disponível.',
               }}
             />
             <Link prefetch={false} href={`/watch/${episodes[0].video_id}`}>
@@ -273,6 +267,25 @@ const Anime: NextPage<{
   )
 }
 
+const AnimePage: NextPage<{
+  anime: Category
+  episodes: Episode[]
+  animesRecommended: Category[]
+}> = ({ anime, episodes, animesRecommended }) => {
+  const theme = useTheme()
+  const router = useRouter()
+
+  return router.isFallback ? (
+    <Loading color={theme.tertiary} />
+  ) : (
+    <Anime
+      anime={anime}
+      episodes={episodes}
+      animesRecommended={animesRecommended}
+    />
+  )
+}
+
 export const getStaticPaths = async () => {
   return {
     paths: [],
@@ -295,9 +308,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     let animesRecommended: Category[] | null = null
 
     if (anime.genres) {
-      animesRecommended = await api.getCategory(
-        anime.genres[0]
-      )
+      animesRecommended = await api.getCategory(anime.genres[0])
     }
 
     return {
@@ -305,9 +316,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         anime,
         episodes: episodes.reverse(),
         animesRecommended:
-          animesRecommended
-            ?.sort((a, b) => Number(b.id) - Number(a.id))
-            .slice(0, 20) || [],
+          animesRecommended || [],
       },
       revalidate: 60,
     }
@@ -320,4 +329,4 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   }
 }
 
-export default Anime
+export default AnimePage

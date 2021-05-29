@@ -12,7 +12,7 @@ const api = axios.create({
 export default {
   ...api,
   getCategory: async (category: string) => {
-    const { data: { results } } = await api.get<{results: Category[]}>(
+    const { data: results } = await api.get<Category[]>(
       `https://hurkita-bot-v3.herokuapp.com/api/animes`,
       {
         params: {
