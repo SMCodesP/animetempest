@@ -297,36 +297,28 @@ const pageData = getAllStaticData({
       key: process.env.API_KEY,
       limit: 5000
     })
-    return await Promise.all(animes.map(async (anime) => {
-      try {
-        const episodes = await api.getEpisodesFromAnime(String(anime.id))
-        console.log(anime.id)
-        return {
-          ...anime,
-          episodes
-        };
-      } catch (error) {
-        console.log(error)
-        return null
-      }
-    }))
+    return animes
   },
-  getStaticPropsWithData: async (ctx: any) => {
-    if (!ctx.data || !ctx.data.data) {
+  getStaticPropsWithData: async (ctx: any, id: string) => {
+    try {
+      const episodes = await api.getEpisodesFromAnime(id);
+
       return {
-        notFound: true,
-        revalidate: 1
-      }
-    }
-    return {
-      props: {
-        data: {
-          ...ctx.data.data,
-          episodes: null
+        props: {
+          ...ctx.data,
+          episodes
         },
-        episodes: ctx.data.data.episodes
-      },
-      revalidate: 300
+        revalidate: 300
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        props: {
+          ...ctx.data,
+          episodes: [],
+        },
+        revalidate: 300
+      }
     }
   },
   name: 'id',
