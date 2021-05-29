@@ -77,7 +77,7 @@ export default function getAllStaticData<
     const parsedResult = JSON.parse(result) as D[]
 
     const data = (parsedResult as any).find((element: Category) => String(element.id) === slug) as D
-    return getStaticPropsWithData({ ...ctx, data: {data} }, slug)
+    return await getStaticPropsWithData({ ...ctx, data: {data} }, slug)
   }
 
   return { getStaticPaths, getStaticProps }

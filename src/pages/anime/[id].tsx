@@ -196,7 +196,7 @@ const Anime: React.FC<{
                 __html: anime.sinopse || 'Nenhuma descrição disponível.',
               }}
             />
-            {episodes.length !== 0 && (
+            {episodes && episodes.length !== 0 && (
               <Link prefetch={false} href={`/watch/${episodes[0]?.video_id}`}>
                 <a style={{ width: 'fit-content' }}>
                   <ButtonWatch>Assistir online</ButtonWatch>
@@ -278,30 +278,34 @@ const AnimePage: NextPage<{
   const theme = useTheme()
   const router = useRouter()
 
-  return router.isFallback ? (
+  return (router.isFallback && !anime) ? (
     <Loading color={theme.tertiary} />
   ) : (
     <Anime
       anime={anime}
-      episodes={episodes}
-      animesRecommended={animesRecommended}
+      episodes={episodes || []}
+      animesRecommended={animesRecommended || []}
     />
   )
 }
 
 const pageData = getAllStaticData({
   getData: async () => {
-    const animes = await api.getAnimes({})
-    const animesPopular = await api.getPopular()
-    return [...animes, ...animesPopular]
+    const animes = await api.getAnimes({
+      key: process.env.API_KEY,
+      limit: 5000
+    })
+    return animes
   },
   getStaticPropsWithData: async (ctx: any, id: string) => {
-    const episodes = await api.getEpisodesFromAnime(id)
+    const episodes = await api.getEpisodesFromAnime(id);
+
     return {
       props: {
         ...ctx.data,
         episodes
       },
+      revalidate: 300
     }
   },
   name: 'id',

@@ -68,8 +68,10 @@ export default {
       category,
       page,
       limit,
+      key
     }: {
       category?: string
+      key?: string
       page?: number
       limit?: number
     }
@@ -81,6 +83,7 @@ export default {
             page,
             limit,
             category,
+            key
           }
         }
       )
