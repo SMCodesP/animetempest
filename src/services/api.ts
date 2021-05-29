@@ -22,6 +22,12 @@ export default {
     )
     return results
   },
+  getPopular: async () => {
+    const { data: results } = await api.get<Category[]>(
+      `https://hurkita-bot-v3.herokuapp.com/api/popular`
+    )
+    return results
+  },
   getEpisode: async (episode: string) => {
     const { data } = await axios.get<Episode[]>(
       `https://appanimeplus.tk/api-animesbr-10.php?episodios=${episode}`,

@@ -129,11 +129,9 @@ const Home: NextPage<{
 
 export async function getStaticProps() {
   let { data: animesLatest } = await api.get<Video[]>('/api-animesbr-10.php?latest')
-  let { data: animesPopular } = await api.get<Category[]>('/api-animesbr-10.php?populares')
+  let animesPopular = await api.getPopular()
 
   animesLatest = animesLatest.filter(anime => anime.category_id !== "2" && anime.category_id !== "33440")
-  animesPopular = animesPopular.filter(anime => !anime.category_name.toLowerCase().includes('animetv'))
-  animesPopular = animesPopular.filter(anime => !anime.category_name.toLowerCase().includes('animetv'))
 
   return {
     props: {
