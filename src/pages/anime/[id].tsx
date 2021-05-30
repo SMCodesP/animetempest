@@ -332,9 +332,9 @@ const pageData = getAllStaticData({
         props: {
           data: {
             ...ctx.data.data,
-            animesRecommended: undefined
+            animesRecommended: null
           },
-          animesRecommended: ctx.data.data.animesRecommended,
+          animesRecommended: ctx.data.data.animesRecommended || null,
           episodes
         },
         revalidate: 60
