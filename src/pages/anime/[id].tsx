@@ -120,31 +120,31 @@ const Anime: React.FC<{
           name="description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.sinopse?.substring(0, 110)}...`}
+          }. ${anime.sinopse}`}
         />
         <meta
           property="og:description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.sinopse?.substring(0, 110)}...`}
+          }. ${anime.sinopse}`}
         />
         <meta
           name="description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.sinopse?.substring(0, 110)}...`}
+          }. ${anime.sinopse}`}
         />
         <meta
           name="Description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.sinopse?.substring(0, 110)}...`}
+          }. ${anime.sinopse}`}
         />
         <meta
           name="twitter:description"
           content={`Venha assistir agora ${
             anime.category_name
-          }. ${anime.sinopse?.substring(0, 110)}...`}
+          }. ${anime.sinopse}`}
         />
       </Head>
       <Container
@@ -302,16 +302,42 @@ const pageData = getAllStaticData({
       animesRecommended: await api.getCategory(anime.genres[0])
     })))
   },
+  getStaticPropsRevalidate: async (id: string) => {
+    try {
+      const anime = await api.getAnime(id);
+      const animesRecommended = await api.getCategory(anime.genres[0]);
+      const episodes = await api.getEpisodesFromAnime(id);
+
+      return {
+        props: {
+          data: anime,
+          animesRecommended,
+          episodes
+        },
+        revalidate: 60
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        notFound: true,
+        revalidate: 60
+      }
+    }
+  },
   getStaticPropsWithData: async (ctx: any, id: string) => {
     try {
       const episodes = await api.getEpisodesFromAnime(id);
 
       return {
         props: {
-          ...ctx.data,
+          data: {
+            ...ctx.data.data,
+            animesRecommended: undefined
+          },
+          animesRecommended: ctx.data.data.animesRecommended,
           episodes
         },
-        revalidate: 300
+        revalidate: 60
       }
     } catch (error) {
       console.log(error)
@@ -320,7 +346,7 @@ const pageData = getAllStaticData({
           ...ctx.data,
           episodes: [],
         },
-        revalidate: 300
+        revalidate: 60
       }
     }
   },
