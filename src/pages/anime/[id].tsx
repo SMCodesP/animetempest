@@ -2,6 +2,7 @@ import { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 
 import { useEffect, useState } from 'react'
 import { FaHome, FaBookmark, FaRegBookmark } from 'react-icons/fa'
@@ -15,6 +16,7 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { useDebouncedCallback } from 'use-debounce'
 
 import Footer from '../../components/Footer'
+
 
 import Category from '../../entities/Category'
 import Episode from '../../entities/Episode'
@@ -41,9 +43,10 @@ import {
 import Loading from '../../components/Player/Loading'
 import UserMenu from '../../components/UserMenu'
 import { useProfile } from '../../contexts/ProfileContext'
-import AnimeResumeList from '../../components/AnimeResumeList'
 import { LoadingComponent } from '../../shared/styles/search'
 import getAllStaticData from '../../utils/getAllStaticData'
+
+const AnimeResumeList = dynamic(() => import('../../components/AnimeResumeList'))
 
 const Anime: React.FC<{
   anime: Category
@@ -256,17 +259,22 @@ const Anime: React.FC<{
             </ContainerListEpisodes>
           </InfiniteScroll>
         )}
-        <h2
-          style={{
-            fontSize: 32,
-            marginTop: 15,
-            fontWeight: 'bold',
-          }}
-        >
-          Recomendados
-        </h2>
-        <AnimeResumeList animes={animesRecommended} />
+        {animesRecommended && animesRecommended.length > 0 && (
+          <>
+            <h2
+              style={{
+                fontSize: 32,
+                marginTop: 15,
+                fontWeight: 'bold',
+              }}
+            >
+              Recomendados
+            </h2>
+            <AnimeResumeList animes={animesRecommended} />
+          </>
+        )}
       </Container>
+
       <Footer />
     </>
   )

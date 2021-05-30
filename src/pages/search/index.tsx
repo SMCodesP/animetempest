@@ -103,6 +103,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
 
   const handleSearch = async () => {
     setLoading(true)
+    setHasMore(false)
     setAnimes([])
     setPage(1)
     let animesList
@@ -116,6 +117,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
     setAnimes(animesList)
     setLoading(false)
     setHasMore(true)
+    nextPage()
   }
 
   const handleChangeCallback = useDebouncedCallback(
@@ -271,7 +273,7 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
               {loading && animes.length === 0 ? (
                 <>
                   <h1>Carregando...</h1>
-                  <LoadingComponent color={theme.fifthText}>
+                  <LoadingComponent color={theme.tertiary}>
                     <div>
                       <div />
                       <div />
