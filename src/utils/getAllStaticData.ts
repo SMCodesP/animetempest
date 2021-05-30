@@ -46,6 +46,8 @@ export interface GetAllStaticDataParams<
   getStaticPropsWithData?: any
   /** Fallback value for `getStaticPaths`. */
   fallback?: GetStaticPathsResult["fallback"]
+
+  getStaticPropsRevalidate?: any
 }
 
 export default function getAllStaticData<
@@ -55,6 +57,7 @@ export default function getAllStaticData<
   name,
   getStaticPropsWithData = defaultGetStaticProps,
   fallback = false,
+  getStaticPropsRevalidate
 }: GetAllStaticDataParams<D>) {
   const getStaticPaths: (fs: typeof import("fs")) => GetStaticPaths = (
     fs
@@ -72,12 +75,16 @@ export default function getAllStaticData<
   const getStaticProps: (fs: typeof import("fs")) => GetStaticProps = (
     fs
   ) => async (ctx) => {
-    const result = await fs.promises.readFile(".cache", "utf8")
-    const slug = ctx.params?.[name as any] as string
-    const parsedResult = JSON.parse(result) as D[]
+    try {
+      const result = await fs.promises.readFile(".cache", "utf8")
+      const slug = ctx.params?.[name as any] as string
+      const parsedResult = JSON.parse(result) as D[]
 
-    const data = (parsedResult as any).find((element: Category) => String(element.id) === slug) as D
-    return await getStaticPropsWithData({ ...ctx, data: {data} }, slug)
+      const data = (parsedResult as any).find((element: Category) => String(element.id) === slug) as D
+      return await getStaticPropsWithData({ ...ctx, data: {data} }, slug)
+    } catch (error) {
+      return await getStaticPropsRevalidate(ctx.params?.[name as any])
+    }
   }
 
   return { getStaticPaths, getStaticProps }
