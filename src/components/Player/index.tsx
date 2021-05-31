@@ -259,8 +259,8 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     75: () => play.toggle(),
     32: () => play.toggle(),
     70: () => chooseFullScreen(),
-    38: () => volumeChange.addOrRemove(10),
-    40: () => volumeChange.addOrRemove(-10),
+    38: () => volumeChange.addOrRemove(5),
+    40: () => volumeChange.addOrRemove(-5),
   }
 
   const keyboardInteractionCallback = (e: any) => {
