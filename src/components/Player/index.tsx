@@ -74,7 +74,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   loading = false,
 }) => {
   const {
-    volumeChange,
     primaryColor,
     secundaryColor,
     videoId,
@@ -239,6 +238,17 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     })
   }, [])
 
+  const volumeChange = {
+    set: (newVolume: number) =>
+      (videoComponent.current!.volume = Math.min(Math.max(newVolume, 0), 100)),
+    addOrRemove: (newVolume: number) => {
+      videoComponent.current!.volume = Math.min(
+        Math.max((videoComponent.current!.volume * 100) + newVolume, 0),
+        100
+      ) / 100
+    },
+  }
+
   const controlKeyBoard: {
     [key: number]: () => void
   } = {
@@ -249,8 +259,8 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     75: () => play.toggle(),
     32: () => play.toggle(),
     70: () => chooseFullScreen(),
-    38: () => volumeChange.addOrRemove(10),
-    40: () => volumeChange.addOrRemove(-10),
+    38: () => volumeChange.addOrRemove(5),
+    40: () => volumeChange.addOrRemove(-5),
   }
 
   const keyboardInteractionCallback = (e: any) => {
