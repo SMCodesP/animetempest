@@ -243,9 +243,9 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
       (videoComponent.current!.volume = Math.min(Math.max(newVolume, 0), 100)),
     addOrRemove: (newVolume: number) => {
       videoComponent.current!.volume = Math.min(
-        Math.max(videoComponent.current!.volume + newVolume, 0),
+        Math.max((videoComponent.current!.volume * 100) + newVolume, 0),
         100
-      )
+      ) / 100
     },
   }
 
