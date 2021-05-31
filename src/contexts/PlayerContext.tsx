@@ -20,10 +20,6 @@ type PlayerType = {
   volumeIndicator: number
   videoId?: string
   onTimeUpdate: (time: number) => void
-  volumeChange: {
-    set: (newVolume: number) => void
-    addOrRemove: (newVolume: number) => void
-  }
   setProgress: Dispatch<SetStateAction<number>>
   setVolume: Dispatch<SetStateAction<number>>
   play: {
@@ -59,15 +55,6 @@ const PlayerProvider: React.FC<{
   const [duration] = useState(0)
 
   const [volumeIndicator] = useDebounce(volume, 5000)
-
-  const volumeChange: PlayerType['volumeChange'] = {
-    set: (newVolume) => setVolume(newVolume),
-    addOrRemove: (newVolume) => {
-      setVolume((oldState) => {
-        return Math.min(Math.max(oldState + newVolume, 0), 100)
-      })
-    },
-  }
 
   const saveVideoProgress = (progress: number) => {
     const history = localStorage.getItem('history')
@@ -134,7 +121,6 @@ const PlayerProvider: React.FC<{
         onTimeUpdate,
         playing,
         volume,
-        volumeChange,
         fullscreen,
         primaryColor,
         secundaryColor,

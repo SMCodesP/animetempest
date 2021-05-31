@@ -301,6 +301,7 @@ const AnimePage: NextPage<{
 
 const pageData = getAllStaticData({
   getData: async () => {
+    return [];
     const animes = await api.getAnimes({
       key: process.env.API_KEY,
       limit: 5000
