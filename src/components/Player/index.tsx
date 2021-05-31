@@ -74,7 +74,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   loading = false,
 }) => {
   const {
-    volumeChange,
     primaryColor,
     secundaryColor,
     videoId,
