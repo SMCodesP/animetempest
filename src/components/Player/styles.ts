@@ -1,6 +1,91 @@
 // @ts-nocheck
 
+import { opacify } from 'polished'
 import styled, { css, keyframes } from 'styled-components'
+
+const opacityQualities = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+
+const ItemControllBar = styled.div`
+  bottom: 20px;
+  right: -20px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+
+  .box-connector {
+    height: 20px;
+    width: 100%;
+  }
+`
+
+export const ItemListQuality = styled(ItemControllBar)`
+  max-width: 120px;
+  min-width: 120px;
+  opacity: 0 !important;
+  display: none !important;
+
+  & > div:first-child {
+    font-size: 14px;
+    background: ${({ theme }) => theme.background};
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    div {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      cursor: pointer;
+
+      &:hover {
+        background: ${({ theme }) => theme.secundaryBackground};
+      }
+    }
+
+    span {
+      margin-right: 5px;
+
+      &:nth-child(1) {
+        font-weight: bold;
+      }
+    }
+
+    svg {
+      color: #f78b28;
+      font-size: 2em;
+      margin-left: auto;
+    }
+  }
+`
+
+export const VolumeAlert = styled.div<{
+  primaryColor: string;
+}>`
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  padding: 10px 20px;
+  background: ${({theme}) => theme.background};
+  box-shadow: 0 0 3px ${({primaryColor}) => opacify(0.25, primaryColor)};
+  z-index: 99999;
+  border-radius: 5px;
+  user-select: none;
+  transition: all .5s ease-out;
+
+  & span {
+    font-size: 16px;
+    font-weight: bold;
+  }
+`
 
 const toUpOpacity = keyframes`
   0% {
@@ -211,17 +296,23 @@ export const Controlls = styled.div<{
   }
 
   .line-reproduction {
-    display: flex;
-    margin-bottom: 10px;
-    justify-content: space-between;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: max-content auto max-content;
+    gap: 10px;
+    align-items: center;
 
-    input {
-      margin: auto;
+    .connect {
+      background-color: ${({primaryColor}) => primaryColor} !important;
+    }
+
+    .handler {
+      background-color: ${({primaryColor}) => primaryColor} !important;
     }
 
     span {
-      font-size: 14px;
+      font-size: 15px;
+      text-align: center;
+      text-shadow: 0 0 5px #000;
     }
   }
 
@@ -237,6 +328,12 @@ export const Controlls = styled.div<{
     div {
       display: flex;
       justify-items: center;
+    }
+
+    .qualities-control:hover ${ItemListQuality} {
+      animation: ${opacityQualities} .4s;
+      display: flex !important;
+      opacity: 1 !important;
     }
 
     .item-control {
@@ -408,20 +505,6 @@ export const Loading = styled.div`
       background: ${(props) => props.color};
       margin: auto 5px;
     }
-  }
-`
-
-const ItemControllBar = styled.div`
-  bottom: 20px;
-  right: -20px;
-  position: absolute;
-  display: flex;
-  flex-direction: column;
-  width: 300px;
-
-  .box-connector {
-    height: 20px;
-    width: 100%;
   }
 `
 
@@ -598,45 +681,6 @@ export const ItemListReproduction = styled(ItemControllBar)`
       .selected {
         background: ${({ theme }) => theme.secundaryBackground};
       }
-    }
-  }
-`
-
-export const ItemListQuality = styled(ItemControllBar)`
-  max-width: 120px;
-  min-width: 120px;
-
-  & > div:first-child {
-    font-size: 14px;
-    background: ${({ theme }) => theme.background};
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-
-    div {
-      display: flex;
-      align-items: center;
-      padding: 10px;
-      cursor: pointer;
-
-      &:hover {
-        background: ${({ theme }) => theme.secundaryBackground};
-      }
-    }
-
-    span {
-      margin-right: 5px;
-
-      &:nth-child(1) {
-        font-weight: bold;
-      }
-    }
-
-    svg {
-      color: #f78b28;
-      font-size: 2em;
-      margin-left: auto;
     }
   }
 `

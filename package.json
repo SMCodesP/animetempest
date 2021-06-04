@@ -45,6 +45,8 @@
     "react-particles-js": "^3.4.1",
     "react-select": "^4.3.0",
     "react-syntax-highlighter": "^15.4.3",
+    "react-time-seek-slider": "^1.1.0",
+    "react-video-seek-slider": "^2.1.2",
     "react-wavify": "^1.5.2",
     "socket.io-client": "^4.0.0",
     "styled-components": "^5.2.1",

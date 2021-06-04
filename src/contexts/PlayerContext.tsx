@@ -6,7 +6,7 @@ import {
   useContext,
   useState,
 } from 'react'
-import { useDebounce, useDebouncedCallback } from 'use-debounce'
+import {  useDebouncedCallback } from 'use-debounce'
 import Progress from '../entities/Progress'
 import useSocket from '../hooks/useSocket'
 
@@ -17,7 +17,6 @@ type PlayerType = {
   primaryColor: string
   secundaryColor: string
   progress: number
-  volumeIndicator: number
   videoId?: string
   onTimeUpdate: (time: number) => void
   setProgress: Dispatch<SetStateAction<number>>
@@ -53,8 +52,6 @@ const PlayerProvider: React.FC<{
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
   const [duration] = useState(0)
-
-  const [volumeIndicator] = useDebounce(volume, 5000)
 
   const saveVideoProgress = (progress: number) => {
     const history = localStorage.getItem('history')
@@ -115,7 +112,6 @@ const PlayerProvider: React.FC<{
     <PlayerContext.Provider
       value={{
         setVolume,
-        volumeIndicator,
         videoId,
         progress,
         onTimeUpdate,

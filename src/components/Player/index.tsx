@@ -10,6 +10,9 @@ import React, {
 import { useDebouncedCallback } from 'use-debounce'
 import { ThemeContext } from 'styled-components'
 
+import {TimeSeekSlider} from 'react-time-seek-slider';
+import 'react-time-seek-slider/lib/ui-time-seek-slider.css';
+
 import {
   FaUndoAlt,
   FaPlay,
@@ -41,6 +44,7 @@ import Loading from './Loading'
 import InfoVideo from './InfoVideo'
 import CloseVideo from './CloseVideo'
 import Comments from './Comments'
+import VolumeAlert from './VolumeAlert'
 
 import PlayerProps from '../../entities/PlayerProps'
 import { usePlayer } from '../../contexts/PlayerContext'
@@ -82,7 +86,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     playing,
     play,
     setVolume,
-    setProgress,
+    setProgress
   } = usePlayer()
 
   const theme = useContext(ThemeContext)
@@ -102,13 +106,14 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const [isComment, setIsComment] = useState(false)
   const [playbackRate, setPlaybackRate] = useState<string | number>(1)
 
-  const [showQuality, setShowQuality] = useState(false)
   const [showDataNext, setShowDataNext] = useState(false)
   const [showDataPrevious, setShowDataPrevious] = useState(false)
   const [showPlaybackRate, setShowPlaybackRate] = useState(false)
   const [showReproductionList, setShowReproductionList] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
   const [, setTimeoutDebounce] = useState<any | null>(null)
+  const [, setVolumeChanged] = useState<any | null>(null)
+  const [isVolumeChanged, setIsVolumeChanged] = useState<any | null>(false)
 
   const progressChange = {
     set: (newProgress: number) => {
@@ -234,18 +239,18 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
       if (oldTimeout !== null) {
         clearTimeout(oldTimeout)
       }
-      return setTimeout(controllScreenTimeOut, 2500)
+      return setTimeout(controllScreenTimeOut, 250000)
     })
   }, [])
 
   const volumeChange = {
     set: (newVolume: number) =>
-      (videoComponent.current!.volume = Math.min(Math.max(newVolume, 0), 100)),
+      (videoComponent.current!.volume = Number(Math.min(Math.max(newVolume, 0), 100).toFixed(2))),
     addOrRemove: (newVolume: number) => {
-      videoComponent.current!.volume = Math.min(
-        Math.max((videoComponent.current!.volume * 100) + newVolume, 0),
-        100
-      ) / 100
+      videoComponent.current!.volume = Number(Math.min(
+        Math.max((videoComponent.current!.volume) + (newVolume / 100), 0),
+        1
+      ).toFixed(2))
     },
   }
 
@@ -282,6 +287,18 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     speed = speed === 'Normal' ? 1 : speed
     videoComponent.current!.playbackRate = speed
     setPlaybackRate(speed)
+  }
+
+  const handleVolumeCallback = (event: any) => {
+    setVolume(Math.floor(event.target.volume * 100))
+    setVolumeChanged((oldState: NodeJS.Timeout) => {
+      clearTimeout(oldState)
+      return setTimeout(() => {
+        setIsVolumeChanged(false)
+        setVolumeChanged(null)
+      }, 2500)
+    })
+    setIsVolumeChanged(true)
   }
 
   useEffect(() => {
@@ -339,6 +356,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
   return (
     <>
+      <VolumeAlert primaryColor={primaryColor} isVolumeChanged={isVolumeChanged} />
       {isComment && videoId && (
         <Comments videoId={videoId} close={() => setIsComment(false)} />
       )}
@@ -382,7 +400,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
           src={src}
           controls={false}
           onClick={play.toggle}
-          onVolumeChange={(event: any) => setVolume(event.target.volume * 100)}
+          onVolumeChange={handleVolumeCallback}
           onLoadedData={startVideo}
           onTimeUpdate={(e: any) => onTimeUpdate(e.target.currentTime)}
           onError={erroVideo}
@@ -424,7 +442,16 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
           <div>
             <div className="line-reproduction">
               <span>{formatTime(progress)}</span>
-              <input
+              <TimeSeekSlider
+                max={duration}
+                currentTime={progress}
+                progress={0}
+                onSeeking={(time)=> progressChange.set(time)}
+                offset={0}
+                secondsPrefix="00:00:"
+                minutesPrefix="00:"
+              />
+              {/* <input
                 type="range"
                 className="progress-bar"
                 style={{
@@ -438,7 +465,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                 max={duration}
                 onChange={(e) => progressChange.set(Number(e.target.value))}
                 title=""
-              />
+              /> */}
               <span>{formatTime(duration)}</span>
             </div>
 
@@ -682,35 +709,30 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
                   {qualities && qualities.length > 1 && (
                     <div
-                      className="item-control"
-                      onMouseLeave={() => setShowQuality(false)}
+                      className="item-control qualities-control"
                     >
-                      {showQuality === true && (
-                        <ItemListQuality>
-                          <div>
-                            {qualities &&
-                              qualities.map((item, index) => (
-                                <div
-                                  key={`quality-${index}`}
-                                  onClick={() => {
-                                    setShowQuality(false)
-                                    onChangeQuality(item.id)
-                                  }}
-                                >
-                                  {item.prefix && <span>HD</span>}
+                      <ItemListQuality>
+                        <div>
+                          {qualities &&
+                            qualities.map((item, index) => (
+                              <div
+                                key={`quality-${index}`}
+                                onClick={() => {
+                                  onChangeQuality(item.id)
+                                }}
+                              >
+                                {item.prefix && <span>HD</span>}
 
-                                  <span>{item.nome}</span>
-                                  {item.playing && <FiCheck />}
-                                </div>
-                              ))}
-                          </div>
-                          <div className="box-connector" />
-                        </ItemListQuality>
-                      )}
+                                <span>{item.nome}</span>
+                                {item.playing && <FiCheck />}
+                              </div>
+                            ))}
+                        </div>
+                        <div className="box-connector" />
+                      </ItemListQuality>
 
                       <FaCog
                         size={28}
-                        onMouseEnter={() => setShowQuality(true)}
                       />
                     </div>
                   )}

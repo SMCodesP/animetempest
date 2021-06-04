@@ -14,7 +14,7 @@ export const Container = styled.div<{
   percentVolume: number
 }>`
   position: relative;
-  
+
   &:hover .volumn-control {
     animation: ${opacityVolume} .4s;
     display: flex !important;
@@ -23,6 +23,7 @@ export const Container = styled.div<{
 
   .volumn-control {
     display: none !important;
+    z-index: 99999;
     opacity: 0;
     bottom: 78px;
     left: -57px;

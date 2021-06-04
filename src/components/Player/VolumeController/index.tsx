@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import {
   ImVolumeMute2,
   ImVolumeHigh,
@@ -26,10 +26,13 @@ const VolumeController: React.FC<VolumeControllerProps> = ({
   isMuted,
   ...props
 }) => {
-  const { volume } = usePlayer()
+  const { volume, setVolume } = usePlayer()
 
-  const handleVolume: React.ChangeEventHandler<HTMLInputElement> = (e) =>
-    (videoComponent.current!.volume = Number(e.target.value) / 100)
+  const handleVolume: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const newVolume = Number((Number(e.target.value) / 100).toFixed(2))
+    setVolume(Math.floor(newVolume * 100))
+    videoComponent.current!.volume = newVolume
+  }
 
   const IconVolume = isMuted
     ? ImVolumeMute2
@@ -51,9 +54,9 @@ const VolumeController: React.FC<VolumeControllerProps> = ({
             min={0}
             className="volumn-input"
             max={100}
+            step={1}
             value={volume}
             onChange={handleVolume}
-            title=""
           />
         </div>
       </div>
@@ -66,4 +69,4 @@ const VolumeController: React.FC<VolumeControllerProps> = ({
   )
 }
 
-export default VolumeController
+export default memo(VolumeController)
