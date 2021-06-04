@@ -25,6 +25,154 @@ const ItemControllBar = styled.div`
     height: 20px;
     width: 100%;
   }
+
+  & > div:first-child {
+    background: ${({ theme }) => theme.secundaryBackground};
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+      padding: 10px;
+      margin: 0;
+    }
+  }
+`
+
+export const ItemPlaybackRate = styled(ItemControllBar)`
+  cursor: pointer;
+  font-weight: bold;
+  max-width: 150px;
+  opacity: 0 !important;
+  display: none !important;
+
+  & > div:first-child {
+    border-radius: 5px;
+
+    .item {
+      background: ${({ theme }) => theme.background};
+      display: flex;
+      font-size: 14px;
+      padding: 10px;
+      cursor: pointer;
+      transition: all 0.2s linear;
+      flex-direction: row;
+      align-items: center;
+    }
+
+    & .selected {
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    & .item:hover,
+    & .selected {
+      background: ${({ theme }) => theme.secundaryBackground};
+    }
+
+    svg {
+      font-size: 14px !important;
+      margin-right: 5px;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+  }
+`
+
+export const ItemListReproduction = styled(ItemControllBar)`
+  max-width: 400px;
+  overflow: hidden;
+  opacity: 0 !important;
+  display: none !important;
+
+  & > div:first-child {
+    border-radius: 5px;
+    overflow: hidden;
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .list-list-reproduction {
+      display: flex;
+      flex-direction: column;
+      max-height: 400px;
+      overflow: auto;
+
+      &::-webkit-scrollbar-track {
+        background-color: ${({ theme }) => theme.background};
+      }
+
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: ${({ theme }) => theme.secundaryBackground};
+      }
+
+      a {
+        color: ${({ theme }) => theme.text};
+        text-decoration: none;
+      }
+
+      .item-list-reproduction {
+        background: ${({ theme }) => theme.background};
+        display: flex;
+        flex-direction: row;
+        font-size: 14px;
+        padding: 10px;
+        cursor: pointer;
+        transition: all 0.2s linear;
+        align-items: center;
+
+        &:hover {
+          background: ${({ theme }) => theme.secundaryBackground};
+        }
+
+        .percent {
+          height: 3px;
+          width: 100px;
+          margin-left: auto;
+        }
+      }
+
+      .selected {
+        background: ${({ theme }) => theme.secundaryBackground};
+      }
+    }
+  }
+`
+
+export const ItemNextOrPrevious = styled(ItemControllBar)`
+  opacity: 0 !important;
+  display: none !important;
+
+  & > div:first-child {
+    border-radius: 5px;
+
+    .item {
+      border-radius: 5px;
+      background: ${({ theme }) => theme.background};
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      padding: 10px;
+      cursor: pointer;
+      transition: border-radius 0.2s, background 0.2s;
+
+      &:hover {
+        border-radius: 5px;
+        background: ${({ theme }) => theme.secundaryBackground};
+      }
+    }
+    .bold {
+      font-weight: bold;
+    }
+  }
 `
 
 export const ItemListQuality = styled(ItemControllBar)`
@@ -37,8 +185,6 @@ export const ItemListQuality = styled(ItemControllBar)`
     font-size: 14px;
     background: ${({ theme }) => theme.background};
     border-radius: 5px;
-    display: flex;
-    flex-direction: column;
     overflow: hidden;
 
     div {
@@ -46,6 +192,7 @@ export const ItemListQuality = styled(ItemControllBar)`
       align-items: center;
       padding: 10px;
       cursor: pointer;
+      transition: background 0.2s linear;
 
       &:hover {
         background: ${({ theme }) => theme.secundaryBackground};
@@ -69,18 +216,18 @@ export const ItemListQuality = styled(ItemControllBar)`
 `
 
 export const VolumeAlert = styled.div<{
-  primaryColor: string;
+  primaryColor: string
 }>`
   position: absolute;
   top: 15px;
   left: 50%;
   padding: 10px 20px !important;
-  background: ${({theme}) => theme.background};
-  box-shadow: 0 0 3px ${({primaryColor}) => transparentize(15, primaryColor)};
+  background: ${({ theme }) => theme.background};
+  box-shadow: 0 0 3px ${({ primaryColor }) => transparentize(15, primaryColor)};
   z-index: 99999;
   border-radius: 5px;
   user-select: none;
-  transition: all .5s ease-out;
+  transition: all 0.5s ease-out;
 
   & span {
     font-size: 16px;
@@ -209,7 +356,7 @@ export const ContainerMain = styled.div<{
     filter: brightness(70%);
   }
 
-  @media(max-width: 1000px) {
+  @media (max-width: 1000px) {
     width: fit-content;
     height: fit-content;
     align-self: center;
@@ -238,7 +385,7 @@ export const Controlls = styled.div<{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all .5s;
+  transition: all 0.5s;
   opacity: ${(props) => (props.show ? 1 : 0)};
 
   padding: 10px;
@@ -256,7 +403,7 @@ export const Controlls = styled.div<{
   );
 
   & * {
-    transition: opacity .5s;
+    transition: opacity 0.5s;
     opacity: ${(props) => (props.show ? 1 : 0)};
   }
 
@@ -270,13 +417,13 @@ export const Controlls = styled.div<{
       font-size: 20px;
       align-items: center;
       opacity: 0.3;
-      transition: all 0.2s ease-out;
+      transition: all 0.2s linear;
       overflow: hidden;
 
       span {
         margin-left: -100%;
         opacity: 0;
-        transition: all ease-out 0.2s;
+        transition: all linear 0.2s;
       }
 
       &:hover {
@@ -303,15 +450,16 @@ export const Controlls = styled.div<{
     align-items: center;
 
     .main {
-      box-shadow: 0 0 5px ${({theme}) => transparentize(0.75, theme.background)} !important;
+      box-shadow: 0 0 5px
+        ${({ theme }) => transparentize(0.75, theme.background)} !important;
     }
 
     .connect {
-      background-color: ${({primaryColor}) => primaryColor} !important;
+      background-color: ${({ primaryColor }) => primaryColor} !important;
     }
 
     .handler {
-      background-color: ${({primaryColor}) => primaryColor} !important;
+      background-color: ${({ primaryColor }) => primaryColor} !important;
     }
 
     span {
@@ -335,8 +483,15 @@ export const Controlls = styled.div<{
       justify-items: center;
     }
 
-    .qualities-control:hover ${ItemListQuality} {
-      animation: ${opacityQualities} .4s;
+    .previous-control:hover .item-previous,
+    .next-control:hover .item-next,
+    .playback-control:hover
+      ${ItemPlaybackRate},
+      .reproduction-list-control:hover
+      ${ItemListReproduction},
+      .qualities-control:hover
+      ${ItemListQuality} {
+      animation: ${opacityQualities} 0.4s;
       display: flex !important;
       opacity: 1 !important;
     }
@@ -344,6 +499,11 @@ export const Controlls = styled.div<{
     .item-control {
       position: relative;
       margin: auto 15px;
+
+      &:hover svg {
+        opacity: 1 !important;
+        transform: scale(1.2) !important;
+      }
     }
 
     .info-video {
@@ -368,12 +528,7 @@ export const Controlls = styled.div<{
       cursor: pointer;
       opacity: 0.65;
       font-size: 25px;
-      transition: all 0.2s ease-out;
-
-      &:hover {
-        opacity: 1;
-        transform: scale(1.2);
-      }
+      transition: all 0.2s linear;
     }
   }
 
@@ -421,7 +576,7 @@ export const Controlls = styled.div<{
     }
   }
 
-  @media(max-width: 1000px) {
+  @media (max-width: 1000px) {
     & svg {
       width: 20px;
       height: 20px;
@@ -440,7 +595,7 @@ export const Controlls = styled.div<{
     }
   }
 
-  @media(max-width: 660px) {
+  @media (max-width: 660px) {
     .controlls {
       .info-video {
         display: none;
@@ -448,7 +603,7 @@ export const Controlls = styled.div<{
     }
   }
 
-  @media(max-width: 490px) {
+  @media (max-width: 490px) {
     .controlls {
       margin: 5px 0;
 
@@ -462,7 +617,7 @@ export const Controlls = styled.div<{
     }
   }
 
-  @media(max-width: 440px) {
+  @media (max-width: 440px) {
     & svg {
       width: 17px;
       height: 17px;
@@ -475,7 +630,7 @@ export const Controlls = styled.div<{
     }
   }
 
-  @media(max-width: 315px) {
+  @media (max-width: 315px) {
     .controlls {
       .time-play {
         display: none;
@@ -525,7 +680,7 @@ export const IconPlayBackRate = styled.div`
   span {
     opacity: 0.65;
     font-size: 25px;
-    transition: all 0.2s ease-out;
+    transition: all 0.2s linear;
 
     &:hover {
       opacity: 1;
@@ -533,159 +688,13 @@ export const IconPlayBackRate = styled.div`
     }
   }
 
-
-  @media(max-width: 1000px) {
+  @media (max-width: 1000px) {
     & span {
       font-size: 23px;
     }
   }
 
-  @media(max-width: 490px) {
+  @media (max-width: 490px) {
     display: none !important;
-  }
-`
-
-export const ItemPlaybackRate = styled(ItemControllBar)`
-  cursor: pointer;
-  font-weight: bold;
-  max-width: 150px;
-
-  & > div:first-child {
-    background: ${({ theme }) => theme.secundaryBackground};
-    display: flex;
-    flex-direction: column;
-    border-radius: 5px;
-
-    .title {
-      font-size: 18px;
-      font-weight: bold;
-      padding: 10px;
-      margin: 0;
-    }
-
-    .item {
-      background: ${({ theme }) => theme.secundaryBackground};
-      display: flex;
-      font-size: 14px;
-      padding: 10px;
-      cursor: pointer;
-      transition: all 0.2s ease-out;
-      flex-direction: row;
-      align-items: center;
-
-      &:hover {
-        background: ${({ theme }) => theme.background};
-      }
-    }
-
-    svg {
-      font-size: 14px !important;
-      margin-right: 5px;
-    }
-
-    .bold {
-      font-weight: bold;
-    }
-  }
-`
-
-export const ItemNextOrPrevious = styled(ItemControllBar)`
-  & > div:first-child {
-    background: ${({ theme }) => theme.secundaryBackground};
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-
-    .item {
-      border-radius: 10px;
-      background: ${({ theme }) => theme.background};
-      display: flex;
-      flex-direction: column;
-      font-size: 14px;
-      padding: 10px;
-      cursor: pointer;
-      transition: border-radius .2s, background .2s;
-
-      &:hover {
-        border-radius: 5px;
-        background: ${({ theme }) => theme.secundaryBackground};
-      }
-    }
-    .bold {
-      font-weight: bold;
-    }
-  }
-`
-
-export const ItemListReproduction = styled(ItemControllBar)`
-  max-width: 400px;
-  overflow: hidden;
-
-  & > div:first-child {
-    background: ${({ theme }) => theme.secundaryBackground};
-    display: flex;
-    flex-direction: column;
-    border-radius: 5px;
-    overflow: hidden;
-
-    .bold {
-      font-weight: bold;
-    }
-
-    .title {
-      font-size: 18px;
-      font-weight: bold;
-      padding: 10px;
-      margin: 0;
-    }
-
-    .list-list-reproduction {
-      display: flex;
-      flex-direction: column;
-      max-height: 400px;
-      overflow: auto;
-
-      &::-webkit-scrollbar-track {
-        background-color: ${({ theme }) => theme.background};
-      }
-
-      &::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background: ${({ theme }) => theme.secundaryBackground};
-      }
-
-      a {
-        color: ${({ theme }) => theme.text};
-        text-decoration: none;
-      }
-
-      .item-list-reproduction {
-        background: ${({ theme }) => theme.background};
-        display: flex;
-        flex-direction: row;
-        font-size: 14px;
-        padding: 10px;
-        cursor: pointer;
-        transition: all 0.2s ease-out;
-        align-items: center;
-
-        &:hover {
-          background: ${({ theme }) => theme.secundaryBackground};
-        }
-
-        .percent {
-          height: 3px;
-          width: 100px;
-          margin-left: auto;
-        }
-      }
-
-      .selected {
-        background: ${({ theme }) => theme.secundaryBackground};
-      }
-    }
   }
 `

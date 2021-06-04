@@ -10,8 +10,8 @@ import React, {
 import { useDebouncedCallback } from 'use-debounce'
 import { ThemeContext } from 'styled-components'
 
-import {TimeSeekSlider} from 'react-time-seek-slider';
-import 'react-time-seek-slider/lib/ui-time-seek-slider.css';
+import { TimeSeekSlider } from 'react-time-seek-slider'
+import 'react-time-seek-slider/lib/ui-time-seek-slider.css'
 
 import {
   FaUndoAlt,
@@ -86,7 +86,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
     playing,
     play,
     setVolume,
-    setProgress
+    setProgress,
   } = usePlayer()
 
   const theme = useContext(ThemeContext)
@@ -106,10 +106,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   const [isComment, setIsComment] = useState(false)
   const [playbackRate, setPlaybackRate] = useState<string | number>(1)
 
-  const [showDataNext, setShowDataNext] = useState(false)
-  const [showDataPrevious, setShowDataPrevious] = useState(false)
-  const [showPlaybackRate, setShowPlaybackRate] = useState(false)
-  const [showReproductionList, setShowReproductionList] = useState(false)
   const [fullscreen, setFullscreen] = useState(false)
   const [, setTimeoutDebounce] = useState<any | null>(null)
   const [, setVolumeChanged] = useState<any | null>(null)
@@ -245,12 +241,16 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
   const volumeChange = {
     set: (newVolume: number) =>
-      (videoComponent.current!.volume = Number(Math.min(Math.max(newVolume, 0), 100).toFixed(2))),
+      (videoComponent.current!.volume = Number(
+        Math.min(Math.max(newVolume, 0), 100).toFixed(2)
+      )),
     addOrRemove: (newVolume: number) => {
-      videoComponent.current!.volume = Number(Math.min(
-        Math.max((videoComponent.current!.volume) + (newVolume / 100), 0),
-        1
-      ).toFixed(2))
+      videoComponent.current!.volume = Number(
+        Math.min(
+          Math.max(videoComponent.current!.volume + newVolume / 100, 0),
+          1
+        ).toFixed(2)
+      )
     },
   }
 
@@ -314,18 +314,10 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
   }, [playing])
 
   useEffect(() => {
-    if (showReproductionList) {
-      scrollToSelected()
-    }
-  }, [showReproductionList])
-
-  useEffect(() => {
     if (src) {
       play.set(false)
       setVideoReady(false)
       setError('')
-      setShowReproductionList(false)
-      setShowDataNext(false)
     }
   }, [src])
 
@@ -368,7 +360,10 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
         onKeyDown={keyboardInteractionCallback}
         tabIndex={0}
       >
-        <VolumeAlert primaryColor={primaryColor} isVolumeChanged={isVolumeChanged} />
+        <VolumeAlert
+          primaryColor={primaryColor}
+          isVolumeChanged={isVolumeChanged}
+        />
 
         {(!videoReady || loading) && !error && !end && (
           <Loading color={primaryColor} />
@@ -448,7 +443,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                 max={duration}
                 currentTime={progress}
                 progress={0}
-                onSeeking={(time)=> progressChange.set(time)}
+                onSeeking={(time) => progressChange.set(time)}
                 offset={0}
                 secondsPrefix="00:00:"
                 minutesPrefix="00:"
@@ -516,39 +511,35 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
                 <div className="end">
                   {!!playbackRateEnable && (
-                    <div
-                      className="item-control"
-                      onMouseLeave={() => setShowPlaybackRate(false)}
-                    >
-                      {showPlaybackRate === true && (
-                        <ItemPlaybackRate>
-                          <div>
-                            <div className="title">Velocidades</div>
-                            {playbackRateOptions.map((item, index) => (
-                              <div
-                                key={`speed-${index}`}
-                                className="item"
-                                onClick={() => onChangePlayBackRate(item)}
-                              >
-                                {(+item === +playbackRate ||
-                                  (item === 'Normal' &&
-                                    +playbackRate === 1)) && (
-                                  <FiCheck size={28} />
-                                )}
-                                <div className="bold">
-                                  {item === 'Normal' ? item : `${item}x`}
-                                </div>
+                    <div className="item-control playback-control">
+                      <ItemPlaybackRate>
+                        <div>
+                          <div className="title">Velocidades</div>
+                          {playbackRateOptions.map((item, index) => (
+                            <div
+                              key={`speed-${index}`}
+                              className={`item${
+                                +item === +playbackRate ||
+                                (item === 'Normal' && +playbackRate === 1)
+                                  ? ' selected'
+                                  : ''
+                              }`}
+                              onClick={() => onChangePlayBackRate(item)}
+                            >
+                              {(+item === +playbackRate ||
+                                (item === 'Normal' && +playbackRate === 1)) && (
+                                <FiCheck size={24} />
+                              )}
+                              <div className="bold">
+                                {item === 'Normal' ? item : `${item}x`}
                               </div>
-                            ))}
-                          </div>
-                          <div className="box-connector" />
-                        </ItemPlaybackRate>
-                      )}
+                            </div>
+                          ))}
+                        </div>
+                        <div className="box-connector" />
+                      </ItemPlaybackRate>
 
-                      <IconPlayBackRate
-                        className="playbackRate"
-                        onMouseEnter={() => setShowPlaybackRate(true)}
-                      >
+                      <IconPlayBackRate className="playbackRate">
                         <span>
                           {playbackRate === 'Normal' ? '1' : `${playbackRate}`}
                           <small>x</small>
@@ -557,81 +548,63 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                     </div>
                   )}
 
-                  {dataPrevious && (
-                    <div
-                      className="item-control"
-                      onMouseLeave={() => setShowDataPrevious(false)}
-                    >
-                      {showDataPrevious && dataPrevious.title && (
-                        <ItemNextOrPrevious>
-                          <div>
-                            <Link href={dataPrevious.uri}>
-                              <a>
-                                <div className="item">
-                                  <div className="bold">
-                                    {dataPrevious.title}
-                                  </div>
-                                  {dataPrevious.description && (
-                                    <div>{dataPrevious.description}</div>
-                                  )}
-                                </div>
-                              </a>
-                            </Link>
-                          </div>
-                          <div className="box-connector" />
-                        </ItemNextOrPrevious>
-                      )}
+                  {dataPrevious && dataPrevious.title && (
+                    <div className="item-control previous-control">
+                      <ItemNextOrPrevious className="item-previous">
+                        <div>
+                          <Link href={dataPrevious.uri}>
+                            <a>
+                              <div className="item">
+                                <div className="bold">{dataPrevious.title}</div>
+                                {dataPrevious.description && (
+                                  <div>{dataPrevious.description}</div>
+                                )}
+                              </div>
+                            </a>
+                          </Link>
+                        </div>
+                        <div className="box-connector" />
+                      </ItemNextOrPrevious>
 
                       <Link href={dataPrevious.uri}>
                         <a>
-                          <FaStepBackward
-                            size={28}
-                            onMouseEnter={() => setShowDataPrevious(true)}
-                          />
+                          <FaStepBackward size={28} />
                         </a>
                       </Link>
                     </div>
                   )}
 
-                  {dataNext && (
-                    <div
-                      className="item-control"
-                      onMouseLeave={() => setShowDataNext(false)}
-                    >
-                      {showDataNext && dataNext.title && (
-                        <ItemNextOrPrevious>
-                          <div>
-                            <Link href={dataNext.uri}>
-                              <a>
-                                <div className="item">
-                                  <div className="bold">{dataNext.title}</div>
-                                  {dataNext.description && (
-                                    <div>{dataNext.description}</div>
-                                  )}
-                                </div>
-                              </a>
-                            </Link>
-                          </div>
-                          <div className="box-connector" />
-                        </ItemNextOrPrevious>
-                      )}
+                  {dataNext && dataNext.title && (
+                    <div className="item-control next-control">
+                      <ItemNextOrPrevious className="item-next">
+                        <div>
+                          <Link href={dataNext.uri}>
+                            <a>
+                              <div className="item">
+                                <div className="bold">{dataNext.title}</div>
+                                {dataNext.description && (
+                                  <div>{dataNext.description}</div>
+                                )}
+                              </div>
+                            </a>
+                          </Link>
+                        </div>
+                        <div className="box-connector" />
+                      </ItemNextOrPrevious>
 
                       <Link href={dataNext.uri}>
                         <a>
-                          <FaStepForward
-                            size={28}
-                            onMouseEnter={() => setShowDataNext(true)}
-                          />
+                          <FaStepForward size={28} />
                         </a>
                       </Link>
                     </div>
                   )}
 
-                  <div
-                    className="item-control"
-                    onMouseLeave={() => setShowReproductionList(false)}
-                  >
-                    {showReproductionList && (
+                  {reprodutionList && reprodutionList.length > 1 && (
+                    <div
+                      className="item-control reproduction-list-control"
+                      onMouseEnter={scrollToSelected}
+                    >
                       <ItemListReproduction>
                         <div>
                           <div className="title">Lista de Reprodução</div>
@@ -700,19 +673,13 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                         </div>
                         <div className="box-connector" />
                       </ItemListReproduction>
-                    )}
-                    {reprodutionList && reprodutionList.length > 1 && (
-                      <FaClone
-                        size={28}
-                        onMouseEnter={() => setShowReproductionList(true)}
-                      />
-                    )}
-                  </div>
+
+                      <FaClone size={28} />
+                    </div>
+                  )}
 
                   {qualities && qualities.length > 1 && (
-                    <div
-                      className="item-control qualities-control"
-                    >
+                    <div className="item-control qualities-control">
                       <ItemListQuality>
                         <div>
                           {qualities &&
@@ -733,9 +700,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
                         <div className="box-connector" />
                       </ItemListQuality>
 
-                      <FaCog
-                        size={28}
-                      />
+                      <FaCog size={28} />
                     </div>
                   )}
 
