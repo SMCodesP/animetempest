@@ -239,7 +239,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
       if (oldTimeout !== null) {
         clearTimeout(oldTimeout)
       }
-      return setTimeout(controllScreenTimeOut, 250000)
+      return setTimeout(controllScreenTimeOut, 2500)
     })
   }, [])
 
@@ -356,7 +356,6 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
 
   return (
     <>
-      <VolumeAlert primaryColor={primaryColor} isVolumeChanged={isVolumeChanged} />
       {isComment && videoId && (
         <Comments videoId={videoId} close={() => setIsComment(false)} />
       )}
@@ -369,6 +368,8 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
         onKeyDown={keyboardInteractionCallback}
         tabIndex={0}
       >
+        <VolumeAlert primaryColor={primaryColor} isVolumeChanged={isVolumeChanged} />
+
         {(!videoReady || loading) && !error && !end && (
           <Loading color={primaryColor} />
         )}
@@ -406,6 +407,7 @@ const ReactNetflixPlayer: React.FC<PlayerProps> = ({
           onError={erroVideo}
           onEnded={onEndedFunction}
           muted={isMuted}
+          preload="auto"
         />
 
         <Controlls

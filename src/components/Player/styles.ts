@@ -1,6 +1,6 @@
 // @ts-nocheck
 
-import { opacify } from 'polished'
+import { transparentize } from 'polished'
 import styled, { css, keyframes } from 'styled-components'
 
 const opacityQualities = keyframes`
@@ -73,9 +73,9 @@ export const VolumeAlert = styled.div<{
   position: absolute;
   top: 15px;
   left: 50%;
-  padding: 10px 20px;
+  padding: 10px 20px !important;
   background: ${({theme}) => theme.background};
-  box-shadow: 0 0 3px ${({primaryColor}) => opacify(0.25, primaryColor)};
+  box-shadow: 0 0 3px ${({primaryColor}) => transparentize(15, primaryColor)};
   z-index: 99999;
   border-radius: 5px;
   user-select: none;
@@ -300,6 +300,10 @@ export const Controlls = styled.div<{
     grid-template-columns: max-content auto max-content;
     gap: 10px;
     align-items: center;
+
+    .main {
+      box-shadow: 0 0 5px ${({theme}) => transparentize(0.75, theme.background)} !important;
+    }
 
     .connect {
       background-color: ${({primaryColor}) => primaryColor} !important;
