@@ -16,6 +16,7 @@ const ItemControllBar = styled.div`
   bottom: 20px;
   right: -20px;
   position: absolute;
+  z-index: 9999999;
   display: flex;
   flex-direction: column;
   width: 300px;
