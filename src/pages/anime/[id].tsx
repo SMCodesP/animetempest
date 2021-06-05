@@ -15,9 +15,6 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 
 import { useDebouncedCallback } from 'use-debounce'
 
-import Footer from '../../components/Footer'
-
-
 import Category from '../../entities/Category'
 import Episode from '../../entities/Episode'
 
@@ -38,6 +35,7 @@ import {
   EpisodeImage,
   ContainerAnimeImage,
   SearchInput,
+  ContainerHome,
 } from '../../shared/styles/anime'
 
 import Loading from '../../components/Player/Loading'
@@ -45,7 +43,11 @@ import UserMenu from '../../components/UserMenu'
 import { useProfile } from '../../contexts/ProfileContext'
 import { LoadingComponent } from '../../shared/styles/search'
 import getAllStaticData from '../../utils/getAllStaticData'
+import AnimeBanner from '../../components/AnimeBanner'
 
+const Footer = dynamic(() => import('../../components/Footer'), {
+  ssr: false
+})
 const AnimeResumeList = dynamic(() => import('../../components/AnimeResumeList'))
 
 const Anime: React.FC<{
@@ -150,17 +152,13 @@ const Anime: React.FC<{
           }. ${anime.sinopse}`}
         />
       </Head>
+      {anime.bannerImage && <AnimeBanner bannerImage={anime.bannerImage} />}
       <Container
         style={{
           minHeight: '100vh',
         }}
       >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-          }}
-        >
+        <ContainerHome>
           <Link href="/">
             <a>
               <Back>
@@ -170,7 +168,7 @@ const Anime: React.FC<{
             </a>
           </Link>
           <UserMenu />
-        </div>
+        </ContainerHome>
         <ContainerInfoAnime>
           <ContainerAnimeImage>
             <AnimeImage
@@ -314,13 +312,14 @@ const pageData = getAllStaticData({
   getStaticPropsRevalidate: async (id: string) => {
     try {
       const anime = await api.getAnime(id);
-      const animesRecommended = await api.getCategory(anime.genres[0]);
+      console.log(anime.genres)
+      const animesRecommended = await api.getCategory(anime.genres[Math.floor(Math.random() * anime.genres.length)]);
       const episodes = await api.getEpisodesFromAnime(id);
 
       return {
         props: {
           data: anime,
-          animesRecommended,
+          animesRecommended: animesRecommended.filter((animeRecommended) => Number(animeRecommended.id) !== Number(anime.id)),
           episodes
         },
         revalidate: 60

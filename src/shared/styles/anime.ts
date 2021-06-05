@@ -3,6 +3,17 @@ import Image from 'next/image'
 
 export const Container = styled.div`
   padding: 45px 25px 0 25px;
+  position: relative;
+  z-index: 5;
+
+  & * {
+    z-index: 5;
+  }
+`
+
+export const ContainerHome = styled.div`
+  display: flex;
+  justify-content: space-between;
 `
 
 export const Back = styled.div`
@@ -14,6 +25,7 @@ export const Back = styled.div`
   align-items: center;
   gap: 5px;
   cursor: pointer;
+  text-shadow: 0 0 5px ${({theme}) => theme.background};
   transition: 0.3s filter;
 
   &:hover {
@@ -30,16 +42,17 @@ export const ContainerInfoAnime = styled.div`
   display: flex;
   margin-top: 15px;
 
-  & > div:first-child {
+  & img {
     flex: 0 0 268px;
     border-radius: 15px;
     box-shadow: 1px 1px 2px ${({ theme }) => theme.secundaryText};
-    transition: box-shadow 0.3s, filter 0.3s, transform 0.3s;
+    transition: box-shadow 0.4s linear, filter 0.4s linear, transform 0.4s linear;
   }
 
-  & > div:first-child:hover {
+  & img:hover {
     box-shadow: 2px 2px 8px ${({ theme }) => theme.secundaryText};
-    transform: scale(1.050);
+    filter: brightness(45%);
+    transform: scale(1.15);
   }
 
   @media(max-width: 750px) {
@@ -51,6 +64,11 @@ export const ContainerInfoAnime = styled.div`
 export const ContainerAnimeImage = styled.div`
   height: fit-content;
   width: fit-content;
+  border-radius: 15px;
+
+  & * {
+    border-radius: 15px;
+  }
 `
 
 export const AnimeImage = styled(Image)`
@@ -70,19 +88,22 @@ export const AnimeInfo = styled.div`
   }
 `
 
-export const AnimeTitle = styled.h1``
+export const AnimeTitle = styled.h1`
+  text-shadow: 0 0 5px ${({theme}) => theme.background};
+`
 
 export const AnimeDescription = styled.div`
   text-indent: 1em;
   font-size: 17px;
   padding: 5px 15px;
+  text-shadow: 0 0 5px ${({theme}) => theme.background};
   margin-bottom: 20px;
 `
 
 export const ButtonWatch = styled.button`
   width: fit-content;
   padding: 10px 20px;
-  background: ${({ theme }) => theme.background};
+  background: transparent;
   cursor: pointer;
   border: 1px solid ${({ theme }) => theme.text};
   border-radius: 5px;

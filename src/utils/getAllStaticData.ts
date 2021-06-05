@@ -82,6 +82,8 @@ export default function getAllStaticData<
 
       const data = (parsedResult as any).find((element: Category) => String(element.id) === slug) as D
 
+      if (!data) throw new Error('No data')
+
       return await getStaticPropsWithData({ ...ctx, data: {data} }, slug)
     } catch (error) {
       return await getStaticPropsRevalidate(ctx.params?.[name as any])
