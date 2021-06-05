@@ -145,16 +145,16 @@ export const ContainerListEpisodes = styled.div`
 
 export const EpisodeTitle = styled.span`
   word-break: break-word;
-  background: ${({ theme }) => theme.secundaryBackground};
-  color: ${({ theme }) => theme.tertiaryText};
-  text-shadow: 0 0 1px ${({ theme }) => theme.tertiaryText};
+  /* background: ${({ theme }) => theme.secundaryBackground}; */
+  color: ${({ theme }) => theme.text};
+  text-shadow: 0 0 3px ${({ theme }) => theme.background};
   width: 100%;
   padding: 7px 10px;
   font-size: 17px;
   font-weight: 900;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  top: 0;
+  bottom: 5px;
   position: absolute;
   z-index: 999;
   opacity: 0.9;
@@ -164,6 +164,7 @@ export const EpisodeTitle = styled.span`
 export const EpisodeImage = styled(AnimeImage)`
   border-radius: 10px !important;
   transition: filter 0.3s;
+  filter: brightness(75%);
 `
 
 export const ContainerItemEpisode = styled.div`
@@ -185,7 +186,7 @@ export const ContainerItemEpisode = styled.div`
   }
 
   &:hover ${EpisodeImage} {
-    filter: brightness(50%) blur(3px);
+    filter: brightness(35%);
   }
 `
 

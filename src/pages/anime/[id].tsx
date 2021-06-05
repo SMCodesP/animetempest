@@ -46,9 +46,11 @@ import getAllStaticData from '../../utils/getAllStaticData'
 import AnimeBanner from '../../components/AnimeBanner'
 
 const Footer = dynamic(() => import('../../components/Footer'), {
-  ssr: false
+  ssr: false,
 })
-const AnimeResumeList = dynamic(() => import('../../components/AnimeResumeList'))
+const AnimeResumeList = dynamic(
+  () => import('../../components/AnimeResumeList')
+)
 
 const Anime: React.FC<{
   anime: Category
@@ -128,33 +130,23 @@ const Anime: React.FC<{
         />
         <meta
           name="description"
-          content={`Venha assistir agora ${
-            anime.category_name
-          }. ${anime.sinopse}`}
+          content={`Venha assistir agora ${anime.category_name}. ${anime.sinopse}`}
         />
         <meta
           property="og:description"
-          content={`Venha assistir agora ${
-            anime.category_name
-          }. ${anime.sinopse}`}
+          content={`Venha assistir agora ${anime.category_name}. ${anime.sinopse}`}
         />
         <meta
           name="description"
-          content={`Venha assistir agora ${
-            anime.category_name
-          }. ${anime.sinopse}`}
+          content={`Venha assistir agora ${anime.category_name}. ${anime.sinopse}`}
         />
         <meta
           name="Description"
-          content={`Venha assistir agora ${
-            anime.category_name
-          }. ${anime.sinopse}`}
+          content={`Venha assistir agora ${anime.category_name}. ${anime.sinopse}`}
         />
         <meta
           name="twitter:description"
-          content={`Venha assistir agora ${
-            anime.category_name
-          }. ${anime.sinopse}`}
+          content={`Venha assistir agora ${anime.category_name}. ${anime.sinopse}`}
         />
       </Head>
       {anime.bannerImage && <AnimeBanner bannerImage={anime.bannerImage} />}
@@ -244,7 +236,12 @@ const Anime: React.FC<{
                   <a>
                     <ContainerItemEpisode>
                       <EpisodeTitle>
-                        {episode.title.replace(anime.category_name, '')}
+                        {episode.title.replace(anime.category_name, '').trim()
+                          .length === 0
+                          ? episode.title
+                          : episode.title
+                              .replace(anime.category_name, '')
+                              .trim()}
                       </EpisodeTitle>
                       <EpisodeImage
                         src={
@@ -291,7 +288,7 @@ const AnimePage: NextPage<{
   const theme = useTheme()
   const router = useRouter()
 
-  return (router.isFallback && !anime) ? (
+  return router.isFallback && !anime ? (
     <Loading color={theme.tertiary} />
   ) : (
     <Anime
@@ -304,52 +301,59 @@ const AnimePage: NextPage<{
 
 const pageData = getAllStaticData({
   getData: async () => {
-    // return [];
-    const animes = await api.getAnimes({
-      key: process.env.API_KEY,
-      limit: 5000
-    })
-    return await Promise.all(animes.map(async (anime) => ({
-      ...anime,
-      animesRecommended: await api.getCategory(anime.genres[0])
-    })))
+    return [];
+    // const animes = await api.getAnimes({
+    //   key: process.env.API_KEY,
+    //   limit: 5000,
+    // })
+    // return await Promise.all(
+    //   animes.map(async (anime) => ({
+    //     ...anime,
+    //     animesRecommended: await api.getCategory(anime.genres[0]),
+    //   }))
+    // )
   },
   getStaticPropsRevalidate: async (id: string) => {
     try {
-      const anime = await api.getAnime(id);
-      const animesRecommended = await api.getCategory(anime.genres[Math.floor(Math.random() * anime.genres.length)]);
-      const episodes = await api.getEpisodesFromAnime(id);
+      const anime = await api.getAnime(id)
+      const animesRecommended = await api.getCategory(
+        anime.genres[Math.floor(Math.random() * anime.genres.length)]
+      )
+      const episodes = await api.getEpisodesFromAnime(id)
 
       return {
         props: {
           data: anime,
-          animesRecommended: animesRecommended.filter((animeRecommended) => Number(animeRecommended.id) !== Number(anime.id)),
-          episodes
+          animesRecommended: animesRecommended.filter(
+            (animeRecommended) =>
+              Number(animeRecommended.id) !== Number(anime.id)
+          ),
+          episodes,
         },
-        revalidate: 60
+        revalidate: 60,
       }
     } catch (error) {
       console.log(error)
       return {
         notFound: true,
-        revalidate: 60
+        revalidate: 60,
       }
     }
   },
   getStaticPropsWithData: async (ctx: any, id: string) => {
     try {
-      const episodes = await api.getEpisodesFromAnime(id);
+      const episodes = await api.getEpisodesFromAnime(id)
 
       return {
         props: {
           data: {
             ...ctx.data.data,
-            animesRecommended: null
+            animesRecommended: null,
           },
           animesRecommended: ctx.data.data.animesRecommended || null,
-          episodes
+          episodes,
         },
-        revalidate: 60
+        revalidate: 60,
       }
     } catch (error) {
       console.log(error)
@@ -358,16 +362,16 @@ const pageData = getAllStaticData({
           ...ctx.data,
           episodes: [],
         },
-        revalidate: 60
+        revalidate: 60,
       }
     }
   },
   name: 'id',
-  fallback: true
+  fallback: true,
 })
 
-export const getStaticPaths = pageData.getStaticPaths(require("fs"))
-export const getStaticProps = pageData.getStaticProps(require("fs"))
+export const getStaticPaths = pageData.getStaticPaths(require('fs'))
+export const getStaticProps = pageData.getStaticProps(require('fs'))
 
 // export const getStaticPaths = async () => {
 //   return {
