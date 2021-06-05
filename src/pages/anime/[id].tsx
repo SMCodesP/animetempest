@@ -67,6 +67,11 @@ const Anime: React.FC<{
 
   useEffect(() => {
     setPage(1)
+    setEpisodesDisplay(episodes)
+  }, [episodes])
+
+  useEffect(() => {
+    setPage(1)
     setEpisodesDisplay(
       episodes.filter((episode) =>
         episode.title.toLowerCase().includes(query.toLowerCase())
@@ -299,15 +304,15 @@ const AnimePage: NextPage<{
 
 const pageData = getAllStaticData({
   getData: async () => {
-    return [];
-    // const animes = await api.getAnimes({
-    //   key: process.env.API_KEY,
-    //   limit: 5000
-    // })
-    // return await Promise.all(animes.map(async (anime) => ({
-    //   ...anime,
-    //   animesRecommended: await api.getCategory(anime.genres[0])
-    // })))
+    // return [];
+    const animes = await api.getAnimes({
+      key: process.env.API_KEY,
+      limit: 5000
+    })
+    return await Promise.all(animes.map(async (anime) => ({
+      ...anime,
+      animesRecommended: await api.getCategory(anime.genres[0])
+    })))
   },
   getStaticPropsRevalidate: async (id: string) => {
     try {
