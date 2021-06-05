@@ -312,7 +312,6 @@ const pageData = getAllStaticData({
   getStaticPropsRevalidate: async (id: string) => {
     try {
       const anime = await api.getAnime(id);
-      console.log(anime.genres)
       const animesRecommended = await api.getCategory(anime.genres[Math.floor(Math.random() * anime.genres.length)]);
       const episodes = await api.getEpisodesFromAnime(id);
 
