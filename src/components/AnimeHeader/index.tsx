@@ -131,7 +131,7 @@ const AnimeHeader: React.FC<{
           </ContainerInfo>
           <Link href={`/anime/${anime.id}`}>
             <a>
-              <Thumbnail src={anime.coverImage_large || `https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
+              <Thumbnail src={anime.coverImage_extraLarge || `https://cdn.appanimeplus.tk/img/${anime.category_image}`} />
             </a>
           </Link>
         </ContainerAnime>

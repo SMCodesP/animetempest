@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Category from '../entities/Category'
 import Episode from '../entities/Episode'
+import Video from '../entities/Video'
 
 const api = axios.create({
   baseURL: 'https://appanimeplus.tk',
@@ -22,6 +23,17 @@ export default {
       }
     )
     return results
+  },
+  getLatest: async () => {
+    const { data: results } = await api.get<Video[]>('/api-animesbr-10.php?latest')
+    const { data: animes } = await axios.get<Category[]>(
+      `https://hurkita-bot-v3.herokuapp.com/api/anime/${results.map(anime => anime.category_id).join(',')}`
+    )
+
+    return results.map(episode => ({
+      ...episode,
+      anime: animes.find(anime => anime.id === Number(episode.category_id))
+    }))
   },
   getPopular: async () => {
     const { data: results } = await api.get<Category[]>(

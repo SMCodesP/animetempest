@@ -55,8 +55,7 @@ const AnimeResume: React.FC<{
       <Link href={`/anime/${anime.id}`}>
         <a>
           <Image
-            src={anime.coverImage_large || `https://cdn.appanimeplus.tk/img/${anime.category_image}`
-            }
+            src={anime.coverImage_extraLarge || `https://cdn.appanimeplus.tk/img/${anime.category_image}`}
           />
         </a>
       </Link>

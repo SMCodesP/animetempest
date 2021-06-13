@@ -16,7 +16,8 @@ const AnimeResume: React.FC<{
       <a>
         <ContainerAnime>
           <Image
-            src={`https://cdn.appanimeplus.tk/img/${episode.category_image}`}
+            src={episode.anime?.coverImage_extraLarge || `https://cdn.appanimeplus.tk/img/${episode.category_image}`}
+            quality={100}
           />
           <More
             style={{
