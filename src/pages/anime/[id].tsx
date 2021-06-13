@@ -303,7 +303,7 @@ const pageData = getAllStaticData({
   getData: async () => {
     // return [];
     const animes = await api.getAnimes({
-      key: process.env.API_KEY,
+      key: String(process.env.API_KEY),
       limit: 5000,
     })
     return await Promise.all(
