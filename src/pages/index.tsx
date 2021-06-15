@@ -134,8 +134,6 @@ export async function getStaticProps() {
   animesLatest = animesLatest
     .filter(anime => anime.category_id !== "2" && anime.category_id !== "33440")
 
-  console.log(animesLatest)
-
   return {
     props: {
       animesLatest,

@@ -95,7 +95,6 @@ const Search: NextPage = ({ query: queryInitial }: any) => {
         page: page + 1
       })
     }
-    console.log(animesList)
     if (animesList.length === 0)
       return setHasMore(false)
     setAnimes(state => [...state, ...animesList])
