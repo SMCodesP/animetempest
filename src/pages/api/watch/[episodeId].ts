@@ -5,9 +5,18 @@ import api from '../../../services/api'
 
 const handler = nc<NextApiRequest, NextApiResponse>().get(async (req, res) => {
 	try {
-		const { episodeId } = req.query
+		const { episodeId, quality }: {
+			episodeId: string | string[]
+			quality: 'locationsd' | 'locationhd' | 'location'
+		} = req.query as any
 
 		const episode = await api.getEpisode(String(episodeId))
+
+		if (quality) {
+			if (episode[quality]) {
+				return res.redirect(String(episode[quality]));
+			}
+		}
 
 		return res.json(episode)
 	} catch (error) {
