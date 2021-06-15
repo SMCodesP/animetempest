@@ -13,7 +13,7 @@ const handler = nc<NextApiRequest, NextApiResponse>().get(async (req, res) => {
 
   try {
     if (animes.length === 0) {
-      const {data} = await api.get<Category[]>('/api-animesbr-10.php')
+      const {data} = await api.get<Category[]>('/meuanimetv-40.php')
       animes = data;
     }
 

@@ -25,7 +25,7 @@ export default {
     return results
   },
   getLatest: async () => {
-    const { data: results } = await api.get<Video[]>('/api-animesbr-10.php?latest')
+    const { data: results } = await api.get<Video[]>('/meuanimetv-40.php?latest')
     const { data: animes } = await axios.get<Category[]>(
       `https://hurkita-bot-v3.herokuapp.com/api/anime/${results.map(anime => anime.category_id).join(',')}`
     )
@@ -42,8 +42,8 @@ export default {
     return results
   },
   getEpisode: async (episode: string) => {
-    const { data } = await axios.get<Episode[]>(
-      `https://appanimeplus.tk/api-animesbr-10.php?episodios=${episode}`,
+    const { data } = await api.get<Episode[]>(
+      `/meuanimetv-40.php?episodios=${episode}`,
       {
         headers: {
           'proxy-type': 'brazil',
@@ -56,7 +56,7 @@ export default {
   },
   getEpisodesFromAnime: async (anime_id: string | number) => {
     const { data } = await api.get<Episode[]>(
-      `/api-animesbr-10.php?cat_id=${anime_id}`
+      `/meuanimetv-40.php?cat_id=${anime_id}`
     )
     return data
   },
@@ -66,13 +66,13 @@ export default {
   },
   nextEpisode: async (episode_id: string, anime_id: string) => {
     const { data } = await api.get<Episode[] | null>(
-      `/api-animesbr-10.php?episodios=${episode_id}&catid=${anime_id}&next`
+      `/meuanimetv-40.php?episodios=${episode_id}&catid=${anime_id}&next`
     )
     return data && data[0]
   },
   previousEpisode: async (episode_id: string, anime_id: string) => {
     const { data } = await api.get<Episode[] | null>(
-      `/api-animesbr-10.php?episodios=${episode_id}&catid=${anime_id}&previous`
+      `/meuanimetv-40.php?episodios=${episode_id}&catid=${anime_id}&previous`
     )
     return data && data[0]
   },
