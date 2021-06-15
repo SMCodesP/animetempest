@@ -11,8 +11,6 @@ import { FiLogOut } from 'react-icons/fi'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 import Footer from '../../components/Footer'
-import Category from '../../entities/Category'
-import api from '../../services/api'
 
 import {
   Container,
