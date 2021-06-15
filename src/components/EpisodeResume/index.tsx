@@ -12,7 +12,7 @@ const AnimeResume: React.FC<{
 }> = ({ episode }) => {
 
   return (
-    <Link prefetch={false} href={`/watch/${episode.video_id}`}>
+    <Link href={`/watch/${episode.video_id}`}>
       <a>
         <ContainerAnime>
           <Image

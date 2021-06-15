@@ -195,7 +195,7 @@ const Anime: React.FC<{
               }}
             />
             {episodes && episodes.length !== 0 && (
-              <Link prefetch={false} href={`/watch/${episodes[0]?.video_id}`}>
+              <Link href={`/watch/${episodes[0]?.video_id}`}>
                 <a style={{ width: 'fit-content' }}>
                   <ButtonWatch>Assistir online</ButtonWatch>
                 </a>
@@ -229,7 +229,6 @@ const Anime: React.FC<{
             <ContainerListEpisodes>
               {episodesDisplay.slice(0, 15 * page).map((episode) => (
                 <Link
-                  prefetch={false}
                   href={`/watch/${episode.video_id}`}
                   key={`episode-${episode.video_id}`}
                 >
