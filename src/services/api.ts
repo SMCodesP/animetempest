@@ -32,7 +32,7 @@ export default {
 
     return results.map(episode => ({
       ...episode,
-      anime: animes.find(anime => anime.id === Number(episode.category_id))
+      anime: animes.find(anime => anime.id === Number(episode.category_id)) || null
     }))
   },
   getPopular: async () => {
