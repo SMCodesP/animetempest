@@ -139,15 +139,4 @@ const Profile: NextPage = () => {
   )
 }
 
-export async function getStaticProps() {
-  const { data: animes } = await api.get<Category[]>('/meuanimetv-40.php')
-
-  return {
-    props: {
-      animes,
-    },
-    revalidate: 60,
-  }
-}
-
 export default Profile
