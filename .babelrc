@@ -7,8 +7,8 @@
       "styled-components",
       {
         "ssr": true,
-        "displayName": false,
-        "preprocess": true
+        "displayName": true,
+        "preprocess": false
       }
     ]
   ]

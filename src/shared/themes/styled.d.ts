@@ -1,24 +1,16 @@
-import 'styled-components'
+import 'styled-components';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
-    primary: string
-    secundary: string
-    tertiary: string
-
-    background: string
-    secundaryBackground: string
-
-    text: string
-    secundaryText: string
-    tertiaryText: string
-    fifthText: string
-    inverseText: string
-
-    number: string
-
-    light: string
+    red: string;
+    orange: string;
+    yellow: string;
+    green: string;
+    cyan: string;
+    blue: string;
+    purple: string;
+    pink: string;
+    background: string;
+    text: string;
   }
 }
-
-declare module '@next-auth/faunadb-adapter'

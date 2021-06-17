@@ -1,8 +1,6 @@
 module.exports = {
+  reactStrictMode: true,
   images: {
-    domains: ['cdn.appanimeplus.tk', 'cdn.myanimelist.net', 's4.anilist.co'],
+    domains: ['smcodes.tk'],
   },
-  future: {
-    webpack5: true,
-  },
-}
+};

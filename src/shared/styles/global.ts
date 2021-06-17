@@ -1,4 +1,5 @@
-import { createGlobalStyle } from 'styled-components'
+import { lighten } from 'polished';
+import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyle = createGlobalStyle`
   * {
@@ -7,9 +8,9 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   html, body {
-    background: ${({ theme }) => theme.background};
+    background: ${({ theme }) => lighten(0.15, theme.cyan)};
     color: ${({ theme }) => theme.text};
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Rubik', sans-serif;
   }
   a {
     text-decoration: none;
@@ -18,25 +19,20 @@ export const GlobalStyle = createGlobalStyle`
   input, button {
     outline: 0;
   }
-  ::-moz-selection {
-    background: ${({ theme }) => theme.secundaryText};
-  }
-  ::selection {
-    background: ${({ theme }) => theme.secundaryText};
-  }
   ::-webkit-scrollbar {
     width: 5px;
     height: 5px;
   }
   ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.fifthText};
+    background: ${({ theme }) => theme.background};
+    padding: 0 5px;
   }
   ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.inverseText};
+    background: ${({ theme }) => theme.text};
     border-radius: 5px;
     transition: 0.2s background;
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #455073;
   }
-`
+`;
