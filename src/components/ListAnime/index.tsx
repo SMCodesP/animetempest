@@ -65,7 +65,10 @@ const ListAnime: React.FC<{
             }}
           >
             <AnimeImage
-              src={String(anime.coverImage_extraLarge)}
+              src={
+                String(anime.coverImage_extraLarge) ||
+                `https://cdn.appanimeplus.tk/img/${anime.category_image}`
+              }
               width={260}
               height={370}
               quality={100}
