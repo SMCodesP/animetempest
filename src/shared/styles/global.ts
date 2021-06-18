@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   html, body {
-    background: ${({ theme }) => lighten(0.15, theme.cyan)};
+    background: ${({ theme }) => lighten(0.175, theme.cyan)};
     color: ${({ theme }) => theme.text};
     font-family: 'Rubik', sans-serif;
   }

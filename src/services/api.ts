@@ -8,10 +8,24 @@ const api = axios.create({
   },
 });
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   ...api,
-  getPopular: async () => {
-    const { data: results } = await api.get<Category[]>(`/popular`);
+  getPopular: async (limit = 10) => {
+    const { data: results } = await api.get<Category[]>(`/popular`, {
+      params: {
+        limit,
+      },
+    });
+
+    return results;
+  },
+  getByGenre: async (genre: string, limit = 10) => {
+    const { data: results } = await api.get<Category[]>(`/genres/${genre}`, {
+      params: {
+        limit,
+      },
+    });
 
     return results;
   },

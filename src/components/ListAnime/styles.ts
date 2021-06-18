@@ -13,12 +13,15 @@ export const Container = styled.div<{
 
   & > div {
     padding-left: 50px;
+    padding-top: 70px;
+    padding-bottom: 10px;
+    margin-top: -58px;
   }
 
   ul {
     padding: 10px 0;
     gap: 15px;
-    width: calc(260px * ${({ items }) => items});
+    width: calc(255px * ${({ items }) => items});
   }
 
   & * {
@@ -41,6 +44,12 @@ export const ContainerImage = styled.div`
   position: relative;
   height: 99%;
   border-radius: 15px;
+  transition: transform 0.4s;
+
+  &:hover {
+    transform: scale(1.075);
+    box-shadow: 0 !important;
+  }
 `;
 
 export const AnimeImage = styled(Image)`
@@ -100,4 +109,50 @@ export const AnimeTitle = styled.p`
   border-bottom-right-radius: 15px;
   word-break: break-all;
   font-weight: 500;
+`;
+
+export const ContainerButton = styled.div`
+  position: absolute;
+  right: 0;
+  top: 8px;
+  margin-right: 15px;
+  display: flex;
+  flex-direction: row;
+  z-index: 99999999;
+  box-shadow: 0 0 8px ${({ theme }) => transparentize(0.925, theme.text)};
+  border-radius: 8px;
+
+  & button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: ${({ theme }) => theme.background};
+    width: 40px;
+    height: 40px;
+    border: 0;
+    transition: filter 0.2s;
+
+    &.disable {
+      filter: brightness(85%);
+    }
+
+    &:active {
+      filter: brightness(85%);
+    }
+
+    &:first-child {
+      border-bottom-left-radius: 8px;
+      border-top-left-radius: 8px;
+      border: 1px solid ${({ theme }) => transparentize(0.75, theme.text)};
+    }
+
+    &:last-child {
+      border-bottom-right-radius: 8px;
+      border-top-right-radius: 8px;
+      border-top: 1px solid ${({ theme }) => transparentize(0.75, theme.text)};
+      border-right: 1px solid ${({ theme }) => transparentize(0.75, theme.text)};
+      border-bottom: 1px solid
+        ${({ theme }) => transparentize(0.75, theme.text)};
+    }
+  }
 `;
