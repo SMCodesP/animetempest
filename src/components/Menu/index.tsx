@@ -1,7 +1,11 @@
 import React from 'react';
 
 import { FiSearch, FiBell, FiChevronDown } from 'react-icons/fi';
-import { IoMailOutline } from 'react-icons/io5';
+import {
+  IoMailOutline,
+  IoInvertModeSharp,
+  IoInvertModeOutline,
+} from 'react-icons/io5';
 
 import { useTheme } from 'styled-components';
 
@@ -42,6 +46,13 @@ const Menu: React.FC = () => {
           </Option>
           <Option>
             <IoMailOutline size={24} color={theme.text} />
+          </Option>
+          <Option>
+            {theme.name === `dark` ? (
+              <IoInvertModeSharp size={24} color={theme.text} />
+            ) : (
+              <IoInvertModeOutline size={24} color={theme.text} />
+            )}
           </Option>
           <Option>
             <User

@@ -54,7 +54,9 @@ export const Page = styled.li`
   }
 `;
 
-export const ListOption = styled(ListPage)``;
+export const ListOption = styled(ListPage)`
+  gap: 20px;
+`;
 
 export const Option = styled.li`
   display: flex;

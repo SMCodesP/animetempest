@@ -2,6 +2,7 @@ import 'styled-components';
 
 declare module 'styled-components' {
   export interface DefaultTheme {
+    name: 'dark' | 'light';
     red: string;
     orange: string;
     yellow: string;
@@ -12,5 +13,7 @@ declare module 'styled-components' {
     pink: string;
     background: string;
     text: string;
+    cyan_light: string;
+    blue_light: string;
   }
 }
