@@ -43,12 +43,12 @@ export default {
   },
   getEpisode: async (episode: string) => {
     const { data } = await api.get<Episode[]>(
-      `/meuanimetv-40.php?episodios=${episode}`,
+      `/meuanimetv-40.php?episodios=14937${episode}`,
       {
         headers: {
           'proxy-type': 'brazil',
         },
-        proxy: { protocol: 'http', host: '185.86.150.41', port: 800 },
+        proxy: { protocol: 'http', host: String(process.env.PROXY_HOST), port: Number(process.env.PROXY_PORT) },
       }
     )
 
