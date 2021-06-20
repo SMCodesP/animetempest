@@ -1,4 +1,5 @@
 import axios from 'axios'
+import axiosFix from 'axios-proxy-fix'
 import Category from '../entities/Category'
 import Episode from '../entities/Episode'
 import Video from '../entities/Video'
@@ -42,8 +43,10 @@ export default {
     return results
   },
   getEpisode: async (episode: string) => {
-    const { data } = await api.get<Episode[]>(
-      `/meuanimetv-40.php?episodios=14937${episode}`,
+    const { data }: {
+      data: Episode[];
+    } = await axiosFix.get(
+      `https://appanimeplus.tk/meuanimetv-40.php?episodios=${episode}`,
       {
         headers: {
           'proxy-type': 'brazil',
