@@ -128,19 +128,25 @@ const Home: NextPage<{
 }
 
 export async function getStaticProps() {
-  let animesLatest = await api.getLatest()
-  let animesPopular = await api.getPopular()
+  try {
+    let animesLatest = await api.getLatest()
+    let animesPopular = await api.getPopular()
 
-  animesLatest = animesLatest
-    .filter(anime => anime.category_id !== "2" && anime.category_id !== "33440")
+    animesLatest = animesLatest
+      .filter(anime => anime.category_id !== "2" && anime.category_id !== "33440")
 
-  return {
-    props: {
-      animesLatest,
-      animesPopular,
-      animePopular: animesPopular[Math.floor(Math.random() * animesPopular.length)]
-    },
-    revalidate: 60,
+    return {
+      props: {
+        animesLatest,
+        animesPopular,
+        animePopular: animesPopular[Math.floor(Math.random() * animesPopular.length)]
+      },
+      revalidate: 60,
+    }
+  } catch (err) {
+    console.log('error no index')
+    console.error(err)
+    console.log(err)
   }
 }
 

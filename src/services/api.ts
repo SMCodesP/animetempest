@@ -2,11 +2,14 @@ import axios from 'axios'
 import Category from '../entities/Category'
 import Episode from '../entities/Episode'
 import Video from '../entities/Video'
+import { getAuth, getStreamingDataR } from '../utils/animetv/authHeaders'
+import randomAgent from '../utils/animetv/randomAgent'
 
 const api = axios.create({
   baseURL: 'https://appanimeplus.tk',
   headers: {
     'Content-type': 'application/json',
+    'User-Agent': 'node-fetch/1.0',
   },
 })
 
@@ -45,20 +48,25 @@ export default {
     const { data }: {
       data: Episode[];
     } = await axios.get(
-      `https://appanimeplus.tk/meuanimetv-40.php?episodios=${episode}`,
+      `https://appanimeplus.tk/meuanimetv-40.php`,
       {
+        params: {
+          episodios: episode,
+          ...getStreamingDataR()
+        },
         headers: {
-          'proxy-type': 'brazil',
+          'User-Agent': randomAgent(),
+          ...(await getAuth())
         },
-        proxy: {
-          protocol: String(process.env.PROXY_PROTOCOL),
-          host: String(process.env.PROXY_HOST),
-          port: Number(process.env.PROXY_PORT),
-          auth: {
-            username: String(process.env.PROXY_USERNAME),
-            password: String(process.env.PROXY_PASSWORD)
-          }
-        },
+        // proxy: {
+        //   protocol: String(process.env.PROXY_PROTOCOL),
+        //   host: String(process.env.PROXY_HOST),
+        //   port: Number(process.env.PROXY_PORT),
+        //   auth: {
+        //     username: String(process.env.PROXY_USERNAME),
+        //     password: String(process.env.PROXY_PASSWORD)
+        //   }
+        // },
       }
     )
 
@@ -66,7 +74,15 @@ export default {
   },
   getEpisodesFromAnime: async (anime_id: string | number) => {
     const { data } = await api.get<Episode[]>(
-      `/meuanimetv-40.php?cat_id=${anime_id}`
+      `/meuanimetv-40.php`,
+      {
+        params: {
+          cat_id: anime_id,
+        },
+        headers: {
+          'User-Agent': randomAgent(),
+        },
+      }
     )
     return data
   },
@@ -76,13 +92,20 @@ export default {
   },
   nextEpisode: async (episode_id: string, anime_id: string) => {
     const { data } = await api.get<Episode[] | null>(
-      `/meuanimetv-40.php?episodios=${episode_id}&catid=${anime_id}&next`
+      `/meuanimetv-40.php?episodios=${episode_id}&catid=${anime_id}&next`,
+      {
+        headers: {
+          'User-Agent': randomAgent(),
+        },}
     )
     return data && data[0]
   },
   previousEpisode: async (episode_id: string, anime_id: string) => {
     const { data } = await api.get<Episode[] | null>(
-      `/meuanimetv-40.php?episodios=${episode_id}&catid=${anime_id}&previous`
+      `/meuanimetv-40.php?episodios=${episode_id}&catid=${anime_id}&previous`, {
+        headers: {
+          'User-Agent': randomAgent(),
+        },}
     )
     return data && data[0]
   },

@@ -164,7 +164,7 @@ const Watch: NextPage<{
   }
 
   if (!episodeInitial) {
-    return <Error statusCode={404} />
+    return <Error statusCode={500} />
   }
 
   return (
@@ -216,6 +216,7 @@ export const getStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   try {
     const episodeInitial = await api.getEpisode(String(params?.videoId))
+    console.log(episodeInitial)
     if (!episodeInitial) throw `Episode ${String(params?.videoId)} null.`
     if (!episodeInitial.location)
       throw `Episode location video not found ${String(params?.videoId)}.`
@@ -247,6 +248,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       revalidate: 60,
     }
   } catch (error) {
+    console.error(error)
     return {
       notFound: true,
       revalidate: 60,
