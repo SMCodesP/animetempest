@@ -31,17 +31,18 @@ export async function getAuth(): Promise<{}> {
       'user-agent': randomAgent(),
       'content-type': 'application/octet-stream',
       'accept': '*/*',
+      'proxy-type': 'brazil',
       'content-length': buffer.length,
     },
-    // proxy: {
-    //   protocol: String(process.env.PROXY_PROTOCOL),
-    //   host: String(process.env.PROXY_HOST),
-    //   port: Number(process.env.PROXY_PORT),
-    //   auth: {
-    //     username: String(process.env.PROXY_USERNAME),
-    //     password: String(process.env.PROXY_PASSWORD)
-    //   }
-    // },
+    proxy: {
+      protocol: String(process.env.PROXY_PROTOCOL),
+      host: String(process.env.PROXY_HOST),
+      port: Number(process.env.PROXY_PORT),
+      auth: {
+        username: String(process.env.PROXY_USERNAME),
+        password: String(process.env.PROXY_PASSWORD)
+      }
+    },
   })
 
   return {

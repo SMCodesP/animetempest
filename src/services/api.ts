@@ -56,17 +56,18 @@ export default {
         },
         headers: {
           'User-Agent': randomAgent(),
+          'proxy-type': 'brazil',
           ...(await getAuth())
         },
-        // proxy: {
-        //   protocol: String(process.env.PROXY_PROTOCOL),
-        //   host: String(process.env.PROXY_HOST),
-        //   port: Number(process.env.PROXY_PORT),
-        //   auth: {
-        //     username: String(process.env.PROXY_USERNAME),
-        //     password: String(process.env.PROXY_PASSWORD)
-        //   }
-        // },
+        proxy: {
+          protocol: String(process.env.PROXY_PROTOCOL),
+          host: String(process.env.PROXY_HOST),
+          port: Number(process.env.PROXY_PORT),
+          auth: {
+            username: String(process.env.PROXY_USERNAME),
+            password: String(process.env.PROXY_PASSWORD)
+          }
+        },
       }
     )
 
