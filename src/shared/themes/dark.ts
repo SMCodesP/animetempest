@@ -1,18 +1,19 @@
-export default {
-  primary: "#67E480",
-  secundary: "#41414D",
-  tertiary: "#988BC7",
+import { DefaultTheme } from 'styled-components';
 
-  background: "#191622",
-  secundaryBackground: "#44475a",
+const dark: DefaultTheme = {
+  name: `dark`,
+  red: `#ffadad`,
+  orange: `#ffd6a5`,
+  yellow: `#fdffb6`,
+  green: `#caffbf`,
+  cyan: `#0e0c13`,
+  cyan_light: `#16131d`,
+  blue_light: `#483C67`,
+  blue: `#a0c4ff`,
+  purple: `#bdb2ff`,
+  pink: `#FF79C6`,
+  background: `#0e0c13`,
+  text: `#fffffc`,
+};
 
-  text: "#E1E1E6",
-  secundaryText: "#483C67",
-  tertiaryText: "#f1fa8c",
-  fifthText: "#E96379",
-  inverseText: "#333333",
-
-  number: "#78D1E1",
-
-  light: "#fafafa",
-}
+export default dark;

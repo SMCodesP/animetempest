@@ -1,2 +1,9 @@
+import light from './light';
 import dark from './dark';
-export default {dark};
+
+const themes = {
+  light,
+  dark,
+};
+
+export default themes;

@@ -1,74 +1,59 @@
-<h1 align="center"><img width="128" style="border-radius: 64px" src="./public/images/logo.jpg"></h1>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/26466516/118417547-e9409d00-b68a-11eb-8162-6afccf9288a9.png" alt="Next.js TypeScript Starter">
+</p>
 
-<div align="center">
-  <p>
-    <strong>Seu site de animes open source</strong>
-  </p>
-  <p>
-    <a href="https://vercel.com/?utm_source=brasilapi" target="_blank" rel="noopener">
-      <img src="./public/images/powered-by-vercel.svg" width="175" alt="Powered by Vercel" />
-    </a>
-  </p>
-</div>
+<p align="center">
+  <img src="https://img.shields.io/static/v1?label=PRs&message=welcome&style=for-the-badge&color=5e17eb&labelColor=000000" alt="PRs welcome!" />
 
-# AnimeTempest
+  <img alt="License" src="https://img.shields.io/github/license/jpedroschmitz/typescript-nextjs-starter?style=for-the-badge&color=5e17eb&labelColor=000000">
 
-<div align="center">
-
-[![Discord Group](https://shields.io/discord/803654181839700038?style=for-the-badge&logo=discord&color=67E480)](https://discord.gg/s9jKHJwxqH)
-[![Github status](https://shields.io/github/last-commit/SMCodesP/animetempest?style=for-the-badge&logo=github&color=24292e)](https://github.com/SMCodesP/animetempest)
-![Status website](https://shields.io/uptimerobot/ratio/m788136933-a1e7a27585f1fc18930f9b1d?style=for-the-badge&label=UPTIME%2030)
-
-</div>
-
-![Screens](./public/images/screens.png)
-
-Esse projeto é um website simples usando React com NextJS para asssitir animes online, nesse website não hospedo nenhum animes, apenas uso de uma API que disponibiliza dados dos animes, porém caso você for usar essa API produtivamente lembre-se que ela tem alguns bugs nos episódios como listagem bagunçada e alguns faltando episódios.
-
-## Funções
-
-- [x] **Player de video**
-- [x] **Listagem de animes**
-- [x] **Autenticação**
-- [x] **Salvando dados** (Progresso do video, histórico, favoritos)
-- [ ] **Perfil**
-- [ ] **Estatísticas e top de usuários**
-
-## Como usar
-
-1. **Clone esse repositório**
-
-```bash
-git clone https://github.com/SMCodesP/animetempest
-```
-
-2. **Configure variáveis ambientes**
-
-```bash
-# Copie o arquivo de examples das variaveis ambientes e siga os comentários para preenchê-las
-cp .env.example .env
-```
-
-3. **Instale dependências**
-
-```bash
-yarn
-# or
-npm install
-```
-
-4. **Iniciar**
-
-```bash
-yarn dev
-# or
-npm run dev
-```
+  <a href="https://twitter.com/intent/follow?screen_name=jpedroschmitz">
+    <img src="https://img.shields.io/twitter/follow/jpedroschmitz?style=for-the-badge&color=5e17eb&labelColor=000000" alt="Follow @jpedroschmitz" />
+  </a>
+</p>
 
 <br>
 
+A TypeScript starter for Next.js that includes all you need to build amazing projects 🔥
+
+- 📏 **ESLint** — Pluggable JavaScript linter
+- 💖 **Prettier** - Opinionated Code Formatter
+- 🐶 **Husky** — Use git hooks with ease
+- 📄 **Commitizen** - Conventional commit messages CLI
+- 🚓 **Commitlint** - Lint commit messages
+- 🖌 **Renovate** - Dependency update tool
+- 🚫 **lint-staged** - Run linters against staged git files
+- 👷 **PR Workflow** - Run Type Check & Linters on pull requests
+- 🗂 **Absolute import** - Import folders and files using the `@` prefix
+
+## 🚀 Getting started
+
+The best way to start with this template is using `create-next-app`.
+
+```
+npx create-next-app ts-next -e https://github.com/jpedroschmitz/typescript-nextjs-starter
+```
+
+If you prefer you can clone this repository and run the following commands inside the project folder:
+
+1. `npm install` or `yarn`;
+2. `yarn dev`;
+
+To view the project open `http://localhost:3000`.
+
+## 🤝 Contributing
+
+1. Fork this repository;
+2. Create your branch: `git checkout -b my-new-feature`;
+3. Commit your changes: `git commit -m 'Add some feature'`;
+4. Push to the branch: `git push origin my-new-feature`.
+
+**After your pull request is merged**, you can safely delete your branch.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for more information.
+
 ---
 
-<p align="center">
-  Copyright © 2020-present, <b>SMCodes<b>.
-</p>
+Made with ♥ by João Pedro Schmitz
