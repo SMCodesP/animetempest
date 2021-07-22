@@ -14,7 +14,7 @@ const light: DefaultTheme = {
   purple: `#bdb2ff`,
   pink: `#FF79C6`,
   background: `#fffffc`,
-  text: `#191622`,
+  text: `#483C67`,
 };
 
 export default light;

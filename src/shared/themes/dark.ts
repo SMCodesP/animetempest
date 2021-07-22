@@ -7,7 +7,7 @@ const dark: DefaultTheme = {
   yellow: `#fdffb6`,
   green: `#caffbf`,
   cyan: `#0e0c13`,
-  cyan_light: `#16131d`,
+  cyan_light: `#191622`,
   blue_light: `#483C67`,
   blue: `#a0c4ff`,
   purple: `#bdb2ff`,
