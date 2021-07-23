@@ -2,9 +2,17 @@ import { NextPage } from 'next';
 
 import { CharacterQuote } from '@/components/CharacterQuote';
 import { Menu } from '@/components/Menu';
+import { Footer } from '@/components/Footer';
 
 import api from '@/services/api';
 import TCharacterQuote from '@/types/TCharacterQuote';
+
+import {
+  ContainerAbout,
+  ContainerWelcome,
+  Description,
+  Title,
+} from '@/shared/styles/home';
 
 const Home: NextPage<{
   characterQuote: TCharacterQuote;
@@ -12,7 +20,15 @@ const Home: NextPage<{
   <div>
     <Menu actived="home" />
 
-    <CharacterQuote characterQuote={characterQuote} />
+    <ContainerWelcome>
+      <CharacterQuote characterQuote={characterQuote} />
+      <ContainerAbout>
+        <Title>Seja bem-vindo ao nosso blog!</Title>
+        <Description>Fique por dentro do universo dos animes</Description>
+      </ContainerAbout>
+    </ContainerWelcome>
+
+    <Footer />
   </div>
 );
 
