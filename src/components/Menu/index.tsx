@@ -5,6 +5,7 @@ import { useTheme } from 'styled-components';
 
 import { BiSearchAlt2 } from 'react-icons/bi';
 import { CgDarkMode } from 'react-icons/cg';
+import { FaDiscord } from 'react-icons/fa';
 
 import {
   Container,
@@ -33,6 +34,9 @@ export const Menu: React.FC<{
           height={36}
         />
         <ListOptions>
+          <OptionItem>
+            <FaDiscord size={24} color={theme.text} />
+          </OptionItem>
           <OptionItem>
             <CgDarkMode size={24} color={theme.text} />
           </OptionItem>
