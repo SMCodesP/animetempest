@@ -72,7 +72,6 @@ export const Dot = styled.span`
   background: ${({ theme }) => theme.purple};
   animation: ${opacity} 0.4s linear;
 `;
-// ${({ actived }) => !actived && `display: none;`}
 
 export const PageItem = styled.li<{
   actived: boolean;
