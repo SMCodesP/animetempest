@@ -1,13 +1,9 @@
 import styled from 'styled-components';
 
-export const ContainerWelcome = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
+export const ContainerWelcome = styled.div``;
 
 export const ContainerAbout = styled.div`
-  flex: 1;
-  padding: 50px;
+  padding: 10px 0 10px 25px;
   display: flex;
   flex-direction: column;
   gap: 15px;

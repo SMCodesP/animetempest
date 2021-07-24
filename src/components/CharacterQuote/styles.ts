@@ -2,12 +2,13 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   display: flex;
+  float: left;
   flex-direction: column;
   gap: 70px;
   position: relative;
   width: 600px;
   min-height: 350px;
-  box-shadow: 0 0 5px ${({ theme }) => theme.purple};
+  box-shadow: 0 0 5px ${({ theme }) => theme.text};
   background: #191622;
   background-repeat: no-repeat;
   background-position-x: right;
@@ -30,13 +31,16 @@ export const CharacterAuthor = styled.p`
   margin-top: auto;
   padding-bottom: 50px;
   padding-left: 20px;
-  color: ${({ theme }) => theme.yellow};
-  font-size: 0.9em;
+  color: ${({ theme }) => theme.blue_light};
+  font-size: 1em;
   font-family: 'Noto Sans', sans-serif;
   font-weight: bold;
 
   & span {
-    color: ${({ theme }) => theme.pink};
+    font-size: 1.25em;
+    font-family: sans-serif;
+    font-weight: 900;
+    color: ${({ theme }) => theme.green};
   }
 `;
 

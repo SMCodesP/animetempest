@@ -15,6 +15,7 @@ const light: DefaultTheme = {
   pink: `#FF79C6`,
   background: `#fffffc`,
   text: `#483C67`,
+  light: `#E1E1E6`,
 };
 
 export default light;

@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components';
 export const Container = styled.footer`
   width: 100%;
   margin-top: 50px;
-  padding: 50px;
+  padding: 50px 50px 15px 50px;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -59,22 +59,13 @@ export const AuthorCopyright = styled.p`
 
 const heartbeat = keyframes`
   0% {
-    transform: scale(.75);
-  }
-  20% {
     transform: scale(1);
   }
-  40% {
-    transform: scale(.75);
-  }
-  60% {
-    transform: scale(1);
-  }
-  80% {
+  50% {
     transform: scale(.75);
   }
   100% {
-    transform: scale(.75);
+    transform: scale(1);
   }
 `;
 

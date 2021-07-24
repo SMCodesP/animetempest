@@ -15,5 +15,6 @@ declare module 'styled-components' {
     text: string;
     cyan_light: string;
     blue_light: string;
+    light: string;
   }
 }

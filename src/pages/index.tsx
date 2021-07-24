@@ -3,6 +3,8 @@ import { NextPage } from 'next';
 import { CharacterQuote } from '@/components/CharacterQuote';
 import { Menu } from '@/components/Menu';
 import { Footer } from '@/components/Footer';
+import { Carousel } from '@/components/Carousel';
+import { CardArticle } from '@/components/CardArticle';
 
 import api from '@/services/api';
 import TCharacterQuote from '@/types/TCharacterQuote';
@@ -25,6 +27,11 @@ const Home: NextPage<{
       <ContainerAbout>
         <Title>Seja bem-vindo ao nosso blog!</Title>
         <Description>Fique por dentro do universo dos animes</Description>
+        <Carousel>
+          {[`teste`, `teste123`, `12i3`, `iapsdi`, `iapsd`].map((index) => (
+            <CardArticle key={index} id={index} className="embla__slide" />
+          ))}
+        </Carousel>
       </ContainerAbout>
     </ContainerWelcome>
 

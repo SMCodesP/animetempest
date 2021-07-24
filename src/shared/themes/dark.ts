@@ -14,6 +14,7 @@ const dark: DefaultTheme = {
   pink: `#FF79C6`,
   background: `#0e0c13`,
   text: `#fffffc`,
+  light: `#E1E1E6`,
 };
 
 export default dark;
