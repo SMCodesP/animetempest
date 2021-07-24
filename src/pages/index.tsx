@@ -29,7 +29,7 @@ const Home: NextPage<{
         <Description>Fique por dentro do universo dos animes</Description>
         <Carousel>
           {[`teste`, `teste123`, `12i3`, `iapsdi`, `iapsd`].map((index) => (
-            <CardArticle key={index} id={index} className="embla__slide" />
+            <CardArticle key={index} className="embla__slide" />
           ))}
         </Carousel>
       </ContainerAbout>

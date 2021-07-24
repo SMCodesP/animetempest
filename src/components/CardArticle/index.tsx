@@ -15,7 +15,9 @@ import {
   TimeRead,
 } from './styles';
 
-export const CardArticle: React.FC = ({ className, id }) => {
+export const CardArticle: React.FC<{
+  className?: string;
+}> = ({ className }) => {
   const theme = useTheme();
 
   return (

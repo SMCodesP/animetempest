@@ -10,6 +10,7 @@ import { Container, Button } from './styles';
 const PrevButton: React.FC<{
   enabled: boolean;
   color: string;
+  onClick: any;
 }> = ({ enabled, color, onClick }) => (
   <Button
     className="embla__button embla__button--prev"
@@ -22,6 +23,7 @@ const PrevButton: React.FC<{
 const NextButton: React.FC<{
   enabled: boolean;
   color: string;
+  onClick: any;
 }> = ({ enabled, color, onClick }) => (
   <Button
     className="embla__button embla__button--next"
