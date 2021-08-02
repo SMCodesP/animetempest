@@ -5,12 +5,14 @@ import { Menu } from '@/components/Menu';
 import { Footer } from '@/components/Footer';
 import { Carousel } from '@/components/Carousel';
 import { CardArticle } from '@/components/CardArticle';
+import { SecundaryCardArticle } from '@/components/SecundaryCardArticle';
 
 import api from '@/services/api';
 import TCharacterQuote from '@/types/TCharacterQuote';
 
 import {
   ContainerAbout,
+  ContainerArticles,
   ContainerWelcome,
   Description,
   Title,
@@ -34,6 +36,17 @@ const Home: NextPage<{
         </Carousel>
       </ContainerAbout>
     </ContainerWelcome>
+
+    <ContainerArticles>
+      <SecundaryCardArticle />
+      <SecundaryCardArticle />
+      <SecundaryCardArticle />
+      <SecundaryCardArticle />
+      <SecundaryCardArticle />
+      <SecundaryCardArticle />
+      <SecundaryCardArticle />
+      <SecundaryCardArticle />
+    </ContainerArticles>
 
     <Footer />
   </div>

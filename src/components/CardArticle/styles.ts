@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export const ImageThumbnail = styled(Image)`
   border-radius: 15px;
-  filter: brightness(60%) blur(0.05em);
+  filter: brightness(55%) blur(0.05em);
   transition: filter 0.4s;
 `;
 
@@ -18,7 +18,7 @@ export const Container = styled.div`
   flex-direction: column;
   cursor: pointer;
   transition: filter 0.4s;
-  background: ${({ theme }) => theme.blue_light};
+  background: ${({ theme }) => theme.text};
 
   & a {
     display: flex;

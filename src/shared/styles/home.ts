@@ -17,3 +17,9 @@ export const Title = styled.h1`
 export const Description = styled.p`
   font-size: 18px;
 `;
+
+export const ContainerArticles = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin: 15px;
+`;
