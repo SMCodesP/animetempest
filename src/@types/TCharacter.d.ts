@@ -1,8 +1,6 @@
-import Category from './Category';
-
-export default interface Character {
+interface TCharacter {
   anilist?: {
-    anime: Category;
+    anime: TCategory;
     image: {
       large: string;
       medium: string;

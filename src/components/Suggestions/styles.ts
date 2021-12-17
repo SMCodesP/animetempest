@@ -1,4 +1,4 @@
-import { darken, transparentize } from 'polished';
+import { darken, getLuminance, transparentize } from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
@@ -9,7 +9,9 @@ export const Container = styled.div`
   width: 60%;
 `;
 
-export const ContainerBackground = styled.div`
+export const ContainerBackground = styled.div<{
+  color?: string;
+}>`
   display: flex;
   width: 100%;
   height: 325px;
@@ -36,8 +38,8 @@ export const ContainerBackground = styled.div`
     z-index: 99999;
     background: linear-gradient(
       to right,
-      ${({ theme }) => theme.blue_light} 5%,
-      ${({ theme }) => transparentize(0.5, theme.blue_light)}
+      ${({ color, theme }) => color || theme.blue_light} 5%,
+      ${({ color, theme }) => transparentize(0.5, color || theme.blue_light)}
     );
     left: calc(63% + 2px);
     backdrop-filter: blur(3px);
@@ -49,10 +51,11 @@ export const ContainerBackground = styled.div`
 
 export const ShadowCurtain = styled.div`
   width: 65%;
-  background: ${({ theme }) => theme.blue_light};
+  background: ${({ color, theme }) => color || theme.blue_light};
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
-  box-shadow: 50vw 0 90px ${({ theme }) => theme.blue_light} inset;
+  box-shadow: 50vw 0 90px ${({ color, theme }) => color || theme.blue_light}
+    inset;
   position: relative;
   z-index: 99999;
 `;
@@ -67,21 +70,42 @@ export const ContainerContent = styled.div`
   height: 100%;
 `;
 
-export const Quote = styled.h3`
-  background: -webkit-linear-gradient(
-    ${({ theme }) => theme.text},
-    ${({ theme }) => transparentize(0.5, theme.text)}
-  );
+export const Quote = styled.h3<{
+  color: string;
+}>`
+  background: ${({ color, theme }) =>
+    getLuminance(color) >= getLuminance(`#0000ff`)
+      ? `-webkit-linear-gradient(${theme.text}, ${transparentize(
+          0.5,
+          theme.text,
+        )});`
+      : `-webkit-linear-gradient(${theme.background}, ${darken(
+          0.5,
+          `#ffffff`,
+        )});`};
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-indent: 1em;
   padding: 4% 20% 4% 4%;
 `;
 
-export const Name = styled.p`
+export const Name = styled.p<{
+  color: string;
+}>`
   padding-left: 5%;
   font-weight: bold;
-  color: ${({ theme }) => theme.pink};
+  background: ${({ color, theme }) =>
+    getLuminance(color) >= getLuminance(`#0000ff`)
+      ? `-webkit-linear-gradient(${theme.text}, ${transparentize(
+          0.5,
+          theme.text,
+        )});`
+      : `-webkit-linear-gradient(${theme.background}, ${darken(
+          0.5,
+          `#ffffff`,
+        )});`};
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 `;
 
 export const CharacterImage = styled.img`

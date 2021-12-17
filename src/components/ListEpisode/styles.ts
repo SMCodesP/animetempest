@@ -2,51 +2,31 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { transparentize } from 'polished';
 
-export const Container = styled.div<{
-  items: number;
-}>`
+export const Container = styled.div`
+  width: 100%;
+  padding: 25px 35px;
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-top: 35px;
-
-  & > div {
-    padding-left: 50px;
-    padding-top: 70px;
-    padding-bottom: 10px;
-    margin-top: -58px;
-  }
-
-  ul {
-    padding: 10px 0;
-    gap: 15px;
-    width: calc(420px * ${({ items }) => items});
-
-    & li {
-      width: 412px !important;
-    }
-  }
-
-  & * {
-    user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-  }
+  gap: 15px;
 `;
 
 export const Title = styled.p`
   padding-left: 50px;
   font-size: 32px;
-  font-weight: 500;
+  font-weight: bold;
+  position: absolute;
+  left: 35px;
+  top: 32px;
 `;
 
 export const ContainerImage = styled.div`
   position: relative;
-  height: 99%;
+  gap: 15px;
+  min-width: 200px;
+  max-width: 200px;
+  height: 100%;
+  margin: 5px 7px;
   border-radius: 15px;
   transition: transform 0.4s;
 

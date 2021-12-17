@@ -2,53 +2,41 @@ import styled from 'styled-components';
 import Image from 'next/image';
 import { transparentize } from 'polished';
 
-export const Container = styled.div<{
-  items: number;
-}>`
+export const Container = styled.div`
+  width: 100%;
+  padding: 25px 35px;
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-top: 35px;
-
-  & > div {
-    padding-left: 50px;
-    padding-top: 70px;
-    padding-bottom: 10px;
-    margin-top: -58px;
-  }
-
-  ul {
-    padding: 10px 0;
-    gap: 15px;
-    width: calc(255px * ${({ items }) => items});
-  }
-
-  & * {
-    user-drag: none;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-  }
+  gap: 15px;
 `;
 
 export const Title = styled.p`
   padding-left: 50px;
   font-size: 32px;
-  font-weight: 500;
+  font-weight: bold;
+  position: absolute;
+  left: 35px;
+  top: 32px;
 `;
 
-export const ContainerImage = styled.div`
+export const ContainerImage = styled.div<{
+  colorBoxShadow: string;
+}>`
   position: relative;
-  height: 99%;
+  gap: 15px;
+  min-width: 200px;
+  max-width: 200px;
+  height: 100%;
+  margin: 15px 7px;
   border-radius: 15px;
-  transition: transform 0.4s;
+  cursor: pointer;
+  box-shadow: 0 0 5px ${({ colorBoxShadow }) => colorBoxShadow};
+  transition: box-shadow 0.4s, transform 0.4s;
 
   &:hover {
-    transform: scale(1.075);
-    box-shadow: 0 !important;
+    transform: scale(1.02);
+    box-shadow: 0 0 10px ${({ colorBoxShadow }) => colorBoxShadow};
   }
 `;
 
@@ -83,19 +71,31 @@ export const ContainerCurtain = styled.div`
 `;
 
 export const ContainerTitleStars = styled.div`
+  --color-green: 123, 213, 85;
+  --color-orange: 247, 154, 99;
+  -color-red: 232, 93, 117;
+
   position: relative;
   display: flex;
-  gap: 14px;
+  gap: 15px;
   justify-content: space-between;
   color: ${({ theme }) => theme.background};
 
   & span {
-    min-width: 42px;
+    min-width: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
     height: fit-content;
     gap: 4px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  & svg {
+    font-size: 18px;
+    width: 1.25em;
+    overflow: hidden;
   }
 `;
 

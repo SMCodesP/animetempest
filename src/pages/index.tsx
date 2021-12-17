@@ -1,13 +1,10 @@
 import React from 'react';
 import { NextPage } from 'next';
 
-import Category from '@/entities/Category';
-import Episode from '@/entities/Episode';
-
 import api from '@/services/api';
 
 import getRandom from '@/utils/getRandom';
-import gerens from '@/shared/data/genres';
+import genres from '@/shared/data/genres';
 
 import Menu from '@/components/Menu';
 import ListAnime from '@/components/ListAnime';
@@ -17,16 +14,17 @@ import Suggestions from '@/components/Suggestions';
 import 'react-multi-carousel/lib/styles.css';
 
 const Home: NextPage<{
-  animesPopular: Category[];
+  animesPopular: TCategory[];
   animesGenre: {
-    [key: string]: Category[];
+    [key: string]: TCategory[];
   };
-  episodesLatest: Episode[];
-}> = ({ animesPopular, episodesLatest, animesGenre }) => (
+  episodesLatest: TEpisode[];
+  quote: TQuote;
+}> = ({ animesPopular, quote, episodesLatest, animesGenre }) => (
   <div>
     <Menu />
 
-    <Suggestions />
+    <Suggestions quote={quote} />
 
     <ListAnime title="Popular" animes={animesPopular} />
 
@@ -43,26 +41,27 @@ const Home: NextPage<{
 );
 
 export async function getStaticProps() {
-  const animesPopular = await api.getPopular();
-  const episodesLatest = await api.getLatest();
-  const genresRandom = getRandom(Object.keys(gerens), 5);
+  const quote = await api.getQuote();
+  const animesPopular: any = await api.getPopular();
+  const genresRandom = getRandom(Object.keys(genres), 5);
   const genresPopulate: {
-    [key: string]: Category[];
+    [key: string]: any;
   } = {};
 
   // eslint-disable-next-line no-restricted-syntax
   for (const genre of genresRandom) {
     // eslint-disable-next-line no-await-in-loop
-    genresPopulate[genre] = await api.getByGenre(gerens[genre]);
+    genresPopulate[genre] = await api.getByGenre(genres[genre]);
   }
-
-  console.log(episodesLatest);
 
   return {
     props: {
       animesPopular,
       animesGenre: genresPopulate,
-      episodesLatest: episodesLatest.slice(0, 10),
+      episodesLatest: [],
+      quote,
+      // animesGenre: [],
+      // episodesLatest: episodesLatest.slice(0, 10),
     },
     revalidate: 300,
   };

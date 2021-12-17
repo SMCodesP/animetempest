@@ -1,101 +1,113 @@
-import Episode from '@/entities/Episode';
 import axios from 'axios';
-import Category from '../entities/Category';
-import Video from '../entities/Video';
+import faunadb from 'faunadb';
+import { request, gql } from 'graphql-request';
+import * as translatte from 'translatte';
 
-const api = axios.create({
-  baseURL: `https://hurkita-bot-v3.herokuapp.com/api`,
-  headers: {
-    'Content-type': `application/json`,
-  },
+const client = new faunadb.Client({
+  secret: process.env.FAUNADB_SECRET_KEY as string,
+  domain: process.env.FAUNADB_DOMAIN,
+  scheme: process.env.FAUNADB_SCHEMA as 'https' | 'http',
 });
+const q = faunadb.query;
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default {
-  ...api,
-  getPopular: async (limit = 10) => {
-    const { data: results } = await api.get<Category[]>(`/popular`, {
-      params: {
-        limit,
-      },
-    });
-
-    return results;
-  },
-  getByGenre: async (genre: string, limit = 10) => {
-    const { data: results } = await api.get<Category[]>(`/genres/${genre}`, {
-      params: {
-        limit,
-      },
-    });
-
-    return results;
-  },
-  getLatest: async (): Promise<Episode[]> => {
-    const { data: results } = await axios.get<Video[]>(
-      `https://appanimeplus.tk/meuanimetv-40.php?latest`,
+async function getQuote(): Promise<TQuote> {
+  try {
+    const { data: animechan } = await axios.get(
+      `https://animechan.vercel.app/api/random`,
     );
-    const { data: animes } = await api.get<Category[]>(
-      `/anime/${results.map((anime) => anime.category_id).join(`,`)}`,
-    );
-
-    const query = `
-    query HeroComparison { ${animes
-      .filter((anime) => anime.anilist_id !== null)
-      .map(
-        (anime) =>
-          `_${anime.anilist_id}: Media(id: ${anime.anilist_id}) { id, streamingEpisodes { title, thumbnail } }`,
-      )
-      .join(``)} }
+    const query = gql`
+      query ($search: String) {
+        Page(page: 1, perPage: 1) {
+          pageInfo {
+            total
+            currentPage
+            lastPage
+            hasNextPage
+            perPage
+          }
+          characters(search: $search) {
+            image {
+              large
+            }
+            media {
+              edges {
+                node {
+                  coverImage {
+                    extraLarge
+                    color
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     `;
 
     const {
-      data: { data: episodesAnime },
-    } = await axios.post<{
-      data: {
-        [key: string]: {
-          streamingEpisodes: {
-            thumbnail: string;
-            title: string;
-          }[];
-        };
-      };
-    }>(
-      `https://graphql.anilist.co`,
-      JSON.stringify({
-        query,
-      }),
+      Page: {
+        characters: [character],
+      },
+    } = await request(`https://graphql.anilist.co`, query, {
+      search: animechan.character,
+    });
+
+    if (
+      !character ||
+      !animechan ||
+      !character.media ||
+      character.media.edges.length === 0
+    )
+      throw new Error(`Incomplete`);
+
+    const quoteTranslated = await translatte(
+      animechan.quote.substring(0, 1000),
       {
-        headers: {
-          'Content-Type': `application/json`,
-          Accept: `application/json`,
-        },
+        to: `pt`,
       },
     );
 
-    return results.map((episode) => {
-      const animeInAnilist = animes.find(
-        (anime) => anime.id === Number(episode.category_id),
-      );
-      const episodeNumber = episode.title.match(/\d+/gi)?.map(Number);
-      const episodeAnilist = animeInAnilist
-        ? episodesAnime[
-            `_${animeInAnilist.anilist_id}`
-          ]?.streamingEpisodes.find((episodeAni: any) =>
-            episodeAni.title.includes(
-              `Episode ${
-                episodeNumber ? episodeNumber[episodeNumber?.length - 1] : 0
-              }`,
-            ),
-          )
-        : null;
+    return {
+      quote:
+        animechan.quote.length > 1000
+          ? `${quoteTranslated.text}...`
+          : quoteTranslated.text,
+      character: animechan.character,
+      image_character: character.image.large,
+      anime: animechan.anime,
+      image_anime: character.media.edges[0].node.coverImage.extraLarge,
+      color_anime: character.media.edges[0].node.coverImage.color,
+    };
+  } catch (error) {
+    // eslint-disable-next-line no-return-await
+    return await getQuote();
+  }
+}
 
-      return {
-        ...episode,
-        titleAnilist: episodeAnilist ? episodeAnilist.title : null,
-        thumbnail: episodeAnilist ? episodeAnilist.thumbnail : null,
-        anime: animeInAnilist || null,
-      };
-    });
+// eslint-disable-next-line import/no-anonymous-default-export
+export default {
+  getQuote,
+  getPopular: async (limit = 10) => {
+    const { data: listPopular }: any = await client.query(
+      q.Map(
+        q.Paginate(q.Documents(q.Collection(`anime`)), { size: limit }),
+        q.Lambda((x) => q.Get(x)),
+      ),
+    );
+
+    return listPopular.map(({ data }: any) => data);
+  },
+  getByGenre: async (genre: string, limit = 10) => {
+    const { data: animesByGenre }: any = await client.query(
+      q.Map(
+        q.Paginate(
+          q.Intersection(q.Match(q.Index(`animes_by_genres`), genre)),
+          { size: limit },
+        ),
+        q.Lambda((x) => q.Get(x)),
+      ),
+    );
+
+    return animesByGenre.map(({ data }: any) => data);
   },
 };

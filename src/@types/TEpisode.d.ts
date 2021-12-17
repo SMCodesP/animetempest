@@ -1,9 +1,7 @@
-import Category from './Category';
-
-export default interface Episode {
+interface TEpisode {
   titleAnilist: string | null;
   thumbnail: string | null;
-  anime: Category | null;
+  anime: TCategory | null;
   video_id: string;
   category_id: string;
   category_image: string;

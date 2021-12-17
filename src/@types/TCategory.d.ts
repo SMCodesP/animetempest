@@ -1,4 +1,4 @@
-export default interface Category {
+interface TCategory {
   id: number;
   category_name: string;
   category_image: string;
@@ -16,6 +16,7 @@ export default interface Category {
   coverImage_large?: string;
   coverImage_medium?: string;
   coverImage_color?: string;
-  animesRecommended?: Category[];
+  animesRecommended?: TCategory[];
+  averageScore?: number;
   error: boolean;
 }
