@@ -3,26 +3,30 @@ import React from 'react';
 
 import {
   Container,
-  ShadowCurtain,
   Quote,
-  ContainerBackground,
   ContainerContent,
   Name,
   CharacterImage,
+  ContainerCharacterImage,
 } from './styles';
 
 const Suggestions: React.FC<{
   quote: TQuote;
 }> = ({ quote }) => (
-  <Container>
-    <ContainerBackground color={quote.color_anime}>
-      <ShadowCurtain color={quote.color_anime} />
-      <img src={quote.image_anime} alt="Anime cover extra large" />
-    </ContainerBackground>
-    <ContainerContent>
+  <Container color={quote.color_anime} image={quote.image_anime_medium}>
+    <ContainerContent color={quote.color_anime}>
       <Quote color={quote.color_anime}>&quot;{quote.quote}&quot;</Quote>
       <Name color={quote.color_anime}>- {quote.character}</Name>
-      <CharacterImage src={quote.image_character} alt="Character user" />
+      <ContainerCharacterImage>
+        <CharacterImage
+          src={quote.image_character}
+          alt="Character user"
+          width={92}
+          height={138}
+          placeholder="blur"
+          blurDataURL={quote.image_character_medium}
+        />
+      </ContainerCharacterImage>
     </ContainerContent>
   </Container>
 );

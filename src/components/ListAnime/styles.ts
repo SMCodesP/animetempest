@@ -30,6 +30,7 @@ export const ContainerImage = styled.div<{
   height: 100%;
   margin: 15px 7px;
   border-radius: 15px;
+  overflow: hidden;
   cursor: pointer;
   box-shadow: 0 0 5px ${({ colorBoxShadow }) => colorBoxShadow};
   transition: box-shadow 0.4s, transform 0.4s;
@@ -41,7 +42,11 @@ export const ContainerImage = styled.div<{
 `;
 
 export const AnimeImage = styled(Image)`
-  border-radius: 15px;
+  /* border-radius: 15px;
+
+  & * {
+    border-radius: 15px;
+  } */
 `;
 
 export const ContainerAnimeTitle = styled.div`

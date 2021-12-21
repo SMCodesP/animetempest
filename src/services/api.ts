@@ -18,22 +18,17 @@ async function getQuote(): Promise<TQuote> {
     const query = gql`
       query ($search: String) {
         Page(page: 1, perPage: 1) {
-          pageInfo {
-            total
-            currentPage
-            lastPage
-            hasNextPage
-            perPage
-          }
           characters(search: $search) {
             image {
               large
+              medium
             }
             media {
               edges {
                 node {
                   coverImage {
                     extraLarge
+                    medium
                     color
                   }
                 }
@@ -74,8 +69,10 @@ async function getQuote(): Promise<TQuote> {
           : quoteTranslated.text,
       character: animechan.character,
       image_character: character.image.large,
+      image_character_medium: character.image.medium,
       anime: animechan.anime,
       image_anime: character.media.edges[0].node.coverImage.extraLarge,
+      image_anime_medium: character.media.edges[0].node.coverImage.medium,
       color_anime: character.media.edges[0].node.coverImage.color,
     };
   } catch (error) {
@@ -95,7 +92,9 @@ export default {
       ),
     );
 
-    return listPopular.map(({ data }: any) => data);
+    return listPopular
+      .map(({ data }: any) => data)
+      .filter((item: any) => item.coverImage_extraLarge !== undefined);
   },
   getByGenre: async (genre: string, limit = 10) => {
     const { data: animesByGenre }: any = await client.query(
@@ -108,6 +107,8 @@ export default {
       ),
     );
 
-    return animesByGenre.map(({ data }: any) => data);
+    return animesByGenre
+      .map(({ data }: any) => data)
+      .filter((item: any) => item.coverImage_extraLarge !== undefined);
   },
 };

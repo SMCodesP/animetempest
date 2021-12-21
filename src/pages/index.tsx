@@ -43,7 +43,7 @@ const Home: NextPage<{
 export async function getStaticProps() {
   const quote = await api.getQuote();
   const animesPopular: any = await api.getPopular();
-  const genresRandom = getRandom(Object.keys(genres), 5);
+  const genresRandom = getRandom(Object.keys(genres), 3);
   const genresPopulate: {
     [key: string]: any;
   } = {};
@@ -61,7 +61,7 @@ export async function getStaticProps() {
       episodesLatest: [],
       quote,
     },
-    revalidate: 1,
+    revalidate: 60,
   };
 }
 
