@@ -116,7 +116,9 @@ const ListAnime: React.FC<{
               )}
               width={260}
               height={370}
-              quality={100}
+              quality={75}
+              placeholder="blur"
+              blurDataURL={anime.coverImage_medium}
             />
             <ContainerAnimeTitle>
               <ContainerCurtain />
