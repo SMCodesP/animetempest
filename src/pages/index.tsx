@@ -10,6 +10,7 @@ import Menu from '@/components/Menu';
 import ListAnime from '@/components/ListAnime';
 import ListEpisode from '@/components/ListEpisode';
 import Suggestions from '@/components/Suggestions';
+import DefaultHead from '@/components/DefaultHead';
 
 import 'react-multi-carousel/lib/styles.css';
 
@@ -22,6 +23,8 @@ const Home: NextPage<{
   quote: TQuote;
 }> = ({ animesPopular, quote, episodesLatest, animesGenre }) => (
   <div>
+    <DefaultHead title="Página Inicial - AnimeTempest" />
+
     <Menu />
 
     <Suggestions quote={quote} />
@@ -60,8 +63,6 @@ export async function getStaticProps() {
       animesGenre: genresPopulate,
       episodesLatest: [],
       quote,
-      // animesGenre: [],
-      // episodesLatest: episodesLatest.slice(0, 10),
     },
     revalidate: 300,
   };
