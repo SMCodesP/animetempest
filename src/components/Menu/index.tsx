@@ -55,12 +55,16 @@ const Menu: React.FC = () => {
             )}
           </Option>
           <Option>
-            <User
-              src="https://smcodes.tk/favicon.jpg"
-              alt="Imagem de perfil"
-              width={32}
-              height={32}
-            />
+            <div style={{ borderRadius: 32, overflow: `hidden` }}>
+              <User
+                src="https://smcodes.tk/favicon.jpg"
+                alt="Imagem de perfil"
+                placeholder="blur"
+                blurDataURL="https://smcodes.tk/favicon_min.jpg"
+                width={32}
+                height={32}
+              />
+            </div>
             <p>SMCodes</p>
             <FiChevronDown size={24} color={theme.text} />
           </Option>
