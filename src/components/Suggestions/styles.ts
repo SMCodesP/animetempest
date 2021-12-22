@@ -2,27 +2,40 @@ import { darken, getLuminance, transparentize } from 'polished';
 import styled from 'styled-components';
 import Image from 'next/image';
 
-export const Container: any = styled.div`
+export const Container = styled.div`
   margin-top: 20px;
   margin-left: 50px;
   position: relative;
-  width: 60%;
-  background: url('${({ image }: any) => image}') right center no-repeat;
+  width: 55%;
   background-size: 25% 100%;
   border-radius: 15px;
   box-shadow: 0 0 10px ${({ color }: any) => color};
+  display: flex;
+
+  & div:first-child {
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+    overflow: hidden;
+  }
+`;
+
+export const ImageAnime = styled(Image)`
+  min-width: fit-content !important;
+  margin: 0 !important;
+  margin-left: auto !important;
 `;
 
 export const ContainerContent = styled.div`
+  width: 100%;
+  height: 100%;
   z-index: 9999999;
-  padding: 15px;
+  padding: 25px 15px;
   position: relative;
   color: ${({ theme }) => theme.text};
   font-style: italic;
   display: flex;
   flex-direction: column;
   border-radius: 15px;
-  height: 100%;
   background: linear-gradient(
     to right,
     ${({ color, theme }) => color || theme.blue_light} 75%,
