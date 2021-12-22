@@ -13,11 +13,12 @@ export const Container = styled.div`
 
 export const Title = styled.p`
   padding-left: 50px;
-  font-size: 32px;
-  font-weight: bold;
-  position: absolute;
-  left: 35px;
-  top: 32px;
+  font-size: 36px;
+  height: 26px;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: normal;
+  font-family: 'Luckiest Guy', cursive;
 `;
 
 export const ContainerImage = styled.div`

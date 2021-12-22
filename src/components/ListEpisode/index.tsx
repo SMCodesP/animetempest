@@ -24,7 +24,6 @@ const ListAnime: React.FC<{
 
   return (
     <Container>
-      <Title>{title}</Title>
       <Carousel
         options={{
           dragFree: true,
@@ -33,6 +32,7 @@ const ListAnime: React.FC<{
           slidesToScroll: 2,
         }}
         autoplay={false}
+        TitleHead={() => <Title>{title}</Title>}
       >
         {episodes.map((episode) => (
           <ContainerImage

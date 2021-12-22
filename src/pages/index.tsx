@@ -26,7 +26,11 @@ const Home: NextPage<{
 
     <Suggestions quote={quote} />
 
-    <ListAnime title="Popular" animes={animesPopular} />
+    <ListAnime
+      style={{ marginTop: 50 }}
+      title="Popular"
+      animes={animesPopular}
+    />
 
     <ListEpisode title="Lançamentos" episodes={episodesLatest} />
 

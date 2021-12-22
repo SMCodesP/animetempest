@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import { usePopper } from 'react-popper';
 
 import { FiSearch, FiBell, FiChevronDown } from 'react-icons/fi';
 import {
@@ -18,10 +19,42 @@ import {
   ListOption,
   Option,
   User,
+  PopperContainer,
+  UserMenu,
+  UserOption,
+  Line,
+  ArrowOption,
+  ContainerMenuAnimation,
+  ContainerMenuNoHidden,
 } from './styles';
 
 const Menu: React.FC = () => {
+  const [menuPoppperIsActived, setMenuPoppperIsActived] = useState(false);
+
   const theme = useTheme();
+  const buttonRef = useRef(null);
+  const popperRef = useRef(null);
+  const [arrowRef, setArrowRef] = useState(null);
+  const { styles, attributes } = usePopper(
+    buttonRef.current,
+    popperRef.current,
+    {
+      modifiers: [
+        {
+          name: `arrow`,
+          options: {
+            element: arrowRef,
+          },
+        },
+        {
+          name: `offset`,
+          options: {
+            offset: [0, 10],
+          },
+        },
+      ],
+    },
+  );
 
   return (
     <Container>
@@ -54,7 +87,11 @@ const Menu: React.FC = () => {
               <IoInvertModeOutline size={24} color={theme.text} />
             )}
           </Option>
-          <Option>
+          <Option
+            ref={buttonRef}
+            onClick={() => setMenuPoppperIsActived((state) => !state)}
+            menuPoppperIsActived={menuPoppperIsActived}
+          >
             <div style={{ borderRadius: 32, overflow: `hidden` }}>
               <User
                 src="https://smcodes.tk/favicon.jpg"
@@ -66,8 +103,38 @@ const Menu: React.FC = () => {
               />
             </div>
             <p>SMCodes</p>
-            <FiChevronDown size={24} color={theme.text} />
+            <ArrowOption
+              menuPoppperIsActived={menuPoppperIsActived}
+              size={24}
+              color={theme.text}
+            />
           </Option>
+          <PopperContainer
+            ref={popperRef}
+            style={styles.popper}
+            {...attributes.popper}
+          >
+            <ContainerMenuNoHidden menuPoppperIsActived={menuPoppperIsActived}>
+              <div
+                ref={setArrowRef as any}
+                style={styles.arrow}
+                className="arrow"
+              />
+              <ContainerMenuAnimation
+                menuPoppperIsActived={menuPoppperIsActived}
+              >
+                <UserMenu>
+                  <UserOption>Seu perfil</UserOption>
+                  <Line />
+                  <UserOption>Favoritos</UserOption>
+                  <UserOption>Recomendados</UserOption>
+                  <UserOption>Configurações</UserOption>
+                  <Line />
+                  <UserOption color={theme.red}>Sair</UserOption>
+                </UserMenu>
+              </ContainerMenuAnimation>
+            </ContainerMenuNoHidden>
+          </PopperContainer>
         </ListOption>
       </ContainerGroup>
     </Container>

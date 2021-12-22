@@ -6,7 +6,7 @@ import useEmblaCarousel, { EmblaOptionsType } from 'embla-carousel-react';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
 import { useRecursiveTimeout } from '@/hooks/useRecursiveTimeout';
-import { Container, ContainerButtons } from './styles';
+import { Container, ContainerButtons, ContainerCarouselHead } from './styles';
 
 const AUTOPLAY_INTERVAL = 4000;
 
@@ -40,7 +40,13 @@ const NextButton: React.FC<{
 const Carousel: React.FC<{
   options?: Partial<EmblaOptionsType> | undefined;
   autoplay?: boolean;
-}> = ({ options, autoplay: autoplayEnabled = false, children }) => {
+  TitleHead?: any;
+}> = ({
+  options,
+  autoplay: autoplayEnabled = false,
+  children,
+  TitleHead = () => <div />,
+}) => {
   const [viewportRef, embla] = useEmblaCarousel(options);
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
   const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
@@ -89,19 +95,22 @@ const Carousel: React.FC<{
 
   return (
     <Container>
-      <ContainerButtons>
-        <PrevButton
-          color="#888888"
-          onClick={scrollPrev}
-          enabled={prevBtnEnabled}
-        />
-        <hr />
-        <NextButton
-          color="#888888"
-          onClick={scrollNext}
-          enabled={nextBtnEnabled}
-        />
-      </ContainerButtons>
+      <ContainerCarouselHead>
+        <TitleHead />
+        <ContainerButtons>
+          <PrevButton
+            color="#888888"
+            onClick={scrollPrev}
+            enabled={prevBtnEnabled}
+          />
+          <hr />
+          <NextButton
+            color="#888888"
+            onClick={scrollNext}
+            enabled={nextBtnEnabled}
+          />
+        </ContainerButtons>
+      </ContainerCarouselHead>
       <div
         style={{
           height: `100%`,

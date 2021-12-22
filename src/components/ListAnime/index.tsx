@@ -85,12 +85,12 @@ const icons = {
 const ListAnime: React.FC<{
   animes: TCategory[];
   title: string;
-}> = ({ animes, title }) => {
+  style?: any;
+}> = ({ animes, title, style = {} }) => {
   const theme = useTheme();
 
   return (
-    <Container>
-      <Title>{title}</Title>
+    <Container style={style}>
       <Carousel
         options={{
           dragFree: true,
@@ -99,6 +99,7 @@ const ListAnime: React.FC<{
           slidesToScroll: 2,
         }}
         autoplay={false}
+        TitleHead={() => <Title>{title}</Title>}
       >
         {animes.map((anime) => (
           <ContainerImage

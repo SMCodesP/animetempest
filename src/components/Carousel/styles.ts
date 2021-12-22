@@ -120,6 +120,13 @@ export const Container = styled.div`
   }
 `;
 
+export const ContainerCarouselHead = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 export const ContainerButtons = styled.div`
   position: relative;
   display: flex;
