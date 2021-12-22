@@ -12,7 +12,7 @@ const genres: {
   Comédia: `comédia`,
   Escolar: `escolar`,
   Esportes: `esporte`,
-  Shoujo: `Shoujo`,
+  Shoujo: `shoujo`,
   Dublados: `dublado`,
   Harém: `harém`,
   Aventura: `aventura`,
