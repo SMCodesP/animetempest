@@ -79,7 +79,7 @@ export const ContainerCurtain = styled.div`
 export const ContainerTitleStars = styled.div`
   --color-green: 123, 213, 85;
   --color-orange: 247, 154, 99;
-  -color-red: 232, 93, 117;
+  --color-red: 232, 93, 117;
 
   position: relative;
   display: flex;

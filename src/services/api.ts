@@ -85,6 +85,33 @@ async function getQuote(): Promise<TQuote> {
 export default {
   getQuote,
   getPopular: async (limit = 10) => {
+    const query = gql`
+      query {
+        Page(page: 1, perPage: ${limit}) {
+          media (sort: POPULARITY_DESC, type: ANIME) {
+            id
+          }
+        }
+      }
+    `;
+
+    const {
+      Page: { media: ids },
+    } = await request(`https://graphql.anilist.co`, query);
+    console.log(ids);
+    const test: any = await client.query(
+      q.Map(
+        q.Paginate(
+          q.Intersection(
+            q.Match(q.Index(`animes_by_anilist_id`), 16498),
+            q.Match(q.Index(`animes_by_anilist_id`), 1535),
+          ),
+        ),
+        q.Lambda((x) => q.Get(x)),
+      ),
+    );
+    console.log(test);
+
     const { data: listPopular }: any = await client.query(
       q.Map(
         q.Paginate(q.Documents(q.Collection(`anime`)), { size: limit }),
