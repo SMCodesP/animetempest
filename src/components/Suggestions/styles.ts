@@ -19,11 +19,15 @@ export const Container = styled.div`
   }
 `;
 
-export const ImageAnime = styled(Image)`
-  min-width: fit-content !important;
-  margin: 0 !important;
-  margin-left: auto !important;
+export const ContainerImage = styled.div`
+  align-self: flex-end;
+  width: 25%;
+  position: absolute;
+  height: 100%;
+  right: 0;
 `;
+
+export const ImageAnime = styled(Image)``;
 
 export const ContainerContent = styled.div`
   width: 100%;
