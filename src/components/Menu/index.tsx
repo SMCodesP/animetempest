@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
+import Link from 'next/link';
 
-import { FiSearch, FiBell, FiChevronDown } from 'react-icons/fi';
+import { FiSearch, FiBell } from 'react-icons/fi';
 import {
   IoMailOutline,
   IoInvertModeSharp,
@@ -28,7 +29,9 @@ import {
   ContainerMenuNoHidden,
 } from './styles';
 
-const Menu: React.FC = () => {
+const Menu: React.FC<{
+  page: string;
+}> = ({ page }) => {
   const [menuPoppperIsActived, setMenuPoppperIsActived] = useState(false);
 
   const theme = useTheme();
@@ -63,10 +66,32 @@ const Menu: React.FC = () => {
       </ContainerGroup>
       <ContainerGroup>
         <ListPage>
-          <Page className="location">Início</Page>
-          <Page>Popular</Page>
-          <Page>Notícias</Page>
-          <Page>Discord</Page>
+          <Link href="/">
+            <a>
+              <Page className={page === `home` ? `location` : ``}>Início</Page>
+            </a>
+          </Link>
+          <Link href="/popular">
+            <a>
+              <Page className={page === `popular` ? `location` : ``}>
+                Popular
+              </Page>
+            </a>
+          </Link>
+          <Link href="/news">
+            <a>
+              <Page className={page === `news` ? `location` : ``}>
+                Notícias
+              </Page>
+            </a>
+          </Link>
+          <Link href="/discord">
+            <a>
+              <Page className={page === `discord` ? `location` : ``}>
+                Discord
+              </Page>
+            </a>
+          </Link>
         </ListPage>
       </ContainerGroup>
       <ContainerGroup>

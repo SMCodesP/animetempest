@@ -1,4 +1,3 @@
-import React from 'react';
 import { NextPage } from 'next';
 
 import api from '@/services/api';
@@ -22,7 +21,7 @@ const Home: NextPage<{
   quote: TQuote;
 }> = ({ animesPopular, quote, episodesLatest, animesGenre }) => (
   <div>
-    <Menu />
+    <Menu page="home" />
 
     <Suggestions quote={quote} />
 

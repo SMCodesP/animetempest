@@ -21,7 +21,7 @@ export const Title = styled.span`
   font-family: 'Luckiest Guy', cursive;
 `;
 
-export const ContainerImage = styled.div<{
+export const ContainerImage = styled.a<{
   colorBoxShadow: string;
 }>`
   position: relative;
@@ -113,7 +113,6 @@ export const AnimeTitle = styled.p`
   z-index: 99999;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
-  word-break: break-all;
   font-weight: 500;
 `;
 

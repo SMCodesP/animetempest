@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { transparentize } from 'polished';
+import Link from 'next/link';
 
 import { useTheme } from 'styled-components';
 
@@ -102,42 +103,50 @@ const ListAnime: React.FC<{
         TitleHead={() => <Title>{title}</Title>}
       >
         {animes.map((anime) => (
-          <ContainerImage
+          <Link
             key={`${title.toLowerCase().replace(` `, `_`)}-${anime.id}`}
-            colorBoxShadow={transparentize(
-              0.3,
-              anime.coverImage_color || theme.text,
-            )}
-            className="embla__slide"
+            href={`/anime/${anime.anilist_id}`}
+            passHref
           >
-            <AnimeImage
-              src={String(
-                anime.coverImage_extraLarge ||
-                  `https://cdn.appanimeplus.tk/img/${anime.category_image}`,
+            <ContainerImage
+              colorBoxShadow={transparentize(
+                0.3,
+                anime.coverImage_color || theme.text,
               )}
-              width={260}
-              height={370}
-              quality={75}
-              placeholder="blur"
-              blurDataURL={anime.coverImage_medium}
-            />
-            <ContainerAnimeTitle>
-              <ContainerCurtain />
-              <ContainerTitleStars>
-                <AnimeTitle>{anime.category_name}</AnimeTitle>
-                <span>
-                  {anime.averageScore !== undefined &&
-                    (anime.averageScore >= 75
-                      ? icons.most
-                      : anime.averageScore >= 60
-                      ? icons.medium
-                      : icons.rage)}
-                  {anime.averageScore}%
-                </span>
-              </ContainerTitleStars>
-              <span>{anime.genres.join(`, `)}</span>
-            </ContainerAnimeTitle>
-          </ContainerImage>
+              className="embla__slide"
+            >
+              <AnimeImage
+                src={String(
+                  anime.coverImage_extraLarge ||
+                    `https://cdn.appanimeplus.tk/img/${anime.category_image}`,
+                )}
+                width={260}
+                height={370}
+                quality={75}
+                placeholder="blur"
+                blurDataURL={anime.coverImage_medium}
+              />
+              <ContainerAnimeTitle>
+                <ContainerCurtain />
+                <ContainerTitleStars>
+                  <AnimeTitle>
+                    {anime.category_name.slice(0, 12)}
+                    {anime.category_name.length > 12 ? `…` : ``}
+                  </AnimeTitle>
+                  <span>
+                    {anime.averageScore !== undefined &&
+                      (anime.averageScore >= 75
+                        ? icons.most
+                        : anime.averageScore >= 60
+                        ? icons.medium
+                        : icons.rage)}
+                    {anime.averageScore}%
+                  </span>
+                </ContainerTitleStars>
+                <span>{anime.genres.join(`, `)}</span>
+              </ContainerAnimeTitle>
+            </ContainerImage>
+          </Link>
         ))}
       </Carousel>
     </Container>
