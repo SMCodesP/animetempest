@@ -7,7 +7,7 @@ import { GlobalStyle } from '@/shared/styles/global';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={themes.light}>
+    <ThemeProvider theme={themes[`light`]}>
       <Component {...pageProps} />
 
       <GlobalStyle />

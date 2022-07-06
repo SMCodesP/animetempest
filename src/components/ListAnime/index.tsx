@@ -105,7 +105,7 @@ const ListAnime: React.FC<{
         {animes.map((anime) => (
           <Link
             key={`${title.toLowerCase().replace(` `, `_`)}-${anime.id}`}
-            href={`/anime/${anime.anilist_id}`}
+            href={`/anime/${anime.id}`}
             passHref
           >
             <ContainerImage

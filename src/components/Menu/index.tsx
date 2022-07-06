@@ -31,7 +31,8 @@ import {
 
 const Menu: React.FC<{
   page: string;
-}> = ({ page }) => {
+  darkground?: boolean;
+}> = ({ page, darkground = false }) => {
   const [menuPoppperIsActived, setMenuPoppperIsActived] = useState(false);
 
   const theme = useTheme();
@@ -62,32 +63,50 @@ const Menu: React.FC<{
   return (
     <Container>
       <ContainerGroup>
-        <Logo src="/vercel.svg" alt="Vercel Logo" width={112} height={46} />
+        <Link href="/">
+          <a>
+            <Logo src="/vercel.svg" alt="Vercel Logo" width={112} height={46} />
+          </a>
+        </Link>
       </ContainerGroup>
       <ContainerGroup>
         <ListPage>
           <Link href="/">
             <a>
-              <Page className={page === `home` ? `location` : ``}>Início</Page>
+              <Page
+                darkground={darkground.toString()}
+                className={page === `home` ? `location` : ``}
+              >
+                Início
+              </Page>
             </a>
           </Link>
           <Link href="/popular">
             <a>
-              <Page className={page === `popular` ? `location` : ``}>
+              <Page
+                darkground={darkground.toString()}
+                className={page === `popular` ? `location` : ``}
+              >
                 Popular
               </Page>
             </a>
           </Link>
           <Link href="/news">
             <a>
-              <Page className={page === `news` ? `location` : ``}>
+              <Page
+                darkground={darkground.toString()}
+                className={page === `news` ? `location` : ``}
+              >
                 Notícias
               </Page>
             </a>
           </Link>
           <Link href="/discord">
             <a>
-              <Page className={page === `discord` ? `location` : ``}>
+              <Page
+                darkground={darkground.toString()}
+                className={page === `discord` ? `location` : ``}
+              >
                 Discord
               </Page>
             </a>
@@ -115,7 +134,7 @@ const Menu: React.FC<{
           <Option
             ref={buttonRef}
             onClick={() => setMenuPoppperIsActived((state) => !state)}
-            menuPoppperIsActived={menuPoppperIsActived}
+            menupoppperisactived={menuPoppperIsActived.toString()}
           >
             <div style={{ borderRadius: 32, overflow: `hidden` }}>
               <User
@@ -129,7 +148,7 @@ const Menu: React.FC<{
             </div>
             <p>SMCodes</p>
             <ArrowOption
-              menuPoppperIsActived={menuPoppperIsActived}
+              menupoppperisactived={menuPoppperIsActived.toString()}
               size={24}
               color={theme.text}
             />
@@ -139,14 +158,16 @@ const Menu: React.FC<{
             style={styles.popper}
             {...attributes.popper}
           >
-            <ContainerMenuNoHidden menuPoppperIsActived={menuPoppperIsActived}>
+            <ContainerMenuNoHidden
+              menupoppperisactived={menuPoppperIsActived.toString()}
+            >
               <div
                 ref={setArrowRef as any}
                 style={styles.arrow}
                 className="arrow"
               />
               <ContainerMenuAnimation
-                menuPoppperIsActived={menuPoppperIsActived}
+                menupoppperisactived={menuPoppperIsActived.toString()}
               >
                 <UserMenu>
                   <UserOption>Seu perfil</UserOption>

@@ -41,6 +41,7 @@ const Carousel: React.FC<{
   options?: Partial<EmblaOptionsType> | undefined;
   autoplay?: boolean;
   TitleHead?: any;
+  children?: any;
 }> = ({
   options,
   autoplay: autoplayEnabled = false,

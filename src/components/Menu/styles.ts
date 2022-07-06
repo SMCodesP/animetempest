@@ -1,17 +1,16 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import { darken, transparentize } from 'polished';
+import { darken, lighten, transparentize } from 'polished';
 import { FiChevronDown } from 'react-icons/fi';
 
 type MenuPopper = {
-  menuPoppperIsActived?: boolean;
+  menupoppperisactived?: string;
 };
 
 export const Container = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 50px;
-  margin-top: 25px;
+  padding: 25px 50px;
   align-items: center;
 `;
 
@@ -29,13 +28,17 @@ export const ListPage = styled.ul`
   gap: 25px;
 `;
 
-export const Page = styled.li`
-  font-size: 18px;
+export const Page = styled.li<{
+  darkground?: string;
+}>`
   opacity: 0.5;
+  font-size: 18px;
   font-weight: 400;
   cursor: pointer;
   position: relative;
   transition: opacity 0.4s;
+  color: ${({ theme, darkground }) =>
+    darkground === `true` ? lighten(1, theme.background) : theme.text};
 
   &:hover {
     opacity: 1;
@@ -73,15 +76,15 @@ export const Option = styled.li<MenuPopper>`
   border-radius: 10px;
   box-shadow: 0 0 10px ${({ theme }) => transparentize(0.925, theme.text)};
   cursor: pointer;
-  transition: box-shadow 0.4s, filter 0.4s;
-  color: ${({ theme, menuPoppperIsActived = false }) =>
-    menuPoppperIsActived
+  transition: box-shadow, filter 0.4s;
+  color: ${({ theme, menupoppperisactived = `false` }) =>
+    menupoppperisactived === `true`
       ? transparentize(0.1, theme.text)
       : transparentize(0.75, theme.text)};
 
   & * {
-    color: ${({ theme, menuPoppperIsActived = false }) =>
-      menuPoppperIsActived
+    color: ${({ theme, menupoppperisactived = `false` }) =>
+      menupoppperisactived === `true`
         ? transparentize(0.1, theme.text)
         : transparentize(0.75, theme.text)};
   }
@@ -100,7 +103,8 @@ export const Option = styled.li<MenuPopper>`
 export const ArrowOption = styled(FiChevronDown)<MenuPopper>`
   transition: transform 0.25s;
   transform: rotate(
-    ${({ menuPoppperIsActived }) => (menuPoppperIsActived ? `-180deg` : `0`)}
+    ${({ menupoppperisactived }) =>
+      menupoppperisactived === `true` ? `-180deg` : `0`}
   );
 `;
 
@@ -139,9 +143,10 @@ export const ContainerMenuNoHidden = styled.div<MenuPopper>`
   position: relative;
   transition: transform 0.25s, opacity 0.25s;
   transform: scale(
-    ${({ menuPoppperIsActived }) => (menuPoppperIsActived ? 1 : 0.8)}
+    ${({ menupoppperisactived }) => (menupoppperisactived === `true` ? 1 : 0.8)}
   );
-  opacity: ${({ menuPoppperIsActived }) => (menuPoppperIsActived ? 1 : 0)};
+  opacity: ${({ menupoppperisactived }) =>
+    menupoppperisactived === `true` ? 1 : 0};
 `;
 
 export const ContainerMenuAnimation = styled.div<MenuPopper>`
@@ -150,8 +155,8 @@ export const ContainerMenuAnimation = styled.div<MenuPopper>`
   border-radius: 10px;
   overflow: hidden;
   transition: max-height 0.5s;
-  max-height: ${({ menuPoppperIsActived }) =>
-    menuPoppperIsActived ? 500 : 0}px;
+  max-height: ${({ menupoppperisactived }) =>
+    menupoppperisactived === `true` ? 500 : 0}px;
 `;
 
 export const UserMenu = styled.ul`

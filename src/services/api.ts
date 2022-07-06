@@ -92,9 +92,32 @@ export default {
       ),
     );
 
-    return listPopular
-      .map(({ data }: any) => data)
-      .filter((item: any) => item.coverImage_extraLarge !== undefined);
+    return [
+      {
+        id: 1,
+        category_name: `Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e - Classroom of the Elite`,
+        category_image: `0503dc1669a735098babc0ea5b7cbf90.jpg`,
+        anilist_id: 98659,
+        title_romaji: `Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e`,
+        title_english: `Classroom of the Elite`,
+        title_native: `ようこそ実力至上主義の教室へ`,
+        title_userPreferred: `Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e`,
+        type: `ANIME`,
+        format: `TV`,
+        bannerImage: `https://s4.anilist.co/file/anilistcdn/media/anime/banner/98659-u46B5RCNl9il.jpg`,
+        coverImage_extraLarge: `https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b98659-sH5z5RfMuyMr.png`,
+        coverImage_large: `https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b98659-sH5z5RfMuyMr.png`,
+        coverImage_medium: `https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/b98659-sH5z5RfMuyMr.png`,
+        coverImage_color: `#43a135`,
+        error: false,
+        sinopse: `A Escola de Ensino Médio Koudo Ikusei é uma escola de prestígio onde 100% dos alunos vão para a universidade ou arranjam um emprego. Os estudantes têm a liberdade para usar qualquer penteado e levar qualquer tipo de adereço pessoal que quiserem. Koukdo Ikusei parece um paraíso, mas a verdade é que apenas os alunos superiores recebem tratamento especial. Kiyotaka Ayanokouji é um estudante de Classe D que é onde a escola despeja os alunos inferiores para ridicularizá-los. Por uma certa razão, Kiyotaka foi negligente no seu exame de admissão e foi colocado nessa classe. Depois de conhecer Suzune Horikita e Kikyou Kushida, dois outros estudantes da sua classe, a situação de Kiyotaka começa a mudar.`,
+        genres: [`comédia`, `romance`, `escolar`],
+        averageScore: 76,
+      },
+      ...listPopular
+        .map(({ data }: any) => data)
+        .filter((item: any) => item.coverImage_extraLarge !== undefined),
+    ];
   },
   getByGenre: async (genre: string, limit = 10) => {
     const { data: animesByGenre }: any = await client.query(
@@ -111,7 +134,137 @@ export default {
       .map(({ data }: any) => data)
       .filter((item: any) => item.coverImage_extraLarge !== undefined);
   },
-  getById: async (id: number) => {
-    console.log(id);
+  getById: async () => {
+    return {
+      id: 1,
+      idAni: 98659,
+      bannerImage: `https://s4.anilist.co/file/anilistcdn/media/anime/banner/98659-u46B5RCNl9il.jpg`,
+      title: {
+        romaji: `Youkoso Jitsuryoku Shijou Shugi no Kyoushitsu e`,
+        english: `Classroom of the Elite`,
+        native: `ようこそ実力至上主義の教室へ`,
+      },
+      coverImage: {
+        extraLarge: `https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b98659-sH5z5RfMuyMr.png`,
+        large: `https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b98659-sH5z5RfMuyMr.png`,
+        medium: `https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/b98659-sH5z5RfMuyMr.png`,
+        color: `#43a135`,
+      },
+      seasonYear: 2017,
+      duration: 24,
+      score: 77,
+      trailer: {
+        id: `iYsx6w5PNno`,
+        site: `youtube`,
+        thumbnail: `https://i.ytimg.com/vi/iYsx6w5PNno/hqdefault.jpg`,
+      },
+      description: `<p>Koudo Ikusei Senior High School é uma escola líder com instalações de última geração. Os alunos têm a liberdade de usar qualquer estilo e trazer qualquer objeto pessoal que desejarem. Koudo Ikusei é como uma utopia, mas a verdade é, apenas os alunos mais superiores recebem tratamento favorável.<br><br></p>\n<p>Kiyotaka Ayanokouji é um aluno da classe D, que é onde o escola despeja seus alunos &quot;inferiores&quot; para ridicularizá-los. Por uma certa razão, Kiyotaka foi descuidado em seu exame de admissão e foi colocado na classe D. Depois de conhecer Suzune Horikita e Kikyou Kushida, dois outros alunos de sua classe, a situação de Kiyotaka começa a mudar.<br><br><br />\n(Fonte: Anime News Network, editado)</p>`,
+      staff: [
+        {
+          id: 113215,
+          name: `Shougo Kinugasa`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/n113215-ZFr2vSw6K5T9.png`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/n113215-ZFr2vSw6K5T9.png`,
+          },
+        },
+        {
+          id: 107006,
+          name: `Shunsaku Tomose`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/n107006-to9nj6wzMt8t.jpg`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/n107006-to9nj6wzMt8t.jpg`,
+          },
+        },
+        {
+          id: 101909,
+          name: `Seiji Kishi`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/n101909-aZwVsWQv0LXB.png`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/n101909-aZwVsWQv0LXB.png`,
+          },
+        },
+        {
+          id: 118960,
+          name: `Hiroyuki Hashimoto`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/118960-3nMQ4I3OI0oX.jpg`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/118960-3nMQ4I3OI0oX.jpg`,
+          },
+        },
+        {
+          id: 120751,
+          name: `Aoi Akashiro`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/n120751-34nuMiCFBqoA.png`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/n120751-34nuMiCFBqoA.png`,
+          },
+        },
+        {
+          id: 102543,
+          name: `Kazuaki Morita`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/n102543-PZ9vdUuH1vSb.png`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/n102543-PZ9vdUuH1vSb.png`,
+          },
+        },
+        {
+          id: 123012,
+          name: `Ryou Takahashi`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/n123012-eZXnRCpriIx6.png`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/n123012-eZXnRCpriIx6.png`,
+          },
+        },
+        {
+          id: 95855,
+          name: `Minami Kuribayashi`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/855.jpg`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/855.jpg`,
+          },
+        },
+        {
+          id: 113433,
+          name: `ZAQ`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/n113433-LhRNpuYfDYsK.png`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/n113433-LhRNpuYfDYsK.png`,
+          },
+        },
+        {
+          id: 120751,
+          name: `Aoi Akashiro`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/n120751-34nuMiCFBqoA.png`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/n120751-34nuMiCFBqoA.png`,
+          },
+        },
+        {
+          id: 158253,
+          name: `Hayato Kazano`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/default.jpg`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/default.jpg`,
+          },
+        },
+        {
+          id: 158254,
+          name: `Ohine Ezaki`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/n158254-lw31PfeZq7sB.png`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/n158254-lw31PfeZq7sB.png`,
+          },
+        },
+        {
+          id: 123983,
+          name: `Tomoko Iwasa`,
+          image: {
+            large: `https://s4.anilist.co/file/anilistcdn/staff/large/default.jpg`,
+            medium: `https://s4.anilist.co/file/anilistcdn/staff/medium/default.jpg`,
+          },
+        },
+      ],
+    };
   },
 };
