@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import { NextSeo } from 'next-seo';
 
 import api from '@/services/api';
 
@@ -20,27 +21,34 @@ const Home: NextPage<{
   episodesLatest: TEpisode[];
   quote: TQuote;
 }> = ({ animesPopular, quote, episodesLatest, animesGenre }) => (
-  <div>
-    <Menu page="home" />
-
-    <Suggestions quote={quote} />
-
-    <ListAnime
-      style={{ marginTop: 50 }}
-      title="Popular"
-      animes={animesPopular}
+  <>
+    <NextSeo
+      title="Página Inicial - AnimeTempest"
+      description="O melhor site para você descobrir um univeso de animes."
     />
 
-    <ListEpisode title="Lançamentos" episodes={episodesLatest} />
+    <div>
+      <Menu page="home" />
 
-    {Object.keys(animesGenre).map((genre) => (
+      <Suggestions quote={quote} />
+
       <ListAnime
-        key={`list_anime-${genre.toLowerCase().replace(` `, `_`)}`}
-        title={genre}
-        animes={animesGenre[genre]}
+        style={{ marginTop: 50 }}
+        title="Popular"
+        animes={animesPopular}
       />
-    ))}
-  </div>
+
+      <ListEpisode title="Lançamentos" episodes={episodesLatest} />
+
+      {Object.keys(animesGenre).map((genre) => (
+        <ListAnime
+          key={`list_anime-${genre.toLowerCase().replace(` `, `_`)}`}
+          title={genre}
+          animes={animesGenre[genre]}
+        />
+      ))}
+    </div>
+  </>
 );
 
 export async function getStaticProps() {

@@ -24,4 +24,5 @@ interface TAnime {
   };
   description?: string;
   staff?: TStaff[];
+  episodes?: TEpisode[];
 }

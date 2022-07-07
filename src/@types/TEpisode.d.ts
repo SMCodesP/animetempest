@@ -1,9 +1,9 @@
 interface TEpisode {
-  titleAnilist: string | null;
-  thumbnail: string | null;
-  anime: TCategory | null;
-  video_id: string;
-  category_id: string;
-  category_image: string;
+  id: number;
+  title_alternative: string;
   title: string;
+  date_release: number;
+  thumbnail: string;
+  anime_id: number;
+  anime?: TAnime;
 }

@@ -1,17 +1,17 @@
 import React, { memo } from 'react';
-import { transparentize } from 'polished';
+// import { transparentize } from 'polished';
 
-import { useTheme } from 'styled-components';
+// import { useTheme } from 'styled-components';
 
 import {
   Container,
-  AnimeImage,
-  ContainerImage,
+  // AnimeImage,
+  // ContainerImage,
   Title,
-  ContainerAnimeTitle,
-  AnimeTitle,
-  ContainerTitleStars,
-  ContainerCurtain,
+  // ContainerAnimeTitle,
+  // AnimeTitle,
+  // ContainerTitleStars,
+  // ContainerCurtain,
 } from './styles';
 
 import Carousel from '../Carousel';
@@ -19,8 +19,8 @@ import Carousel from '../Carousel';
 const ListAnime: React.FC<{
   episodes: TEpisode[];
   title: string;
-}> = ({ episodes, title }) => {
-  const theme = useTheme();
+}> = ({ title }) => {
+  // const theme = useTheme();
 
   return (
     <Container>
@@ -34,7 +34,7 @@ const ListAnime: React.FC<{
         autoplay={false}
         TitleHead={() => <Title>{title}</Title>}
       >
-        {episodes.map((episode) => (
+        {/* {episodes.map((episode) => (
           <ContainerImage
             key={`${title.toLowerCase().replace(` `, `_`)}-${episode.video_id}`}
             style={{
@@ -62,7 +62,7 @@ const ListAnime: React.FC<{
               </ContainerTitleStars>
             </ContainerAnimeTitle>
           </ContainerImage>
-        ))}
+        ))} */}
       </Carousel>
     </Container>
   );

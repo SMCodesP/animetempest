@@ -134,7 +134,7 @@ export default {
       .map(({ data }: any) => data)
       .filter((item: any) => item.coverImage_extraLarge !== undefined);
   },
-  getById: async () => {
+  getById: () => {
     return {
       id: 1,
       idAni: 98659,
@@ -265,6 +265,104 @@ export default {
           },
         },
       ],
-    };
+      episodes: [
+        {
+          id: 1,
+          title_alternative: `Episódio 1`,
+          title: `1. Lembre-se de manter a mente limpa em momentos difíceis.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire1-tmb/1534c9fb80791aec609a7a69a646ba9a1499855007_full.jpg`,
+          date_release: new Date(2017, 7, 12).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 2,
+          title_alternative: `Episódio 2`,
+          title: `2. Exige habilidade para ocultar que se tem grandes habilidades.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire1-tmb/baed8721c7eb199a3510f5480a85daf61500455126_full.jpg`,
+          date_release: new Date(2017, 7, 19).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 3,
+          title_alternative: `Episódio 3`,
+          title: `3. O homem é um animal de barganhas: nenhum outro animal faz isso, cachorro algum troca osso com outro.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire3-tmb/3567e8e02102088cce9729592c4913f31501036435_full.jpg`,
+          date_release: new Date(2017, 7, 26).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 4,
+          title_alternative: `Episódio 4`,
+          title: `4. Não devemos nos irritar com quem esconde a verdade da gente quando frequentemente escondemos a verdade de nós mesmos.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire3-tmb/c8ac32874631ac71df0dce8cac56ef751501537596_full.jpg`,
+          date_release: new Date(2017, 8, 2).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 5,
+          title_alternative: `Episódio 5`,
+          title: `5. O Inferno são as outras pessoas`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire2-tmb/72c8a01b2a35d2009ec82e27ebc8971d1502233395_full.jpg`,
+          date_release: new Date(2017, 8, 9).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 6,
+          title_alternative: `Episódio 6`,
+          title: `6. Há dois tipos de mentiras; um é sobre fatos consumados, o outro é sobre deveres futuros.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire1-tmb/50787a27e4ad4bc1abb02ca06010fcc51502856899_full.jpg`,
+          date_release: new Date(2017, 8, 16).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 7,
+          title_alternative: `Episódio 7`,
+          title: `7. Não há nada tão perigoso como o amigo ignorante; é preferível um inimigo sábio.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire3-tmb/7667c5006cce53d12ba118edbe8bb8901503443247_full.jpg`,
+          date_release: new Date(2017, 8, 23).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 8,
+          title_alternative: `Episódio 8`,
+          title: `8. Abandone toda a esperança, vós que entrais aqui.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire1-tmb/49651088d9dc22d9344527273d61b97d1504092728_full.jpg`,
+          date_release: new Date(2017, 8, 30).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 9,
+          title_alternative: `Episódio 9`,
+          title: `9. O homem está condenado a ser livre.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire4-tmb/a442c72cdc17055413d0175ff4f92fad1504694413_full.jpg`,
+          date_release: new Date(2017, 9, 6).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 10,
+          title_alternative: `Episódio 10`,
+          title: `10. Todo homem tem em si o traidor mais perigoso.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire4-tmb/43dfdd4172641a4f26c4892d93a29e671505296430_full.jpg`,
+          date_release: new Date(2017, 9, 13).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 11,
+          title_alternative: `Episódio 11`,
+          title: `11. Em geral, chamamos de destino às asneiras que cometemos.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire3-tmb/fc67a1e81cf3dd2cc9880910462d65b11505897910_full.jpg`,
+          date_release: new Date(2017, 9, 20).getTime(),
+          anime_id: 1,
+        },
+        {
+          id: 12,
+          title_alternative: `Episódio 12`,
+          title: `12. Os gênios vivem apenas uma história de loucura.`,
+          thumbnail: `https://img1.ak.crunchyroll.com/i/spire2-tmb/af28d93273585bd08cce96fc3a714c941506506315_full.jpg`,
+          date_release: new Date(2017, 9, 27).getTime(),
+          anime_id: 1,
+        },
+      ],
+    } as TAnime;
   },
 };
