@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { usePopper } from 'react-popper';
 import Link from 'next/link';
 
-import { FiSearch, FiBell } from 'react-icons/fi';
+import { FiSearch, FiBell, FiChevronRight } from 'react-icons/fi';
 import {
   IoMailOutline,
   IoInvertModeSharp,
@@ -10,6 +10,7 @@ import {
 } from 'react-icons/io5';
 
 import { useTheme } from 'styled-components';
+import { signIn, signOut, useSession } from 'next-auth/react';
 
 import {
   Container,
@@ -32,7 +33,8 @@ import {
 const Menu: React.FC<{
   page: string;
   darkground?: boolean;
-}> = ({ page, darkground = false }) => {
+  disableLogin?: boolean;
+}> = ({ page, darkground = false, disableLogin = false }) => {
   const [menuPoppperIsActived, setMenuPoppperIsActived] = useState(false);
 
   const theme = useTheme();
@@ -59,13 +61,14 @@ const Menu: React.FC<{
       ],
     },
   );
+  const { data: session, status } = useSession();
 
   return (
     <Container>
       <ContainerGroup>
         <Link href="/">
           <a>
-            <Logo src="/vercel.svg" alt="Vercel Logo" width={112} height={46} />
+            <Logo src="/favicon.png" alt="Vercel Logo" width={92} height={92} />
           </a>
         </Link>
       </ContainerGroup>
@@ -131,28 +134,43 @@ const Menu: React.FC<{
               <IoInvertModeOutline size={24} color={theme.text} />
             )}
           </Option>
-          <Option
-            ref={buttonRef}
-            onClick={() => setMenuPoppperIsActived((state) => !state)}
-            menupoppperisactived={menuPoppperIsActived.toString()}
-          >
-            <div style={{ borderRadius: 32, overflow: `hidden` }}>
-              <User
-                src="https://smcodes.tk/favicon.jpg"
-                alt="Imagem de perfil"
-                placeholder="blur"
-                blurDataURL="https://smcodes.tk/favicon_min.jpg"
-                width={32}
-                height={32}
-              />
-            </div>
-            <p>SMCodes</p>
-            <ArrowOption
-              menupoppperisactived={menuPoppperIsActived.toString()}
-              size={24}
-              color={theme.text}
-            />
-          </Option>
+          {!disableLogin &&
+            (status === `authenticated` ? (
+              <Option
+                ref={buttonRef}
+                onClick={() => setMenuPoppperIsActived((state) => !state)}
+                menupoppperisactived={menuPoppperIsActived.toString()}
+              >
+                <div style={{ borderRadius: 32, overflow: `hidden` }}>
+                  {session.user?.image ? (
+                    <User
+                      src={String(session.user?.image)}
+                      alt="Imagem de perfil"
+                      width={32}
+                      height={32}
+                    />
+                  ) : (
+                    <User
+                      src={`/user.jpg`}
+                      alt="Imagem de perfil"
+                      width={32}
+                      height={32}
+                    />
+                  )}
+                </div>
+                <p>{session.user?.name}</p>
+                <ArrowOption
+                  menupoppperisactived={menuPoppperIsActived.toString()}
+                  size={24}
+                  color={theme.text}
+                />
+              </Option>
+            ) : (
+              <Option onClick={() => signIn()}>
+                <p>Entrar</p>
+                <FiChevronRight size={24} color={theme.text} />
+              </Option>
+            ))}
           <PopperContainer
             ref={popperRef}
             style={styles.popper}
@@ -176,7 +194,9 @@ const Menu: React.FC<{
                   <UserOption>Recomendados</UserOption>
                   <UserOption>Configurações</UserOption>
                   <Line />
-                  <UserOption color={theme.red}>Sair</UserOption>
+                  <UserOption onClick={() => signOut()} color={theme.red}>
+                    Sair
+                  </UserOption>
                 </UserMenu>
               </ContainerMenuAnimation>
             </ContainerMenuNoHidden>

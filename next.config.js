@@ -11,6 +11,7 @@ module.exports = {
       'cdn.appanimeplus.tk',
       'img1.ak.crunchyroll.com',
       'res.cloudinary.com',
+      'cdn.discordapp.com',
     ],
   },
 };

@@ -62,6 +62,9 @@ async function getQuote(): Promise<TQuote> {
       },
     );
 
+    if (character.media.edges[0].node.coverImage.color === null)
+      throw new Error(`Not have color in banner of anime`);
+
     return {
       quote:
         animechan.quote.length > 1000

@@ -58,7 +58,6 @@ const Anime: React.FC<{
   const theme = useTheme();
 
   useEffect(() => {
-    console.log(anime);
     const handler = (event: any) => {
       if (
         filterExpanded &&
