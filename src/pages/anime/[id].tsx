@@ -58,6 +58,7 @@ const Anime: React.FC<{
   const theme = useTheme();
 
   useEffect(() => {
+    console.log(anime);
     const handler = (event: any) => {
       if (
         filterExpanded &&
@@ -100,11 +101,17 @@ const Anime: React.FC<{
           <Menu page="" />
 
           <ContainerInfomations>
-            <CoverPoster>
+            <CoverPoster
+              style={{
+                boxShadow: `0 0 10px ${anime.coverImage?.color}ee`,
+              }}
+            >
               <Image
                 src={String(anime.coverImage?.extraLarge)}
                 alt={String(anime?.title)}
                 layout="fill"
+                placeholder="blur"
+                blurDataURL={String(anime.coverImage?.medium)}
               />
             </CoverPoster>
             <CardListInfos>
@@ -240,9 +247,11 @@ const Anime: React.FC<{
                 <CardEpisode key={`espisode-${episode.id}`}>
                   <ContainerThumbnail>
                     <EpisodeThumbnail
-                      src={episode.thumbnail}
+                      src={episode.thumbnail.large}
                       alt={episode.title}
                       layout="fill"
+                      placeholder="blur"
+                      blurDataURL={String(episode.thumbnail.tiny)}
                     />
                     <TiMediaPlay size={42} color={theme.background} />
                   </ContainerThumbnail>
@@ -260,10 +269,12 @@ const Anime: React.FC<{
   );
 };
 
-export const getStaticPaths: GetStaticPaths = () => ({
-  paths: [],
-  fallback: true,
-});
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [{ params: { id: `1` } }],
+    fallback: true,
+  };
+};
 
 export const getStaticProps: GetStaticProps = () => {
   const anime = api.getById();

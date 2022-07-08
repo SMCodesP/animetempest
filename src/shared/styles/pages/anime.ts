@@ -15,7 +15,6 @@ export const CoverPoster = styled.div`
   height: auto;
   position: relative;
   border-radius: 10px;
-  box-shadow: 0 0 10px #00000055;
 
   & img {
     border-radius: 10px;
@@ -71,6 +70,7 @@ export const Summary = styled.li`
   & svg {
     margin: 0 10px;
     size: 22px;
+    user-select: none;
   }
 
   & small {
@@ -273,6 +273,7 @@ export const EpisodeTitle = styled.p`
 export const CardEpisode = styled.li`
   width: 100%;
   cursor: pointer;
+  user-select: none;
 
   &:hover ${EpisodeThumbnail} {
     filter: brightness(90%);
