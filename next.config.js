@@ -12,6 +12,8 @@ module.exports = {
       'img1.ak.crunchyroll.com',
       'res.cloudinary.com',
       'cdn.discordapp.com',
+      's.gravatar.com',
+      'gravatar.com',
     ],
   },
 };
