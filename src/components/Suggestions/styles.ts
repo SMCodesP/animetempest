@@ -1,6 +1,6 @@
 import { darken, getLuminance, transparentize } from 'polished';
 import styled from 'styled-components';
-import Image from 'next/image';
+import Image from 'next/legacy/image';
 
 export const Container = styled.div`
   margin-top: 20px;

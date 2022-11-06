@@ -107,6 +107,7 @@ const ListAnime: React.FC<{
             key={`${title.toLowerCase().replace(` `, `_`)}-${anime.id}`}
             href={`/anime/${anime.id}`}
             passHref
+            legacyBehavior
           >
             <ContainerImage
               colorBoxShadow={transparentize(

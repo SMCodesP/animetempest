@@ -18,14 +18,6 @@ export const CoverPoster = styled.div`
 
   & img {
     border-radius: 10px;
-    position: initial !important;
-    height: auto !important;
-    min-height: initial !important;
-    max-height: initial !important;
-  }
-
-  & span {
-    position: initial !important;
   }
 `;
 

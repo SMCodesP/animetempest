@@ -95,52 +95,42 @@ const Menu: React.FC<{
     <Container>
       <ContainerGroup>
         <Link href="/">
-          <a>
-            <Logo src="/favicon.png" alt="Vercel Logo" width={92} height={92} />
-          </a>
+          <Logo src="/favicon.png" alt="Vercel Logo" width={92} height={92} />
         </Link>
       </ContainerGroup>
       <ContainerGroup>
         <ListPage>
           <Link href="/">
-            <a>
-              <Page
-                darkground={darkground.toString()}
-                className={page === `home` ? `location` : ``}
-              >
-                Início
-              </Page>
-            </a>
+            <Page
+              darkground={darkground.toString()}
+              className={page === `home` ? `location` : ``}
+            >
+              Início
+            </Page>
           </Link>
           <Link href="/popular">
-            <a>
-              <Page
-                darkground={darkground.toString()}
-                className={page === `popular` ? `location` : ``}
-              >
-                Popular
-              </Page>
-            </a>
+            <Page
+              darkground={darkground.toString()}
+              className={page === `popular` ? `location` : ``}
+            >
+              Popular
+            </Page>
           </Link>
           <Link href="/news">
-            <a>
-              <Page
-                darkground={darkground.toString()}
-                className={page === `news` ? `location` : ``}
-              >
-                Notícias
-              </Page>
-            </a>
+            <Page
+              darkground={darkground.toString()}
+              className={page === `news` ? `location` : ``}
+            >
+              Notícias
+            </Page>
           </Link>
           <Link href="/discord">
-            <a>
-              <Page
-                darkground={darkground.toString()}
-                className={page === `discord` ? `location` : ``}
-              >
-                Discord
-              </Page>
-            </a>
+            <Page
+              darkground={darkground.toString()}
+              className={page === `discord` ? `location` : ``}
+            >
+              Discord
+            </Page>
           </Link>
         </ListPage>
       </ContainerGroup>
@@ -162,12 +152,12 @@ const Menu: React.FC<{
               <IoInvertModeOutline size={24} color={theme.text} />
             )}
           </Option>
-          <Option
+          {/* <Option
             ref={buttonAddRef}
             onClick={() => setMenuAddItem((state) => !state)}
           >
             <IoAdd size={24} color={theme.text} />
-          </Option>
+          </Option> */}
           {!disableLogin &&
             (status === `authenticated` ? (
               <Option
@@ -223,9 +213,7 @@ const Menu: React.FC<{
               >
                 <UserMenu>
                   <Link href="/anime/create">
-                    <a>
-                      <UserOption>Adicionar anime</UserOption>
-                    </a>
+                    <UserOption>Adicionar anime</UserOption>
                   </Link>
                   <Line />
                   <UserOption>Adicionar episódio</UserOption>

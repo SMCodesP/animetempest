@@ -108,8 +108,8 @@ const Anime: React.FC<{
               <Image
                 src={String(anime.coverImage?.extraLarge)}
                 alt={String(anime?.title)}
-                layout="fill"
                 placeholder="blur"
+                fill={true}
                 blurDataURL={String(anime.coverImage?.medium)}
               />
             </CoverPoster>
@@ -248,7 +248,7 @@ const Anime: React.FC<{
                     <EpisodeThumbnail
                       src={episode.thumbnail.large}
                       alt={episode.title}
-                      layout="fill"
+                      fill={true}
                       placeholder="blur"
                       blurDataURL={String(episode.thumbnail.tiny)}
                     />

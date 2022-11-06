@@ -14,6 +14,7 @@ module.exports = {
       'cdn.discordapp.com',
       's.gravatar.com',
       'gravatar.com',
+      'avatars.githubusercontent.com',
     ],
   },
 };
