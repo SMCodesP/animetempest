@@ -16,7 +16,7 @@ import {
   SubTitleLogin,
   TitleLogin,
 } from '@/shared/styles/pages/signin';
-import { BsDiscord } from 'react-icons/bs';
+import { BsDiscord, BsGithub } from 'react-icons/bs';
 import { SiAuth0 } from 'react-icons/si';
 import { BuiltInProviderType } from 'next-auth/providers';
 import { useTheme } from 'styled-components';
@@ -32,6 +32,14 @@ export default function SignIn({
   callbackUrl: string;
 }) {
   const theme = useTheme();
+
+  const colors: {
+    [name: string]: string;
+  } = {
+    discord: `#5865F2`,
+    auth0: `#000000`,
+    github: `#333333`,
+  };
 
   return (
     <>
@@ -57,19 +65,15 @@ export default function SignIn({
                     callbackUrl: callbackUrl,
                   })
                 }
-                color={
-                  provider.id === `discord`
-                    ? `#5865F2`
-                    : provider.id === `auth0`
-                    ? `#000000`
-                    : theme.text
-                }
+                color={colors[provider.id] || theme.text}
               >
                 {provider.id === `discord` ? (
                   <BsDiscord size={22} color={theme.background} />
+                ) : provider.id === `auth0` ? (
+                  <SiAuth0 size={22} color={theme.background} />
                 ) : (
-                  provider.id === `auth0` && (
-                    <SiAuth0 size={22} color={theme.background} />
+                  provider.id === `github` && (
+                    <BsGithub size={22} color={theme.background} />
                   )
                 )}
                 {provider.name}
