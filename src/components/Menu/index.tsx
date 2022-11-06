@@ -7,6 +7,7 @@ import {
   IoMailOutline,
   IoInvertModeSharp,
   IoInvertModeOutline,
+  IoAdd,
 } from 'react-icons/io5';
 
 import { useTheme } from 'styled-components';
@@ -36,8 +37,10 @@ const Menu: React.FC<{
   disableLogin?: boolean;
 }> = ({ page, darkground = false, disableLogin = false }) => {
   const [menuPoppperIsActived, setMenuPoppperIsActived] = useState(false);
+  const [menuAddItem, setMenuAddItem] = useState(false);
 
   const theme = useTheme();
+
   const buttonRef = useRef(null);
   const popperRef = useRef(null);
   const [arrowRef, setArrowRef] = useState(null);
@@ -61,6 +64,31 @@ const Menu: React.FC<{
       ],
     },
   );
+
+  const buttonAddRef = useRef(null);
+  const popperAddRef = useRef(null);
+  const [arrowAddRef, setArrowAddRef] = useState(null);
+  const { styles: stylesAdd, attributes: attributesAdd } = usePopper(
+    buttonAddRef.current,
+    popperAddRef.current,
+    {
+      modifiers: [
+        {
+          name: `arrow`,
+          options: {
+            element: arrowAddRef,
+          },
+        },
+        {
+          name: `offset`,
+          options: {
+            offset: [0, 10],
+          },
+        },
+      ],
+    },
+  );
+
   const { data: session, status } = useSession();
 
   return (
@@ -134,6 +162,12 @@ const Menu: React.FC<{
               <IoInvertModeOutline size={24} color={theme.text} />
             )}
           </Option>
+          <Option
+            ref={buttonAddRef}
+            onClick={() => setMenuAddItem((state) => !state)}
+          >
+            <IoAdd size={24} color={theme.text} />
+          </Option>
           {!disableLogin &&
             (status === `authenticated` ? (
               <Option
@@ -171,6 +205,34 @@ const Menu: React.FC<{
                 <FiChevronRight size={24} color={theme.text} />
               </Option>
             ))}
+          <PopperContainer
+            ref={popperAddRef}
+            style={stylesAdd.popper}
+            {...attributesAdd.popper}
+          >
+            <ContainerMenuNoHidden
+              menupoppperisactived={menuAddItem.toString()}
+            >
+              <div
+                ref={setArrowAddRef as any}
+                style={stylesAdd.arrow}
+                className="arrow"
+              />
+              <ContainerMenuAnimation
+                menupoppperisactived={menuAddItem.toString()}
+              >
+                <UserMenu>
+                  <Link href="/anime/create">
+                    <a>
+                      <UserOption>Adicionar anime</UserOption>
+                    </a>
+                  </Link>
+                  <Line />
+                  <UserOption>Adicionar episódio</UserOption>
+                </UserMenu>
+              </ContainerMenuAnimation>
+            </ContainerMenuNoHidden>
+          </PopperContainer>
           <PopperContainer
             ref={popperRef}
             style={styles.popper}

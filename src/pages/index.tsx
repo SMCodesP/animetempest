@@ -12,6 +12,7 @@ import ListEpisode from '@/components/ListEpisode';
 import Suggestions from '@/components/Suggestions';
 
 import 'react-multi-carousel/lib/styles.css';
+import service from '@/services/service';
 
 const Home: NextPage<{
   animesPopular: TCategory[];
@@ -52,8 +53,8 @@ const Home: NextPage<{
 );
 
 export async function getStaticProps() {
-  const quote = await api.getQuote();
-  const animesPopular: any = await api.getPopular();
+  const quote = await service.getQuote();
+  const animesPopular: any = await service.getPopular();
   const genresRandom = getRandom(Object.keys(genres), 3);
   const genresPopulate: {
     [key: string]: any;
@@ -62,7 +63,7 @@ export async function getStaticProps() {
   // eslint-disable-next-line no-restricted-syntax
   for (const genre of genresRandom) {
     // eslint-disable-next-line no-await-in-loop
-    genresPopulate[genre] = await api.getByGenre(genres[genre]);
+    genresPopulate[genre] = await service.getByGenre(genres[genre]);
   }
 
   return {

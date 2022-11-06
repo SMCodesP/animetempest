@@ -28,9 +28,11 @@ export const ListPage = styled.ul`
   gap: 25px;
 `;
 
-export const Page = styled.li<{
+interface Page {
   darkground?: string;
-}>`
+}
+
+export const Page = styled.li<Page>`
   opacity: 0.5;
   font-size: 18px;
   font-weight: 400;
@@ -81,6 +83,10 @@ export const Option = styled.li<MenuPopper>`
     menupoppperisactived === `true`
       ? transparentize(0.1, theme.text)
       : transparentize(0.75, theme.text)};
+  filter: brightness(
+    ${({ menupoppperisactived = `false` }) =>
+      menupoppperisactived === `true` ? `85%` : `100%`}
+  );
 
   & * {
     color: ${({ theme, menupoppperisactived = `false` }) =>
@@ -165,6 +171,10 @@ export const UserMenu = styled.ul`
   flex-direction: column;
   align-items: flex-start;
   padding: 8px 0;
+
+  & a {
+    width: 100%;
+  }
 `;
 
 export const UserOption = styled.li`
