@@ -73,7 +73,7 @@ export async function getStaticProps() {
       episodesLatest: [],
       quote,
     },
-    revalidate: 60,
+    revalidate: 1,
   };
 }
 

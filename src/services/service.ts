@@ -13,7 +13,7 @@ const q = faunadb.query;
 async function getQuote(): Promise<TQuote> {
   try {
     const { data: animechan } = await axios.get(
-      `https://animechan.vercel.app/api/random`,
+      `https://animechan.xyz/api/random`,
     );
     const query = gql`
       query ($search: String) {
